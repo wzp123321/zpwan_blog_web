@@ -1,14 +1,12 @@
 module.exports = {
   presets: ['@vue/cli-plugin-babel/preset'],
   plugins: [
-    'lodash',
     [
-      'import',
+      'component',
       {
-        libraryName: 'ant-design-vue',
-        libraryDirectory: 'es',
-        style: 'css'
+        libraryName: 'element-ui',
+        styleLibraryName: 'theme-chalk'
       }
-    ] // `style: true` 会加载 less 文件
+    ]
   ]
 }
