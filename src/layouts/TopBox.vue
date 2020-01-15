@@ -1,13 +1,38 @@
 <template>
   <div class="top-wrapper boxW frspace">
     <div class="time">
-      <span> <svg class="icon" aria-hidden="true">
-        <use xlink:href="#icon-xingzhuanggongnengtubiao-" />
-      </svg>
-      {{cityinfo}}</span>
-<span>     {{current_time}}</span>
+      <span>
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-xingzhuanggongnengtubiao-" />
+        </svg>
+        {{cityinfo}}
+      </span>
+      <span>{{current_time}}</span>
     </div>
-    <div class="link"></div>
+    <div class="link">
+      <span>
+        <a href="https://github.com/wzp123321" target="blank">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-xiangmu" />
+          </svg> 我的github
+        </a>
+      </span>
+      <span @click="()=>{$router.push('/about')}">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-gengduo-guanyuxitong" />
+        </svg> 关于
+      </span>
+      <span @click="()=>{$router.push('/links')}">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-lianjie" />
+        </svg> 友情链接
+      </span>
+      <span @click="handleGithubLogin">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-github" />
+        </svg> 登录
+      </span>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -69,7 +94,13 @@ export default class TopBox extends Vue {
       }
     });
   }
-
+  /**
+   * github登录
+   */
+  private handleGithubLogin() {
+    window.location.href =
+      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8080/signin_github";
+  }
   mounted() {
     this.showCityInfo();
     this.timer = setInterval(() => {
@@ -87,20 +118,26 @@ export default class TopBox extends Vue {
   position: relative;
   height: 30px;
   padding-top: 5px;
-  .time {
+  .time,
+  .link {
     font-size: 13px;
-   span{
+    span {
+      display: inline-block;
+      padding: 0 5px;
       .icon {
-      width:16px;
-      height:16px;
-      position: relative;
-    bottom: -2px;
+        width: 16px;
+        height: 16px;
+        position: relative;
+        bottom: -2px;
+      }
+      a {
+        color: #000;
+        text-decoration: none;
+      }
     }
-   }
-   span:last-child{
-     display:inline-block;
-     padding:0 20px;
-   }
+  }
+  .link span:hover {
+    text-decoration: underline;
   }
 }
 </style>

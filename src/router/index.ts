@@ -6,9 +6,11 @@ const LeaveMessageModule = () => import("@/components/pages/leave-message/index.
 const ArticleInfoModule = () => import("@/components/pages/article-info/index.vue")
 const DashboardModule = () => import("@/components/pages/dashboard-manage/index.vue")
 const SearchModule = () => import("@/components/pages/search-manage/index.vue")
-const FriednlyLinkModule = ()=>import("@/components/pages/links/index.vue")
+const FriednlyLinkModule = () => import("@/components/pages/links/index.vue")
+const AboutModule = () => import("@/components/pages/about/index.vue")
 const TypeModule = () => import("@/components/pages/type-article/index.vue")
 const NotFoundModule = () => import("@/components/pages/404.vue")
+const GithubLogin = () => import("@/components/GithubSingn.vue")
 Vue.use(VueRouter)
 
 const routes = [
@@ -38,8 +40,16 @@ const routes = [
         component: TypeModule
       },
       {
-        path:'/links',
-        component:FriednlyLinkModule
+        path: '/links',
+        component: FriednlyLinkModule
+      },
+      {
+        path: '/about',
+        component: AboutModule
+      },
+      {
+        path: '/signin_github',
+        component: GithubLogin
       },
       {
         path: '/404',

@@ -12,6 +12,21 @@ import "@/assets/css/common.css"
 import 'element-ui/lib/theme-chalk/index.css';
 // iconfont
 import "@/assets/js/iconfont.js"
+// 引入nprogress
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+// mavon-editor样式
+import 'mavon-editor/dist/css/index.css'
+
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+})
+
+router.afterEach(route => {
+  NProgress.done();
+})
+
 
 new Vue({
   router,

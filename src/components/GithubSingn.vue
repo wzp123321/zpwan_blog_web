@@ -13,28 +13,29 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import { UserModule } from '@/store/module/user'
-import HttpRequest from '@/assets/api/modules/index'
-import { notification } from 'ant-design-vue'
-import axios from "axios"
+import { Vue, Component } from "vue-property-decorator";
+import { UserModule } from "@/store/module/user";
+import HttpRequest from "@/assets/api/modules/index";
+import { Notification } from "element-ui";
+import axios from "axios";
+Vue.prototype.$notify = Notification;
 
 @Component({
-  name: 'GithubLogin'
+  name: "GithubLogin"
 })
 export default class GithubLogin extends Vue {
-  private total: number = 1
-  private timer: any = null
+  private total: number = 1;
+  private timer: any = null;
   /**
    * 根据access-token获取用户信息
    */
-  private getUserInfoByAccessToken (access_token: string) {
+  private getUserInfoByAccessToken(access_token: string) {
     axios({
-      method: 'GET',
-      url: '/githubUserInfo',
+      method: "GET",
+      url: "/githubUserInfo",
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        accept: 'application/json',
+        "Content-Type": "application/x-www-form-urlencoded",
+        accept: "application/json",
         Authorization: `token ${access_token}`
       }
     }).then(async res => {
@@ -43,64 +44,65 @@ export default class GithubLogin extends Vue {
           {
             user_id: res.data.id
           }
-        )
+        );
         if (response) {
-          const { id, avatar_url, name } = res.data
+          const { id, avatar_url, name } = res.data;
           UserModule.setUserInfo({
             id,
             avatar_url,
             name
-          })
-          localStorage.setItem('token', response.data)
-          localStorage.setItem('id', id)
-          localStorage.setItem('avatar_url', avatar_url)
-          localStorage.setItem('name', name)
-          this.$router.push('/')
-          notification.success({
-            message: '登录成功',
-            description: '恭喜你登录成功!'
-          })
+          });
+          localStorage.setItem("token", response.data);
+          localStorage.setItem("id", id);
+          localStorage.setItem("avatar_url", avatar_url);
+          localStorage.setItem("name", name);
+          this.$router.push("/");
+          this.$notify({
+            title: "登录成功",
+            message: "恭喜你登录成功",
+            type: "success"
+          });
         }
       } else {
-        this.$router.push('/signin')
+        this.$router.push("/signin");
       }
-    })
+    });
   }
   /**
    * 根据code请求token
    */
   private async getAccessTokenByCode() {
-    const client_id = 'e8066bfd81332a5fd345'
-    const client_secret = 'dbd033bca15cd61b1b8b5666dfe41f2d50581bc1'
-    const code = this.$route.query.code
+    const client_id = "e8066bfd81332a5fd345";
+    const client_secret = "dbd033bca15cd61b1b8b5666dfe41f2d50581bc1";
+    const code = this.$route.query.code;
     const tokenResponse = await axios({
-      method: 'get',
-      url: '/githubAccessToken',
+      method: "get",
+      url: "/githubAccessToken",
       params: {
         client_id,
         client_secret,
         code
       },
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        accept: 'application/json'
+        "Content-Type": "application/x-www-form-urlencoded",
+        accept: "application/json"
       }
-    })
+    });
     if (tokenResponse) {
-      this.getUserInfoByAccessToken(tokenResponse.data.access_token)
+      this.getUserInfoByAccessToken(tokenResponse.data.access_token);
     }
   }
   mounted() {
-    this.getAccessTokenByCode()
+    this.getAccessTokenByCode();
     this.timer = setInterval(() => {
-      this.total += 1
-    }, 500)
+      this.total += 1;
+    }, 500);
   }
   /**
    * 页面销毁前 ---清除定时器
    */
   beforeDestroy() {
-    clearInterval()
+    clearInterval();
   }
 }
 </script>
