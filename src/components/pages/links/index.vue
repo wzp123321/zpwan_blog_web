@@ -1,12 +1,12 @@
 <template>
- <h1>LeaveMessageModule</h1>
+ <h1>友情链接</h1>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 @Component({
-  name: "LeaveMessageModule"
+  name: "FriednlyLinkModule"
 })
-export default class LeaveMessageModule extends Vue {}
+export default class FriednlyLinkModule extends Vue {}
 </script>
 <style lang="less" scoped>
 </style>

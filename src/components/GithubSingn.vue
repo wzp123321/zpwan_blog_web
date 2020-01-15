@@ -58,7 +58,7 @@ export default class GithubLogin extends Vue {
           this.$router.push('/')
           notification.success({
             message: '登录成功',
-            description: '恭喜你登录成功，欢迎回来！'
+            description: '恭喜你登录成功!'
           })
         }
       } else {

@@ -6,6 +6,13 @@ import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
+// 引入公共样式
+import "@/assets/css/common.css"
+// 引入element
+import 'element-ui/lib/theme-chalk/index.css';
+// iconfont
+import "@/assets/js/iconfont.js"
+
 new Vue({
   router,
   store,
