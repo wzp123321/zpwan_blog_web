@@ -2,21 +2,21 @@ import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-dec
 import store from '@/store'
 
 export interface IUserState {
-    userInfo: UserInfo
+    userInfo: DashoboardModule.UserInfo
 }
 
 @Module({ dynamic: true, store, name: 'user' })
 class User extends VuexModule implements IUserState {
-    public userInfo!: UserInfo;
+    public userInfo!: DashoboardModule.UserInfo;
 
     @Mutation
-    private SET_USER_INFO (data: UserInfo) {
+    private SET_USER_INFO (data: DashoboardModule.UserInfo) {
       console.log(data)
       this.userInfo = data
     }
 
     @Action
-    public async setUserInfo (userInfo: UserInfo) {
+    public async setUserInfo (userInfo: DashoboardModule.UserInfo) {
       this.SET_USER_INFO(userInfo)
     }
 }

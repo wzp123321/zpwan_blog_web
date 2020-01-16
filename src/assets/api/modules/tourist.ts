@@ -1,9 +1,15 @@
 import { getRequest, postRequest } from "../request"
 
-export const AdminModule = {
+const AdminModule = {
+    async getTouristAdd(params: { [key: string]: any }) {
+        const url = " /tourist/add";
+        return postRequest(url, params);
+    },
 
     async getTokenByUserId(params: { [key: string]: any }) {
-        const url = "";
-        return getRequest(url, params);
+        const url = "/token/getById";
+        return postRequest(url, params);
     }
 }
+
+export default AdminModule

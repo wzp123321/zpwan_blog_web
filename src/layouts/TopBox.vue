@@ -99,7 +99,7 @@ export default class TopBox extends Vue {
    */
   private handleGithubLogin() {
     window.location.href =
-      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8080/signin_github";
+      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8088/signin_github";
   }
   mounted() {
     this.showCityInfo();
@@ -128,7 +128,7 @@ export default class TopBox extends Vue {
         width: 16px;
         height: 16px;
         position: relative;
-        bottom: -2px;
+        bottom: 2px;
       }
       a {
         color: #000;

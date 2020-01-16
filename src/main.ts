@@ -12,10 +12,11 @@ import "@/assets/css/common.css"
 import 'element-ui/lib/theme-chalk/index.css';
 // iconfont
 import "@/assets/js/iconfont.js"
+import "@/assets/css/iconfont.css"
 // 引入nprogress
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-// mavon-editor样式
+// mavon-editor样式---这个后续要改 放到使用的地方
 import 'mavon-editor/dist/css/index.css'
 
 router.beforeEach((to, from, next) => {

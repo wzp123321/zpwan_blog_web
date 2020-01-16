@@ -3,7 +3,7 @@
     <div class="top-model">
       <TopBox></TopBox>
       <HeaderBox :isCeil="isCeil"></HeaderBox>
-      <ContentBox :style="{marginTop:isCeil?'64px':'0'}" class="boxW"></ContentBox>
+      <ContentBox :style="{marginTop:isCeil?'64px':'10px'}" class="boxW"></ContentBox>
     </div>
     <FooterBox></FooterBox>
   </div>

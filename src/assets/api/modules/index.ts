@@ -1,5 +1,11 @@
-import { AdminModule } from "./tourist"
+import AdminModule from "./tourist"
+import CatalogModule from "./catalog"
+import BannerModule from "./banner"
+import ArticleModule from "./article"
 
 export default {
-    AdminModule
+    AdminModule,
+    CatalogModule,
+    BannerModule,
+    ArticleModule
 }

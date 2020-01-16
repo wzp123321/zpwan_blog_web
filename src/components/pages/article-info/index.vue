@@ -1,5 +1,7 @@
 <template>
-  <h1>ArticleInfoModule</h1>
+  <div>
+    <h1>ArticleInfoModule</h1>面包屑
+  </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
