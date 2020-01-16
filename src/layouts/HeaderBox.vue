@@ -26,7 +26,7 @@
             </Submenu>
           </template>
         </Menu>
-        <div class="search-icon">
+        <div class="search-icon" @click="()=>{$router.push('/search')}">
           <i class="iconfont icon-sousuo"></i>
         </div>
       </div>
@@ -69,31 +69,35 @@ export default class HeaderBox extends Vue {
     >> = await HttpRequest.CatalogModule.getCatalogList({ type: 1 });
 
     if (res && res.data) {
-      res.data.data.forEach(async (item: DashoboardModule.CatalogInfo, index: number) => {
-        const { id, code, value } = item;
-        this.menus.push({
-          id,
-          code,
-          value,
-          children: []
-        });
-        const response: ApiResponse<ListResponse<
-          Array<DashoboardModule.CatalogInfo>
-        >> = await HttpRequest.CatalogModule.getCatalogList({ pId: id });
-        if (response && response.data) {
-          let childmenus: Array<DashoboardModule.MenuInfo> = [];
-          response.data.data.forEach((childItem: DashoboardModule.CatalogInfo, idx: number) => {
-            const { id, code, value } = childItem;
-            childmenus.push({
-              id,
-              code,
-              value,
-              children: []
-            });
+      res.data.data.forEach(
+        async (item: DashoboardModule.CatalogInfo, index: number) => {
+          const { id, code, value } = item;
+          this.menus.push({
+            id,
+            code,
+            value,
+            children: []
           });
-          this.menus[index].children = childmenus;
+          const response: ApiResponse<ListResponse<
+            Array<DashoboardModule.CatalogInfo>
+          >> = await HttpRequest.CatalogModule.getCatalogList({ pId: id });
+          if (response && response.data) {
+            let childmenus: Array<DashoboardModule.MenuInfo> = [];
+            response.data.data.forEach(
+              (childItem: DashoboardModule.CatalogInfo, idx: number) => {
+                const { id, code, value } = childItem;
+                childmenus.push({
+                  id,
+                  code,
+                  value,
+                  children: []
+                });
+              }
+            );
+            this.menus[index].children = childmenus;
+          }
         }
-      });
+      );
     }
   }
   created() {
@@ -105,6 +109,7 @@ export default class HeaderBox extends Vue {
 </script>
 <style lang="less" scoped>
 .header-wrapper {
+  z-index: 999;
   height: 62px;
   width: 100%;
   background: #fff;
@@ -120,7 +125,7 @@ export default class HeaderBox extends Vue {
       font-size: 20px;
       color: #31c27c;
     }
-    h1:hover{
+    h1:hover {
       animation: titleHover 200ms linear infinite forwards;
     }
     p {
@@ -151,7 +156,7 @@ export default class HeaderBox extends Vue {
 
 @keyframes titleHover {
   0% {
-    transform:translateX(0);
+    transform: translateX(0);
   }
   25% {
     transform: translateX(-5px);

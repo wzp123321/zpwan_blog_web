@@ -68,3 +68,7 @@ declare namespace DashoboardModule {
     url: string,
   }
 }
+
+interface ArticleInfo{
+  
+}

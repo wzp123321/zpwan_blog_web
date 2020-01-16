@@ -9,7 +9,7 @@ const SearchModule = () => import("@/components/pages/search-manage/index.vue")
 const FriednlyLinkModule = () => import("@/components/pages/links/index.vue")
 const AboutModule = () => import("@/components/pages/about/index.vue")
 const TypeModule = () => import("@/components/pages/type-article/index.vue")
-const NotFoundModule = () => import("@/components/pages/404.vue")
+const NotFoundModule = () => import("@/components/404.vue")
 const GithubLogin = () => import("@/components/GithubSingn.vue")
 Vue.use(VueRouter)
 
@@ -32,7 +32,7 @@ const routes = [
         component: ArticleInfoModule,
       },
       {
-        path: '/search/:key',
+        path: '/search',
         component: SearchModule,
       },
       {
