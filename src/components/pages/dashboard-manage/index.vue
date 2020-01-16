@@ -28,7 +28,9 @@
         ></el-pagination>
       </div>
       <!-- 标签信息模块 -->
-      <div class="tag-wrapper"></div>
+      <div class="tag-wrapper">
+        3.新增名言表
+      </div>
     </div>
   </div>
 </template>
@@ -74,7 +76,7 @@ export default class DashboardModule extends Vue {
   private async getArticleList() {
     const res: ApiResponse<ListResponse<
       Array<ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleList({ isShelves: 1 });
+    >> = await HttpRequest.ArticleModule.getArticleList({});
     if (res && res.data) {
       const datas = res.data.data;
       const total = res.data.total;

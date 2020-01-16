@@ -18,17 +18,17 @@
             <span>
               <i class="iconfont icon-liulan"></i>
               浏览
-              {{articleInfo.visitCount}}
+              {{articleInfo.visit_count}}
             </span>
             <span>
               <i class="iconfont icon-xiai"></i>
               点赞
-              {{articleInfo.likeCount}}
+              {{articleInfo.like_count}}
             </span>
             <span>
               <i class="iconfont icon-pinglun"></i>
               评论
-              {{articleInfo.likeCount}}
+              {{articleInfo.comment_count}}
             </span>
           </div>
           <div class="read" @click="()=>{$router.push('/article/'+articleInfo.id)}">阅读全文</div>
