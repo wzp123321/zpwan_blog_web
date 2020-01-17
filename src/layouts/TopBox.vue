@@ -128,7 +128,7 @@ export default class TopBox extends Vue {
         width: 16px;
         height: 16px;
         position: relative;
-        bottom: 2px;
+        bottom: -3px;
       }
       a {
         color: #000;
@@ -140,4 +140,5 @@ export default class TopBox extends Vue {
     text-decoration: underline;
   }
 }
+
 </style>

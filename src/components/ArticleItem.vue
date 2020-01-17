@@ -9,11 +9,15 @@
           <span>--{{articleInfo.second_catalogName}}</span>
         </div>
         <p>{{articleInfo.description}}</p>
+        <span class="mobile-time">
+          <i class="iconfont icon-rili"></i>
+          {{formatDate(articleInfo.create_time)}}
+        </span>
         <div class="frspace">
           <div class="count">
-            <span>
+            <span class="pc-time">
               <i class="iconfont icon-rili"></i>
-              {{articleInfo.create_time || formatDate}}
+              {{formatDate(articleInfo.create_time)}}
             </span>
             <span>
               <i class="iconfont icon-liulan"></i>
@@ -46,7 +50,11 @@ import { formatDate } from "@/assets/js/index";
 export default class ArticleItem extends Vue {
   // 文章详情
   @Prop()
-  private articleInfo!: ArticleInfo;
+  private articleInfo!: ArticleModule.ArticleInfo;
+
+  private formatDate(time: number) {
+    return formatDate(time);
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -92,6 +100,12 @@ export default class ArticleItem extends Vue {
         color: #424141;
       }
       span {
+        display: inline-block;
+        width: 135px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: right;
+        text-overflow: ellipsis;
         font-size: 14px;
       }
     }
@@ -123,10 +137,30 @@ export default class ArticleItem extends Vue {
     }
   }
 }
+.mobile-time {
+  display: none;
+}
 .article-item:hover {
   cursor: pointer;
   box-shadow: 0 1px 12px 0 rgba(0, 0, 0, 0.1);
   transform: translateX(4px);
   transform: 200ms;
+}
+
+@media screen and (max-width: 768px) {
+  .info {
+    p {
+      height: 33px !important;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  .mobile-time {
+    display: inline;
+  }
+  .pc-time {
+    display: none !important;
+  }
 }
 </style>

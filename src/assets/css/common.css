@@ -28,3 +28,9 @@ body {
     flex-direction: row;
     justify-content: space-between;
 }
+
+/* @media screen and (max-width:768px) {
+    .boxW {
+        width: 23.4375rem !important;
+    }
+} */

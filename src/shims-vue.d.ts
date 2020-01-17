@@ -69,6 +69,30 @@ declare namespace DashoboardModule {
   }
 }
 
-interface ArticleInfo{
-  
+declare namespace ArticleModule {
+  interface ArticleInfo {
+    id?: string,
+    title?: string,
+    content?: string,
+    imgUrl?: string,
+    description?: string,
+    author?: string,
+    tags?: string,
+    first_catalogId?: number,
+    first_catalogName?: string,
+    second_catalogId?: 9
+    second_catalogName?: string,
+    isDelete?: number,
+    isShelves?: number,
+    isRecommend?: number,
+    isTop?: number,
+    visit_count?: number,
+    like_count?: number,
+    comment_count?: number,
+    create_time?: number,
+    modify_time?: number,
+  }
+  interface CommentInfo {
+
+  }
 }

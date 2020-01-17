@@ -100,7 +100,7 @@ export default class HeaderBox extends Vue {
       );
     }
   }
-  created() {
+  async created() {
     this.$nextTick(() => {
       this.perceCatalogData();
     });
@@ -129,7 +129,7 @@ export default class HeaderBox extends Vue {
       animation: titleHover 200ms linear infinite forwards;
     }
     p {
-      font-size: 14px;
+      font-size: 13px;
     }
   }
   .menu {
@@ -170,6 +170,16 @@ export default class HeaderBox extends Vue {
 
   100% {
     transform: translateX(0);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-wrapper {
+    .info {
+      p {
+        font-size: 10px !important;
+      }
+    }
   }
 }
 </style>

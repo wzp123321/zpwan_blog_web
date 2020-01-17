@@ -12,7 +12,7 @@
             <img
               :src="item.imgUrl"
               style="width:100%;height:240px"
-              @click="()=>{$router.push('/article/'+item.id)}"
+              @click="()=>{$router.push(item.url)}"
               alt
             />
             <div class="title">{{item.title}}</div>
@@ -28,9 +28,7 @@
         ></el-pagination>
       </div>
       <!-- 标签信息模块 -->
-      <div class="tag-wrapper">
-        3.新增名言表
-      </div>
+      <div class="tag-wrapper">3.新增名言表</div>
     </div>
   </div>
 </template>
@@ -52,7 +50,7 @@ export default class DashboardModule extends Vue {
   // banner列表
   private banners: Array<DashoboardModule.BannerInfo> = [];
   // 文章列表
-  private articles: Array<ArticleInfo> = [];
+  private articles: Array<ArticleModule.ArticleInfo> = [];
   // 分页
   private pagination: { [key: string]: any } = {
     page: 1,
@@ -75,7 +73,7 @@ export default class DashboardModule extends Vue {
    */
   private async getArticleList() {
     const res: ApiResponse<ListResponse<
-      Array<ArticleInfo>
+      Array<ArticleModule.ArticleInfo>
     >> = await HttpRequest.ArticleModule.getArticleList({});
     if (res && res.data) {
       const datas = res.data.data;
@@ -126,6 +124,12 @@ export default class DashboardModule extends Vue {
       height: auto;
       margin-left: 20px;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .carousel {
+    display: none;
   }
 }
 </style>

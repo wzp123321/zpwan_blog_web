@@ -16,8 +16,9 @@ import "@/assets/css/iconfont.css"
 // 引入nprogress
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-// mavon-editor样式---这个后续要改 放到使用的地方
-import 'mavon-editor/dist/css/index.css'
+// rem
+import "@/assets/js/rem"
+
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
