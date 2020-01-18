@@ -27,9 +27,9 @@ declare namespace DashoboardModule {
    * 用户信息
    */
   interface UserInfo {
-    id: string,
-    name: string,
-    avatar_url: string,
+    id?: string,
+    name?: string,
+    avatar_url?: string,
     location?: string
   }
 
@@ -93,6 +93,27 @@ declare namespace ArticleModule {
     modify_time?: number,
   }
   interface CommentInfo {
-
+    id: string,
+    author: DashoboardModule.UserInfo,
+    article_id: string,
+    content: string,
+    is_delete: number,
+    ups: number,
+    downs: number,
+    parent_id: string,
+    is_root: string,
+    reply_userInfo: DashoboardModule.UserInfo,
+    create_time: number,
+    children?:[]
   }
+}
+
+interface FriendlyLinkInfo {
+  id: number,
+  name: string,
+  ico: string,
+  url: string,
+  isShelves: number,
+  create_time: number,
+  modify_time: number,
 }

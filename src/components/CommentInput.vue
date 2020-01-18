@@ -1,6 +1,6 @@
 <template>
   <div class="comment-input">
-    <el-input type="textarea" :rows="4" placeholder="请输入您的评论" v-model="input_data"></el-input>
+    <el-input type="textarea" :rows="4" placeholder="请输入您的评论" v-model="input_data" style="margin-bottom:10px"></el-input>
     <div class="frspace">
       <div class="emoji" id="emoji" @mouseleave="handleMouseLeave()">
         <i class="iconfont icon-iconsmile" @click="()=>{show = !show}"></i>
@@ -19,8 +19,13 @@
           style="border-radius:20px"
           :disabled="input_data === ''"
           @click="handleCommentRelease"
+          size="mini"
         >发布</el-button>
-        <el-button style="border-radius:20px;margin-left:10px" @click="()=>{input_data = ''}">取消</el-button>
+        <el-button
+          style="border-radius:20px;margin-left:10px"
+          @click="()=>{input_data = ''}"
+          size="mini"
+        >取消</el-button>
       </div>
     </div>
   </div>
@@ -148,8 +153,8 @@ export default class CommentInput extends Vue {
     background: #fff;
     border: 1px solid #eee;
     position: absolute;
-    top: 30px;
-    left: -10px;
+    top: 25px;
+    left: -5px;
     padding: 5px;
     span {
       display: inline-block;

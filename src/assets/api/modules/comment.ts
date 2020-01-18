@@ -14,16 +14,6 @@ const CommentModule = {
         const url = "/comment/list";
         return getRequest(url, params);
     },
-
-    async getCommentDelete(params: { [key: string]: any }) {
-        const url = "/comment/delete";
-        return postRequest(url, params);
-    },
-
-    async getCommentArticleType(params: { [key: string]: any }) {
-        const url = "/comment/articletype";
-        return postRequest(url, params);
-    }
 }
 
 export default CommentModule

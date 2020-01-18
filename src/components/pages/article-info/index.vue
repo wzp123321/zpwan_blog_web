@@ -1,7 +1,6 @@
 <template>
-  <div class="article-wrapper flex-row">
+  <div class="article-wrapper frspace">
     <div class="article-info">
-      <!-- 1.修改文章字段 content：改为md html分别代表代码 以及渲染之后的  以便前后台用 -->
       <!-- 实现分享文章 -->
       <!-- 头部 -->
       <div class="article-header">
@@ -51,7 +50,10 @@
       </div>
       <!-- 评论模块 -->
       <div class="comment-wrapper">
-        <div class="title">全部评论</div>
+        <div class="title">
+          全部评论
+          <span style="font-size:12px;">共{{articleInfo.comment_count}}条</span>
+        </div>
         <div v-if="JSON.stringify(comments) === '[]'" class="no-comment">暂无评论，期待您的优秀评论</div>
         <!--有评论 -->
         <div v-else class="comment-data">
@@ -64,17 +66,17 @@
                   style="wdith:30px;height:30px;border-radius:50px;display:inline"
                   alt
                 />
-                <span>{{item.author.name}}</span>
+                <span v-if="item.author">{{item.author.name}}</span>
               </div>
             </div>
             <p>{{item.content}}</p>
             <p>
-              点赞 --
-              <Button
+              <i class="iconfont icon-dianzan">点赞</i>
+              --
+              <i
+                class="iconfont icon-pinglun"
                 @click="()=>{ floor =index ;id= item.id}"
-                style="background:#67c33d;border-radius:15px;border:0;color:#fff"
-                :ghost="true"
-              >回复</Button>
+              >回复</i>
             </p>
             <div>
               <CommentInput v-if="floor===index && id === item.id" @release="releaseComment"></CommentInput>
@@ -82,7 +84,7 @@
             <div style="margin-left:30px">
               <div v-for="(childItem,idx) in item.children" :key="idx">
                 <div class="frsp">
-                  <div>
+                  <div v-if="childItem.author">
                     <img
                       :src="childItem.author.avatar"
                       style="wdith:30px;height:30px;border-radius:50px;display:inline"
@@ -92,14 +94,16 @@
                   </div>
                   <!-- 点击这里的评论出现@这个评论的楼主 -->
                 </div>
-                <p>
+                <p v-if="childItem.reply_owner">
                   回复
                   <span style="color:#06a5ff">{{childItem.reply_owner.name}}</span>
                   : {{childItem.content}}
                 </p>
                 <p>
-                  点赞 --
-                  <span @click="()=>{ floor =index ;id= childItem.id}">回复</span>
+                  <i class="iconfont icon-dianzan"></i> 点赞 --
+                  <span @click="()=>{ floor =index ;id= childItem.id}">
+                    <i class="iconfont icon-pinglun"></i> 回复
+                  </span>
                 </p>
                 <div>
                   <CommentInput
@@ -113,7 +117,26 @@
         </div>
       </div>
     </div>
-    <div class="right-module">1111</div>
+    <div class="right-module">
+      <!-- 感悟模块 -->
+      <div class="article-quotes">
+        <div class="title">
+          <i class="iconfont icon-laba"></i>
+          人生感悟
+        </div>
+        <p>{{articleInfo.quotes}}</p>
+      </div>
+      <!-- 展示tag -->
+      <div class="tag-module">
+        <div class="title">
+          <i class="iconfont icon-tag"></i>
+          本文标签
+        </div>
+        <div class="tags" v-if="articleInfo.tags">
+          <span v-for="(item,index) in articleInfo.tags.split(',')" :key="index">{{item}}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -141,7 +164,7 @@ export default class ArticleInfoModule extends Vue {
   private floor: number = 1;
   // 当前需要评论的评论id
   private id: string = "";
-  // 评论的作者信息
+  // 评论的作者信息---即登录的用户
   private author: { [key: string]: any } = {
     id: "test_ddrrfaaa",
     name: "test评论",
@@ -157,81 +180,7 @@ export default class ArticleInfoModule extends Vue {
   // 文章详情
   private articleInfo: ArticleModule.ArticleInfo = {};
   // 评论数组
-  private comments: Array<ArticleModule.CommentInfo> = [
-    {
-      id: "1111111111111",
-      content: "测试一下啊",
-      author: {
-        name: "张三",
-        avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-      },
-      ups: [],
-      downs: [],
-      parent_id: "",
-      is_root: true,
-      reply_owner: {},
-      children: [
-        {
-          id: "2222222222222",
-          content: "测试一下啊qqewqe",
-          author: {
-            name: "张三111",
-            avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-          },
-          ups: [],
-          downs: [],
-          parent_id: "1111111111111",
-          is_root: false,
-          reply_owner: {
-            name: "张三",
-            avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-          }
-        },
-        {
-          id: "44444444444",
-          content: "测试一下啊22222222222",
-          author: {
-            name: "张三5555",
-            avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-          },
-          ups: [],
-          downs: [],
-          parent_id: "1111111111111",
-          is_root: false,
-          reply_owner: {
-            name: "张三111",
-            avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-          }
-        }
-      ]
-    },
-    {
-      id: "3333333333333",
-      content: "测试一下啊",
-      author: {
-        name: "张三",
-        avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-      },
-      ups: [],
-      downs: [],
-      parent_id: "",
-      is_root: true,
-      reply_owner: {}
-    },
-    {
-      id: "55555555555",
-      content: "测试一下啊",
-      author: {
-        name: "张三",
-        avatar: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg"
-      },
-      ups: [],
-      downs: [],
-      parent_id: "",
-      is_root: true,
-      reply_owner: {}
-    }
-  ];
+  private comments: Array<ArticleModule.CommentInfo> = [];
   /**
    * 格式化时间
    */
@@ -279,9 +228,59 @@ export default class ArticleInfoModule extends Vue {
       this.articleInfo = info;
     }
   }
+  /**
+   * 请求文章相关评论
+   */
+  private async getArticleCommentList() {
+    const article_id = this.$route.params.id;
+    let page: number = 1;
+    let newComments: Array<ArticleModule.CommentInfo> = [];
+    const queryAll = async (page: number) => {
+      const res: ApiResponse<ListResponse<
+        Array<ArticleModule.CommentInfo>
+      >> = await HttpRequest.CommentModule.getCommentList({
+        page,
+        article_id
+      });
+
+      if (res && res.data) {
+        const data = res.data.data;
+        newComments = [...newComments, ...data];
+        if (res.data.total > newComments.length) {
+          queryAll(page + 1);
+        }
+        //全部请求完成
+        if (newComments.length === res.data.total) {
+          let formatObj = newComments.reduce((pre: any, cur: any) => {
+            return { ...pre, [cur["id"]]: cur };
+          }, {});
+          let formatArray = newComments.reduce((arr: any, cur: any) => {
+            // 获取当前元素的pId 如果没有则设为0  如果有则获取其pId
+            let parent_id = cur.parent_id ? cur.parent_id : "";
+            let parent = formatObj[parent_id];
+            // 这里的parent是当前元素的pId   如果不为0 则代表它是某个分支的子集
+            if (parent) {
+              // 判断当前分支的children数组是否为[] 如果为[]则将当前元素赋值给该数组 如果不为[]则push
+              parent.children
+                ? parent.children.push(cur)
+                : (parent.children = [cur]);
+            } else {
+              // 这是pId为0的情况
+              cur.children = [];
+              arr.push(cur);
+            }
+            return arr;
+          }, []);
+          this.comments = formatArray;
+        }
+      }
+    };
+    queryAll(page);
+  }
   created() {
     this.$nextTick(() => {
       this.getArticleInfoById();
+      this.getArticleCommentList();
     });
   }
 }
@@ -289,6 +288,7 @@ export default class ArticleInfoModule extends Vue {
 <style lang="less" scoped>
 .article-wrapper {
   .article-info {
+    flex: 1;
     padding: 10px;
     background: #fff;
     .article-header {
@@ -362,10 +362,46 @@ export default class ArticleInfoModule extends Vue {
     }
   }
   .right-module {
-    border-radius: 4px;
     width: 300px;
-    background: #fff;
     margin-left: 20px;
+    .article-quotes,
+    .tag-module {
+      border-radius: 4px;
+      background: #fff;
+      width: 100%;
+      .title {
+        border-bottom: 1px solid #eee;
+        font-size: 16px;
+        padding-left: 5px;
+        .iconfont {
+          color: #31c27c;
+          border-right: 1px solid #eee;
+          padding-right: 4px;
+        }
+      }
+      p {
+        padding: 10px 5px;
+        height: 60px;
+        margin: 0;
+      }
+    }
+    .tag-module {
+      margin-top: 10px;
+      background: #fff;
+      border-radius: 4px;
+      .tags {
+        padding: 10px 5px;
+        span {
+          font-size: 12px;
+          color: #fff;
+          margin: 3px;
+          border-radius: 4px;
+          background: #31c27c;
+          padding: 3px 5px;
+          display: inline-block;
+        }
+      }
+    }
   }
 }
 </style>

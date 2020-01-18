@@ -2,7 +2,7 @@
   <div :class="[{'ceil': isCeil}, 'header-wrapper']">
     <div class="boxW frspace">
       <div class="info">
-        <h1>万直鹏的博客</h1>
+        <h1 @click="()=>{$router.push('/')}">万直鹏的博客</h1>
         <p>仰天大笑出门去，我辈岂是蓬蒿人</p>
       </div>
       <div class="menu flex-row">

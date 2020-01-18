@@ -28,7 +28,7 @@
         ></el-pagination>
       </div>
       <!-- 标签信息模块 -->
-      <div class="tag-wrapper">3.新增名言表</div>
+      <div class="tag-wrapper">11111</div>
     </div>
   </div>
 </template>
