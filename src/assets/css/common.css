@@ -29,8 +29,21 @@ body {
     justify-content: space-between;
 }
 
-/* @media screen and (max-width:768px) {
-    .boxW {
-        width: 23.4375rem !important;
-    }
-} */
+/* 自定义scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+    background: none;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #31c27c;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-button {
+    visibility: hidden;
+}

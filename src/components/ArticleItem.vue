@@ -77,8 +77,8 @@ export default class ArticleItem extends Vue {
     background: #ea3737;
   }
   img {
-    width: 150px;
-    height: 150px;
+    width: 150px !important;
+    height: 150px !important;
     border-radius: 3px;
   }
   .info {

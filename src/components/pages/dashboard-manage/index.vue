@@ -1,5 +1,9 @@
 <template>
   <div class="dashoboard-wrapper">
+    1.新增访客表 ---访客登录接口
+    2.文章评论
+    3.后台新增管理员表 ---支持超管新增管理员
+    4.全局回到顶部滚轮
     <!-- 用户信息模块 -->
     <div class="userinfo-wrapper">userinfo</div>
     <!-- content模块 -->

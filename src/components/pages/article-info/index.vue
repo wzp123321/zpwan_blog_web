@@ -136,6 +136,7 @@
           <span v-for="(item,index) in articleInfo.tags.split(',')" :key="index">{{item}}</span>
         </div>
       </div>
+      <RecommendArticle></RecommendArticle>
     </div>
   </div>
 </template>
@@ -145,6 +146,7 @@ import HttpRequest from "@/assets/api/modules/index";
 import { Divider } from "element-ui";
 import { formatDate } from "@/assets/js/index";
 import CommentInput from "@/components/CommentInput.vue";
+import RecommendArticle from "@/components/RecommendArticle.vue";
 import "mavon-editor/dist/css/index.css";
 import "mavon-editor/dist/highlightjs/highlight.min.js";
 import "mavon-editor/dist/katex/katex";
@@ -156,7 +158,8 @@ import "highlight.js/lib/highlight.js";
   name: "ArticleInfoModule",
   components: {
     "el-divider": Divider,
-    CommentInput
+    CommentInput,
+    RecommendArticle
   }
 })
 export default class ArticleInfoModule extends Vue {

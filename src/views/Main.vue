@@ -3,6 +3,7 @@
     <div class="top-model">
       <TopBox></TopBox>
       <HeaderBox :isCeil="isCeil"></HeaderBox>
+      <BreadcrumbModule v-if="$route.path !=='/app'"></BreadcrumbModule>
       <ContentBox :style="{marginTop:isCeil?'64px':'10px'}" class="boxW"></ContentBox>
     </div>
     <FooterBox></FooterBox>
@@ -14,19 +15,20 @@ import TopBox from "@/layouts/TopBox.vue";
 import HeaderBox from "@/layouts/HeaderBox.vue";
 import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
+import BreadcrumbModule from "@/components/Breadcrumb.vue";
 @Component({
   name: "Main",
   components: {
     TopBox,
     HeaderBox,
     ContentBox,
-    FooterBox
+    FooterBox,
+    BreadcrumbModule
   }
 })
 export default class Main extends Vue {
   // 顶部是否吸顶
   private isCeil: boolean = false;
-
   /**
    * 添加全局监听
    */

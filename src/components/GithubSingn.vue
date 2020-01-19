@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-form">
-      <svg class="icon" aria-hidden="true" style="font-size:50px">
+      <svg class="icon" aria-hidden="true" style="width:50px;height:50px">
         <use xlink:href="#icon-github" />
       </svg>
       <div class="loading">
@@ -127,7 +127,6 @@ export default class GithubLogin extends Vue {
       width: 100px;
     }
     .logo {
-      margin-bottom: 24px;
       width: 53px;
       height: 53px;
       border-radius: 50px;

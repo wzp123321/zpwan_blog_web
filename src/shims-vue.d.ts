@@ -17,6 +17,15 @@ interface ListResponse<T> {
   data: T
 }
 
+/**
+ * 路由模块
+ */
+interface RouteInfo {
+  path: string,
+  meta: { name: string }
+  children?: Array<RouteInfo>,
+}
+
 
 /**
  * 首页模块

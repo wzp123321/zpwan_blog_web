@@ -11,7 +11,6 @@ class User extends VuexModule implements IUserState {
 
     @Mutation
     private SET_USER_INFO (data: DashoboardModule.UserInfo) {
-      console.log(data)
       this.userInfo = data
     }
 

@@ -27,23 +27,34 @@
           <use xlink:href="#icon-lianjie" />
         </svg> 友情链接
       </span>
-      <span @click="handleGithubLogin">
+      <span @click="()=>{dialogFormVisible = true}">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-github" />
         </svg> 登录
       </span>
     </div>
+    <UserLoginModule
+      :dialogFormVisible="dialogFormVisible"
+      @cancel="()=>{dialogFormVisible = false}"
+    ></UserLoginModule>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // 解决AMap使用语法提示
 declare let AMap: any;
+import UserLoginModule from "@/components/UserLoginModal.vue";
+import { UserModule } from "@/store/module/user";
 
 @Component({
-  name: "TopBox"
+  name: "TopBox",
+  components: {
+    UserLoginModule
+  }
 })
 export default class TopBox extends Vue {
+  // 登录对话框
+  private dialogFormVisible: boolean = false;
   // 当前时间
   private current_time: string = "";
   // 定时器
@@ -90,17 +101,14 @@ export default class TopBox extends Vue {
         if (result && result.city && result.bounds) {
           const cityinfo = result.province + "" + result.city;
           that.cityinfo = cityinfo;
+          UserModule.setUserInfo({
+            location: cityinfo
+          });
         }
       }
     });
   }
-  /**
-   * github登录
-   */
-  private handleGithubLogin() {
-    window.location.href =
-      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8088/signin_github";
-  }
+
   mounted() {
     this.showCityInfo();
     this.timer = setInterval(() => {
@@ -140,5 +148,4 @@ export default class TopBox extends Vue {
     text-decoration: underline;
   }
 }
-
 </style>

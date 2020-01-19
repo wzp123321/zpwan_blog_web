@@ -18,38 +18,42 @@ const routes = [
     path: '/',
     component: Main,
     redirect: '/app',
+    meta: { name: "首页" },
     children: [
       {
         path: '/app',
         component: DashboardModule,
+        meta: { name: "首页" }
       },
       {
         path: '/leave_message',
         component: LeaveMessageModule,
+        meta: { name: "留言板" }
       },
       {
         path: '/article/:id',
         component: ArticleInfoModule,
+        meta: { name: "文章详情" }
       },
       {
         path: '/search',
         component: SearchModule,
+        meta: { name: "搜索" }
       },
       {
         path: '/type/:type',
-        component: TypeModule
+        component: TypeModule,
+        meta: { name: "模块" }
       },
       {
         path: '/links',
-        component: FriednlyLinkModule
+        component: FriednlyLinkModule,
+        meta: { name: "友情链接" }
       },
       {
         path: '/about',
-        component: AboutModule
-      },
-      {
-        path: '/signin_github',
-        component: GithubLogin
+        component: AboutModule,
+        meta: { name: "关于我们" }
       },
       {
         path: '/404',
@@ -57,6 +61,10 @@ const routes = [
       },
     ]
   },
+  {
+    path: '/signin_github',
+    component: GithubLogin
+  }
 ]
 
 const router = new VueRouter({
