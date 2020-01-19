@@ -38,7 +38,7 @@
       <!-- 点赞模块 -->
       <div class="ups frspace">
         <div class="click-like">
-          <i class="iconfont icon-dianzan"></i>
+          <i class="iconfont icon-dianzan" @click="getArticleUps"></i>
           <span>点个赞呗</span>
         </div>
         <div class="catalog">
@@ -138,15 +138,21 @@
       </div>
       <RecommendArticle></RecommendArticle>
     </div>
+    <UserLoginModule
+      :dialogFormVisible="dialogFormVisible"
+      @cancel="()=>{dialogFormVisible = false}"
+    ></UserLoginModule>
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
-import { Divider } from "element-ui";
+import { Divider, Message } from "element-ui";
 import { formatDate } from "@/assets/js/index";
 import CommentInput from "@/components/CommentInput.vue";
+import { Route } from "vue-router";
 import RecommendArticle from "@/components/RecommendArticle.vue";
+import UserLoginModule from "@/components/UserLoginModal.vue"
 import "mavon-editor/dist/css/index.css";
 import "mavon-editor/dist/highlightjs/highlight.min.js";
 import "mavon-editor/dist/katex/katex";
@@ -154,15 +160,20 @@ import "mavon-editor/dist/highlightjs/languages/javascript.min.js";
 import "mavon-editor/dist/highlightjs/languages/java.min.js";
 import "highlight.js/lib/highlight.js";
 
+Vue.prototype.$message = Message;
+
 @Component({
   name: "ArticleInfoModule",
   components: {
     "el-divider": Divider,
     CommentInput,
-    RecommendArticle
+    RecommendArticle,
+    UserLoginModule
   }
 })
 export default class ArticleInfoModule extends Vue {
+  // 登录对话框
+  private dialogFormVisible: boolean = false;
   // 标识当前评论的大楼层
   private floor: number = 1;
   // 当前需要评论的评论id
@@ -280,11 +291,44 @@ export default class ArticleInfoModule extends Vue {
     };
     queryAll(page);
   }
+  /**
+   * 文章访问
+   */
+  private async getArticleVisit() {
+    const id = this.$route.params.id;
+    const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoVisit(
+      { id }
+    );
+  }
+  /**
+   * 文章点赞
+   */
+  private async getArticleUps() {
+    if (!localStorage.getItem("name")) {
+      this.dialogFormVisible = true;
+    } else {
+      const id = this.$route.params.id;
+      const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
+        { id }
+      );
+      if (res && res.data) {
+        this.$message.success("点赞成功");
+        this.getArticleInfoById();
+      }
+    }
+  }
   created() {
     this.$nextTick(() => {
       this.getArticleInfoById();
       this.getArticleCommentList();
+      this.getArticleVisit();
     });
+  }
+  @Watch("$route")
+  handleRouteChange(newVal: Route, oldVal: Route) {
+    this.getArticleInfoById();
+    this.getArticleCommentList();
+    this.getArticleVisit();
   }
 }
 </script>
@@ -405,6 +449,14 @@ export default class ArticleInfoModule extends Vue {
         }
       }
     }
+  }
+}
+</style>
+<style lang="less">
+.markdown-body {
+  img {
+    max-width: 800px !important;
+    max-height: 300px !important;
   }
 }
 </style>

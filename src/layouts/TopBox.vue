@@ -40,7 +40,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component,Watch } from "vue-property-decorator";
 // 解决AMap使用语法提示
 declare let AMap: any;
 import UserLoginModule from "@/components/UserLoginModal.vue";
@@ -53,6 +53,8 @@ import { UserModule } from "@/store/module/user";
   }
 })
 export default class TopBox extends Vue {
+  // 用户名
+  private name:string = localStorage.getItem('name') || "";
   // 登录对话框
   private dialogFormVisible: boolean = false;
   // 当前时间
@@ -115,7 +117,10 @@ export default class TopBox extends Vue {
       this.getCurrentTime();
     }, 1000);
   }
-
+  @Watch('name')
+  private handleNameChange(newVal:string,oldVal:string){
+    console.log(newVal)
+  }
   beforeDestroy() {
     clearInterval(this.timer);
   }

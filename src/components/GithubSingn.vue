@@ -16,6 +16,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { UserModule } from "@/store/module/user";
 import HttpRequest from "@/assets/api/modules/index";
+import { Route } from "vue-router";
 import { Notification } from "element-ui";
 import axios from "axios";
 Vue.prototype.$notify = Notification;
@@ -56,7 +57,7 @@ export default class GithubLogin extends Vue {
           localStorage.setItem("id", id);
           localStorage.setItem("avatar_url", avatar_url);
           localStorage.setItem("name", name);
-          this.$router.push("/");
+          console.log(this.$router);
           this.$notify({
             title: "登录成功",
             message: "恭喜你登录成功",

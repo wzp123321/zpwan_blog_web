@@ -1,6 +1,7 @@
 <template>
   <div class="dashoboard-wrapper">
-    1.新增访客表 ---访客登录接口
+    1.登录改成数据存在本地即可
+    2.访客列表改为管理员表
     2.文章评论
     3.后台新增管理员表 ---支持超管新增管理员
     4.全局回到顶部滚轮
@@ -32,7 +33,21 @@
         ></el-pagination>
       </div>
       <!-- 标签信息模块 -->
-      <div class="tag-wrapper">11111</div>
+      <div class="other-wrapper">
+        <!-- 标语 -->
+
+        <!-- 标签 -->
+        <div class="tag-wrapper">
+          <div class="title">
+            <i class="iconfont icon-tag"></i>全部标签
+          </div>
+          <div class="content">
+            <span v-for="(item,index) in tags" :key="index">{{item.value}}</span>
+          </div>
+        </div>
+        <!-- 文章列表 -->
+        <RecommendArticle></RecommendArticle>
+      </div>
     </div>
   </div>
 </template>
@@ -41,13 +56,15 @@ import { Vue, Component } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { Carousel, CarouselItem, Pagination } from "element-ui";
 import ArticleItem from "@/components/ArticleItem.vue";
+import RecommendArticle from "@/components/RecommendArticle.vue";
 @Component({
   name: "DashboardModule",
   components: {
     "el-carousel": Carousel,
     "el-carousel-item": CarouselItem,
     "el-pagination": Pagination,
-    ArticleItem
+    ArticleItem,
+    RecommendArticle
   }
 })
 export default class DashboardModule extends Vue {
@@ -60,6 +77,7 @@ export default class DashboardModule extends Vue {
     page: 1,
     total: 10
   };
+  private tags: Array<{ [key: string]: any }> = [];
   /**
    * 请求banner列表
    */
@@ -71,6 +89,27 @@ export default class DashboardModule extends Vue {
       const banners = res.data.data;
       this.banners = banners;
     }
+  }
+  /**
+   * 请求tag列表
+   */
+  private async getTagList() {
+    let page: number = 1;
+    const queryAll = async (page: number) => {
+      const res: ApiResponse<ListResponse<
+        Array<{ [key: string]: any }>
+      >> = await HttpRequest.BannerModule.getTagsList({
+        page
+      });
+      if (res && res.data) {
+        const datas = res.data.data;
+        this.tags = [...this.tags, ...datas];
+        if (res.data.total > this.tags.length) {
+          queryAll(page + 1);
+        }
+      }
+    };
+    queryAll(page);
   }
   /**
    * 请求文章列表
@@ -90,6 +129,7 @@ export default class DashboardModule extends Vue {
     this.$nextTick(() => {
       this.getBannerList();
       this.getArticleList();
+      this.getTagList();
     });
   }
 }
@@ -123,10 +163,34 @@ export default class DashboardModule extends Vue {
         }
       }
     }
-    .tag-wrapper {
+    .other-wrapper {
       width: 300px;
-      height: auto;
       margin-left: 20px;
+      .tag-wrapper {
+        background: #fff;
+        .title {
+          border-bottom: 1px solid #eee;
+          font-size: 16px;
+          padding: 5px 10px;
+          .iconfont {
+            color: #31c27c;
+            border-right: 1px solid #eee;
+            padding-right: 4px;
+          }
+        }
+        .content {
+          padding: 5px;
+          span {
+            font-size: 12px;
+            color: #fff;
+            margin: 3px;
+            border-radius: 4px;
+            background: #31c27c;
+            padding: 3px 5px;
+            display: inline-block;
+          }
+        }
+      }
     }
   }
 }

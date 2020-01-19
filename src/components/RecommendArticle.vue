@@ -13,22 +13,29 @@
       </span>
     </div>
     <div class="content">
-      <span v-for="(item,index) in articles" :key="index">
+      <div
+        v-for="(item,index) in articles"
+        :key="index"
+        @click="()=>{$router.push('/article/'+item.id)}"
+      >
         <i :class="['iconfont',index===2? 'icon-icon-test':'icon-'+index]"></i>
-        {{item.title}}
-      </span>
+        <el-tooltip effect="dark" :content="item.title" placement="top-end">
+          <span>{{item.title}}</span>
+        </el-tooltip>
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { Tabs, TabPane } from "element-ui";
+import { Tabs, TabPane, Tooltip } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
 @Component({
   name: "RecommendArticle",
   components: {
     "el-tabs": Tabs,
-    "el-tab-pane": TabPane
+    "el-tab-pane": TabPane,
+    "el-tooltip": Tooltip
   }
 })
 export default class RecommendArticle extends Vue {
@@ -81,7 +88,15 @@ export default class RecommendArticle extends Vue {
   /**
    * 请求热门文章
    */
-  private async getHotArticle() {}
+  private async getHotArticle() {
+    const res: ApiResponse<ListResponse<
+      Array<ArticleModule.ArticleInfo>
+    >> = await HttpRequest.ArticleModule.getHotArticleList({});
+    if (res && res.data) {
+      const datas = res.data.data;
+      this.articles = datas;
+    }
+  }
 
   created() {
     this.getArticleList({
@@ -100,7 +115,7 @@ export default class RecommendArticle extends Vue {
     border-bottom: 1px solid #eee;
     span {
       display: inline-block;
-      padding: 10px 21px;
+      padding: 10px 18px !important;
     }
     .active {
       transition: all 200ms ease-in-out;
@@ -110,8 +125,7 @@ export default class RecommendArticle extends Vue {
   }
   .content {
     height: 360px;
-    span {
-      display: block;
+    div {
       padding: 8px 10px;
       cursor: pointer;
       font-size: 13px;
@@ -124,24 +138,29 @@ export default class RecommendArticle extends Vue {
         padding: 0 5px;
       }
     }
-    span:nth-child(1) {
+    div:nth-child(1) {
       .iconfont {
         color: red;
       }
     }
-    span:nth-child(2) {
+    div:nth-child(2) {
       .iconfont {
         color: #06a5ffed;
       }
     }
-    span:nth-child(3) {
+    div:nth-child(3) {
       .iconfont {
         color: #31c27c;
       }
     }
-    span:hover {
+    div:hover {
       opacity: 0.7;
     }
   }
+}
+</style>
+<style>
+.el-tooltip__popper.is-dark {
+  background: #31c27c;
 }
 </style>

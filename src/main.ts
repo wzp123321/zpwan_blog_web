@@ -17,7 +17,7 @@ import "@/assets/css/iconfont.css"
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 // rem
-import "@/assets/js/rem"
+// import "@/assets/js/rem"
 
 
 router.beforeEach((to, from, next) => {

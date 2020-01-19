@@ -30,7 +30,7 @@ export default class BreadcrumbModule extends Vue {
       this.routers[0].path = "/";
     }
     // 修改目录的meta -name
-    if (this.routers[1].path.includes('/type')) {
+    if (this.routers[1].path.includes("/type")) {
       this.routers[1].path = this.$route.path;
       const id = this.$route.params.type;
       const res: ApiResponse<any> = await HttpRequest.CatalogModule.getCatalogInfoById(
@@ -39,6 +39,10 @@ export default class BreadcrumbModule extends Vue {
       if (res && res.data) {
         this.routers[1].meta.name = res.data.value;
       }
+    }
+    // 详情页
+    if (this.routers[1].path.includes("/article")) {
+      this.routers[1].path = this.$route.path;
     }
   }
 

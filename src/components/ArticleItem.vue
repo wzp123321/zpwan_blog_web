@@ -35,7 +35,11 @@
               {{articleInfo.comment_count}}
             </span>
           </div>
-          <div class="read" @click="()=>{$router.push('/article/'+articleInfo.id)}">阅读全文</div>
+          <div class="read" @click="()=>{$router.push('/article/'+articleInfo.id)}">
+            <el-tooltip effect="dark" content="前往查看文章详情" placement="top-end">
+              <span>阅读全文</span>
+            </el-tooltip>
+          </div>
         </div>
       </div>
     </div>
@@ -44,8 +48,12 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { formatDate } from "@/assets/js/index";
+import { Tooltip } from "element-ui";
 @Component({
-  name: "ArticleItem"
+  name: "ArticleItem",
+  components: {
+    "el-tooltip": Tooltip
+  }
 })
 export default class ArticleItem extends Vue {
   // 文章详情

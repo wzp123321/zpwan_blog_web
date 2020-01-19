@@ -19,6 +19,11 @@ const BannerModule = {
     return postRequest(url, params)
   },
 
+  async getTagsList(params: { [key: string]: any }) {
+    const url = "/tag/list"
+    return getRequest(url, params)
+  },
+
 }
 
 export default BannerModule
