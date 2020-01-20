@@ -161,25 +161,12 @@ export default class TopBox extends Vue {
         text-decoration: none;
       }
       .loginout {
-        z-index: 3;
-        display: none;
-        position: absolute;
-        top: 18px;
-        left: 11px;
-        padding: 10px 5px;
-        background: #fff;
-        border-radius: 4px;
         font-size: 12px;
-        width: 75px;
-        text-align: center;
-        border: 1px solid #f1f1f1;
         color: #31c27c;
       }
     }
-    .username:hover {
-      .loginout {
-        display: inline-block;
-      }
+    span:last-child{
+      color: #31c27c;
     }
   }
   .link span:hover {
