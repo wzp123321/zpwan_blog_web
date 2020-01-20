@@ -27,20 +27,26 @@
           <use xlink:href="#icon-lianjie" />
         </svg> 友情链接
       </span>
-      <span @click="()=>{dialogFormVisible = true}">
+      <span @click="()=>{dialogFormVisible = true}" v-if="name ===''">
         <svg class="icon" aria-hidden="true">
           <use xlink:href="#icon-github" />
         </svg> 登录
+      </span>
+      <span v-else class="username">
+        <i class="el-icon-user-solid"></i>
+        {{name}}
+        <span @click="loginout" class="loginout">退出登录</span>
       </span>
     </div>
     <UserLoginModule
       :dialogFormVisible="dialogFormVisible"
       @cancel="()=>{dialogFormVisible = false}"
+      @submit="(value)=>{dialogFormVisible = value}"
     ></UserLoginModule>
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component,Watch } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 // 解决AMap使用语法提示
 declare let AMap: any;
 import UserLoginModule from "@/components/UserLoginModal.vue";
@@ -54,7 +60,7 @@ import { UserModule } from "@/store/module/user";
 })
 export default class TopBox extends Vue {
   // 用户名
-  private name:string = localStorage.getItem('name') || "";
+  private name: string = localStorage.getItem("name") || "";
   // 登录对话框
   private dialogFormVisible: boolean = false;
   // 当前时间
@@ -103,23 +109,29 @@ export default class TopBox extends Vue {
         if (result && result.city && result.bounds) {
           const cityinfo = result.province + "" + result.city;
           that.cityinfo = cityinfo;
+          localStorage.setItem("location", cityinfo);
           UserModule.setUserInfo({
+            name: "",
+            avatar_url: "",
+            user_id: "",
             location: cityinfo
           });
         }
       }
     });
   }
-
+  /**
+   * 登出
+   */
+  private loginout() {
+    localStorage.clear();
+    window.location.reload();
+  }
   mounted() {
     this.showCityInfo();
     this.timer = setInterval(() => {
       this.getCurrentTime();
     }, 1000);
-  }
-  @Watch('name')
-  private handleNameChange(newVal:string,oldVal:string){
-    console.log(newVal)
   }
   beforeDestroy() {
     clearInterval(this.timer);
@@ -137,6 +149,7 @@ export default class TopBox extends Vue {
     span {
       display: inline-block;
       padding: 0 5px;
+      position: relative;
       .icon {
         width: 16px;
         height: 16px;
@@ -146,6 +159,26 @@ export default class TopBox extends Vue {
       a {
         color: #000;
         text-decoration: none;
+      }
+      .loginout {
+        z-index: 3;
+        display: none;
+        position: absolute;
+        top: 18px;
+        left: 11px;
+        padding: 10px 5px;
+        background: #fff;
+        border-radius: 4px;
+        font-size: 12px;
+        width: 75px;
+        text-align: center;
+        border: 1px solid #f1f1f1;
+        color: #31c27c;
+      }
+    }
+    .username:hover {
+      .loginout {
+        display: inline-block;
       }
     }
   }

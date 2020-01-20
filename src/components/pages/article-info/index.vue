@@ -38,7 +38,11 @@
       <!-- 点赞模块 -->
       <div class="ups frspace">
         <div class="click-like">
-          <i class="iconfont icon-dianzan" @click="getArticleUps"></i>
+          <i
+            class="iconfont icon-dianzan"
+            :style="{color:isUps?'#ec7259':'#9e9c9c'}"
+            @click="getArticleUps"
+          ></i>
           <span>点个赞呗</span>
         </div>
         <div class="catalog">
@@ -55,14 +59,15 @@
           <span style="font-size:12px;">共{{articleInfo.comment_count}}条</span>
         </div>
         <div v-if="JSON.stringify(comments) === '[]'" class="no-comment">暂无评论，期待您的优秀评论</div>
+        <!-- 顶部输入框 -->
+        <CommentInput @release="releaseComment"></CommentInput>
         <!--有评论 -->
-        <div v-else class="comment-data">
-          <CommentInput @release="releaseComment"></CommentInput>
+        <div v-if="JSON.stringify(comments) !== '[]'" class="comment-data">
           <div v-for="(item,index) in comments" :key="index">
             <div class="frsp">
               <div>
                 <img
-                  :src="item.author.avatar"
+                  :src="require(item.author.avatar_url+'')"
                   style="wdith:30px;height:30px;border-radius:50px;display:inline"
                   alt
                 />
@@ -86,7 +91,7 @@
                 <div class="frsp">
                   <div v-if="childItem.author">
                     <img
-                      :src="childItem.author.avatar"
+                      :src="require(childItem.author.avatar_url)"
                       style="wdith:30px;height:30px;border-radius:50px;display:inline"
                       alt
                     />
@@ -141,6 +146,7 @@
     <UserLoginModule
       :dialogFormVisible="dialogFormVisible"
       @cancel="()=>{dialogFormVisible = false}"
+      @submit="(value)=>{dialogFormVisible = value}"
     ></UserLoginModule>
   </div>
 </template>
@@ -152,7 +158,7 @@ import { formatDate } from "@/assets/js/index";
 import CommentInput from "@/components/CommentInput.vue";
 import { Route } from "vue-router";
 import RecommendArticle from "@/components/RecommendArticle.vue";
-import UserLoginModule from "@/components/UserLoginModal.vue"
+import UserLoginModule from "@/components/UserLoginModal.vue";
 import "mavon-editor/dist/css/index.css";
 import "mavon-editor/dist/highlightjs/highlight.min.js";
 import "mavon-editor/dist/katex/katex";
@@ -174,23 +180,28 @@ Vue.prototype.$message = Message;
 export default class ArticleInfoModule extends Vue {
   // 登录对话框
   private dialogFormVisible: boolean = false;
+  // 用户是否点赞过
+  private isUps: boolean = false;
   // 标识当前评论的大楼层
   private floor: number = 1;
   // 当前需要评论的评论id
   private id: string = "";
   // 评论的作者信息---即登录的用户
-  private author: { [key: string]: any } = {
-    id: "test_ddrrfaaa",
-    name: "test评论",
-    avatar_url: "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg",
-    location: "江苏南京"
+  private author: DashoboardModule.UserInfo = {
+    user_id: localStorage.getItem("user_id") || "",
+    name: localStorage.getItem("name") || "",
+    avatar_url: localStorage.getItem("avatar_url") || "",
+    location: localStorage.getItem("location") || ""
   };
   // 被评论的作者信息
-  private reply_userInfo: { [key: string]: any } = {};
-  // 文章id
-  private article_id: string = "f7c8c0f9-2d51-4915-b690-7bfd460beca2";
+  private reply_userInfo: DashoboardModule.UserInfo = {
+    user_id: "",
+    name: "",
+    avatar_url: "",
+    location: ""
+  };
   // 评论的父级id
-  private parent_id: string = "783c5a44-6747-4ff8-babf-cddc11231b91";
+  private parent_id: string = "";
   // 文章详情
   private articleInfo: ArticleModule.ArticleInfo = {};
   // 评论数组
@@ -205,27 +216,28 @@ export default class ArticleInfoModule extends Vue {
    * 评论输入回调
    */
   private async releaseComment(content: string) {
+    if (!localStorage.getItem("name")) {
+      this.dialogFormVisible = true;
+      return;
+    }
     if (content.replace(/\s+/g, "") === "") {
       this.$message.error("评论不能为空！");
       return;
     }
-    const { author, article_id, parent_id } = this;
+    const article_id = this.$route.params.id;
+    const { author, parent_id, reply_userInfo } = this;
     const res: any = await HttpRequest.CommentModule.getCommentCreate({
       article_id,
-      author: JSON.stringify(this.author),
+      author: JSON.stringify(author),
       content,
       parent_id,
       is_root: parent_id === "",
-      reply_userInfo: JSON.stringify({
-        user_id: "22222323",
-        name: "万直鹏",
-        avatar_url:
-          "http://127.0.0.1:9898/B4B269BDBD69EF82FE920B2BBB489AFC.jpg",
-        location: "location"
-      })
+      reply_userInfo: JSON.stringify(reply_userInfo)
     });
     if (res && res.data) {
       this.$message.success("评论成功");
+      this.getArticleInfoById();
+      this.getArticleCommentList();
     }
   }
   /**
@@ -268,6 +280,9 @@ export default class ArticleInfoModule extends Vue {
           let formatObj = newComments.reduce((pre: any, cur: any) => {
             return { ...pre, [cur["id"]]: cur };
           }, {});
+          /**
+           * 组装数据 生成一个树结构
+           */
           let formatArray = newComments.reduce((arr: any, cur: any) => {
             // 获取当前元素的pId 如果没有则设为0  如果有则获取其pId
             let parent_id = cur.parent_id ? cur.parent_id : "";
@@ -304,24 +319,54 @@ export default class ArticleInfoModule extends Vue {
    * 文章点赞
    */
   private async getArticleUps() {
-    if (!localStorage.getItem("name")) {
+    if (!localStorage.getItem("name") || !localStorage.getItem("user_id")) {
       this.dialogFormVisible = true;
     } else {
-      const id = this.$route.params.id;
-      const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
-        { id }
-      );
-      if (res && res.data) {
-        this.$message.success("点赞成功");
-        this.getArticleInfoById();
+      const article_id = this.$route.params.id;
+      const user_id = localStorage.getItem("user_id");
+      if (!this.isUps) {
+        const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
+          { article_id, user_id }
+        );
+        if (res && res.data) {
+          this.$message.success("点赞成功");
+          this.handleUpsCheck();
+          this.getArticleInfoById();
+        }
+      } else {
+        const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUpsDelete(
+          { article_id, user_id }
+        );
+        if (res && res.data) {
+          this.$message.success("已取消点赞");
+          this.handleUpsCheck();
+          this.getArticleInfoById();
+        }
       }
     }
+  }
+  /**
+   * 校验登录用户是否点赞过
+   */
+  private async handleUpsCheck() {
+    const article_id = this.$route.params.id;
+    const user_id = localStorage.getItem("user_id");
+    const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleUpsCheck(
+      {
+        article_id,
+        user_id
+      }
+    );
+    this.isUps = res.data;
   }
   created() {
     this.$nextTick(() => {
       this.getArticleInfoById();
       this.getArticleCommentList();
       this.getArticleVisit();
+      if (localStorage.getItem("name") && localStorage.getItem("user_id")) {
+        this.handleUpsCheck();
+      }
     });
   }
   @Watch("$route")
@@ -376,7 +421,6 @@ export default class ArticleInfoModule extends Vue {
           cursor: pointer;
           padding: 8px;
           font-size: 18px;
-          color: #ec7259;
           border-radius: 50px;
           border: 1px solid #eee;
         }

@@ -36,10 +36,10 @@ declare namespace DashoboardModule {
    * 用户信息
    */
   interface UserInfo {
-    id?: string,
-    name?: string,
-    avatar_url?: string,
-    location?: string
+    user_id: string,
+    name: string,
+    avatar_url: string,
+    location: string
   }
 
   /**
@@ -113,7 +113,7 @@ declare namespace ArticleModule {
     is_root: string,
     reply_userInfo: DashoboardModule.UserInfo,
     create_time: number,
-    children?:[]
+    children?: []
   }
 }
 

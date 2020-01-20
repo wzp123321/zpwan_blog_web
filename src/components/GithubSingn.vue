@@ -41,29 +41,23 @@ export default class GithubLogin extends Vue {
       }
     }).then(async res => {
       if (res && res.data) {
-        const response: ApiResponse<string> = await HttpRequest.AdminModule.getTokenByUserId(
-          {
-            user_id: res.data.id
-          }
-        );
-        if (response) {
-          const { id, avatar_url, name } = res.data;
-          UserModule.setUserInfo({
-            id,
-            avatar_url,
-            name
-          });
-          localStorage.setItem("token", response.data);
-          localStorage.setItem("id", id);
-          localStorage.setItem("avatar_url", avatar_url);
-          localStorage.setItem("name", name);
-          console.log(this.$router);
-          this.$notify({
-            title: "登录成功",
-            message: "恭喜你登录成功",
-            type: "success"
-          });
-        }
+        const { id, avatar_url, name, location } = res.data;
+        UserModule.setUserInfo({
+          user_id: id,
+          avatar_url,
+          name,
+          location
+        });
+        localStorage.setItem("id", id);
+        localStorage.setItem("avatar_url", avatar_url);
+        localStorage.setItem("name", name);
+        localStorage.setItem("location", location);
+        window.location.href = localStorage.getItem("current_url") || "/";
+        this.$notify({
+          title: "登录成功",
+          message: "恭喜你登录成功",
+          type: "success"
+        });
       } else {
         this.$router.push("/signin");
       }

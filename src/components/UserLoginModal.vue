@@ -1,11 +1,16 @@
 <template>
-  <el-dialog title="用户登录" :visible.sync="dialogFormVisible" @close="close">
+  <el-dialog
+    title="用户登录"
+    :visible.sync="dialogFormVisible"
+    @close="close"
+    @cancel="close"
+    width="420px"
+  >
     <el-form :model="form" ref="form">
-      <div class="title">您可以选择游客登录:</div>
       <el-form-item
-        label="用户名"
-        label-width="80px"
         prop="name"
+        label="用户名:"
+        label-width="70px"
         :rules="[
       { required: true, message: '游客名不能为空'},
       { max: 10, message: '游客名不得超过10个字符'}
@@ -13,13 +18,13 @@
       >
         <el-input
           v-model="form.name"
-          style="width:330px"
+          style="width:280px"
           autocomplete="off"
-          size="mini"
+          size="small"
           placeholder="请填写您的用户名"
         ></el-input>
       </el-form-item>
-      <el-form-item label="头像选择" label-width="80px">
+      <el-form-item label="头像:" label-width="60px">
         <template v-for="item in 6">
           <span :key="item" class="avatar-span">
             <img
@@ -31,35 +36,35 @@
           </span>
         </template>
       </el-form-item>
+      <el-form-item style="text-align:center">
+        <el-button size="small" type="primary" style="width:100%;" @click="handleUserLogin">登 录</el-button>
+      </el-form-item>
       <div class="other-login">
         <div class="title">您还可以选择其他登录方式:</div>
-        <div class="svg" @click="handleGithubLogin">
-          <svg class="icon" aria-hidden="true" style="width:16px;height:16px">
+        <div @click="handleGithubLogin" style="text-align:center">
+          <svg class="icon" aria-hidden="true" style="width:24px;height:24px">
             <use xlink:href="#icon-github" />
           </svg>
-          <span>Github登录</span>
         </div>
       </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button size="mini" @click="cancel">取 消</el-button>
-      <el-button size="mini" type="primary" @click="handleUserLogin">登 录</el-button>
-    </div>
   </el-dialog>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { UserModule } from "@/store/module/user";
+import generateUUId from "@/assets/js/crypto";
 import {
   Dialog,
   Form,
   FormItem,
   Input,
   Button,
-  RadioGroup,
-  Radio
+  Notification
 } from "element-ui";
+Vue.prototype.$notify = Notification;
+
 @Component({
   name: "UserLoginModal",
   components: {
@@ -67,9 +72,7 @@ import {
     "el-form": Form,
     "el-form-item": FormItem,
     "el-button": Button,
-    "el-input": Input,
-    "el-radio": Radio,
-    "el-radio-group": RadioGroup
+    "el-input": Input
   }
 })
 export default class UserLoginModal extends Vue {
@@ -87,35 +90,39 @@ export default class UserLoginModal extends Vue {
   /**
    * 用户登录
    */
+  @Emit("submit")
   private handleUserLogin() {
+    let flag: boolean = true;
     const form: any = this.$refs.form;
-    form.validate(async (valid: any) => {
+    form.validate((valid: any) => {
       if (valid) {
-        const res: ApiResponse<string> = await HttpRequest.AdminModule.getTouristAdd(
-          {
-            name: this.form.name,
-            url: "@/assets/imgs/avatar_" + this.avaItem + ".png",
-            location: UserModule.userInfo.location
-          }
+        window.location.href = this.$route.path;
+        this.$notify({
+          title: "登录成功",
+          message: "恭喜你登录成功",
+          type: "success"
+        });
+        const user_id: string = generateUUId(16);
+        localStorage.setItem("user_id", user_id);
+        localStorage.setItem("name", this.form.name);
+        localStorage.setItem(
+          "avatar_url",
+          "@/assets/imgs/avatar_" + this.avaItem + ".png"
         );
-
-        if (res && res.data) {
-          this.$notify({
-            title: "登录成功",
-            message: "恭喜你登录成功",
-            type: "success"
-          });
-          localStorage.setItem("name", this.form.name);
-          localStorage.setItem(
-            "user_avatar",
-            "@/assets/imgs/avatar_" + this.avaItem + ".png"
-          );
-        }
+        const state: any = UserModule.context.state;
+        const location = state.location;
+        UserModule.setUserInfo({
+          name: this.form.name,
+          avatar_url: this.avaItem+"",
+          location,
+          user_id
+        });
+        flag = false;
       } else {
-        console.log("error submit!!");
-        return false;
+        flag = true;
       }
     });
+    return flag;
   }
   /**
    * github登录
@@ -123,6 +130,7 @@ export default class UserLoginModal extends Vue {
   private handleGithubLogin() {
     window.location.href =
       "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8088/signin_github";
+    localStorage.setItem("current_url", this.$route.path);
   }
 }
 </script>
@@ -137,7 +145,7 @@ export default class UserLoginModal extends Vue {
   cursor: pointer;
   padding: 3px;
   .choosed-img {
-    border: 1px dashed #eee;
+    border: 1px dashed #c7c7c7;
   }
   img {
     width: 40px;
@@ -147,22 +155,9 @@ export default class UserLoginModal extends Vue {
     border-radius: 4px;
   }
 }
-
-.other-login {
-  .svg {
-    .icon {
-      position: relative;
-      bottom: -2px;
-      margin-left: 100px;
-      font-size: 12px;
-    }
-    span {
-      padding-left: 4px;
-      font-size: 12px;
-    }
-  }
-  .svg:hover {
-    text-decoration: underline;
-  }
+</style>
+<style lang="less">
+.el-form-item__content {
+  line-height: 0 !important;
 }
 </style>

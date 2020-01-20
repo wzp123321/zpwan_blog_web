@@ -54,9 +54,9 @@ const publicReq = async (params: { [key: string]: any }) => {
             if (res.data.code === 403) {
                 window.location.href = "/";
                 localStorage.removeItem("name");
-                localStorage.removeItem("id");
+                localStorage.removeItem("user_id");
                 localStorage.removeItem("avatar_url");
-                localStorage.removeItem("token")
+                localStorage.removeItem("location");
                 throw new Error(res.statusText);
             }
             if (res.data.code !== 200) {

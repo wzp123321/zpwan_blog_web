@@ -1,6 +1,5 @@
 <template>
   <div class="dashoboard-wrapper">
-    1.登录改成数据存在本地即可
     2.访客列表改为管理员表
     2.文章评论
     3.后台新增管理员表 ---支持超管新增管理员

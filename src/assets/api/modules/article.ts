@@ -18,13 +18,23 @@ const ArticleModule = {
     },
 
     async getArticleInfoUps(params: { [key: string]: any }) {
-        const url = '/article/ups'
+        const url = '/web/ups/add'
+        return postRequest(url, params);
+    },
+
+    async getArticleInfoUpsDelete(params: { [key: string]: any }) {
+        const url = '/web/ups/delete'
         return getRequest(url, params);
     },
 
     
     async getHotArticleList(params: { [key: string]: any }) {
         const url = 'article/web/hotlist'
+        return getRequest(url, params);
+    },
+
+    async getArticleUpsCheck(params: { [key: string]: any }) {
+        const url = '/web/ups/check'
         return getRequest(url, params);
     },
 
