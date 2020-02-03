@@ -106,9 +106,7 @@ export default class UserLoginModal extends Vue {
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("name", this.form.name);
         localStorage.setItem(
-          "avatar_url",
-          "@/assets/imgs/avatar_" + this.avaItem + ".png"
-        );
+          "avatar_url",this.avaItem+'');
         const state: any = UserModule.context.state;
         const location = state.location;
         UserModule.setUserInfo({

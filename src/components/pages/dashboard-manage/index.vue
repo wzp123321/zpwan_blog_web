@@ -1,7 +1,6 @@
 <template>
   <div class="dashoboard-wrapper">
-    2.访客列表改为管理员表--数据库改字段即可 3.后台新增管理员表 ---支持超管新增管理员
-    2.文章评论---加一个头像表
+    <!-- 搜索也 -->
     4.全局回到顶部滚轮
     <!-- 用户信息模块 -->
     <div class="userinfo-wrapper">userinfo</div>

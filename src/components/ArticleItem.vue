@@ -94,7 +94,7 @@ export default class ArticleItem extends Vue {
     padding: 0 10px;
     .header {
       h1 {
-        margin: 0 0 10px 10px;
+        margin: 0 0 10px 0;
         font-weight: 500;
         font-size: 20px;
         color: #555555;
@@ -119,8 +119,12 @@ export default class ArticleItem extends Vue {
     }
     p {
       margin: 0;
-      height: 90px;
+      height: 80px;
       font-size: 12px;
+      background: #f1f1f1;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 4px;
     }
     .count {
       span {

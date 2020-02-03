@@ -51,7 +51,7 @@ import {
   Message
 } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
-Vue.prototype.$message = Message
+Vue.prototype.$message = Message;
 
 @Component({
   name: "FriednlyLinkModule",
@@ -135,10 +135,11 @@ export default class FriednlyLinkModule extends Vue {
   background: #fff;
   padding: 20px;
   .links {
+    padding: 10px 0;
     a {
       text-decoration: none;
       display: inline-block;
-      padding: 6px 18px;
+      padding: 4px 18px 6px 16px;
       border: 1px solid #eee;
       border-radius: 5px;
       margin: 0 10px;

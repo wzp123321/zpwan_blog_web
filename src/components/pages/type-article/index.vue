@@ -4,6 +4,7 @@
       <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
       <div style="text-align:center">
         <Pagination
+          style="margin-top:10px"
           v-if="JSON.stringify(articles) !=='[]'"
           layout="prev, pager, next"
           :total="pagination.total"

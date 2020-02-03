@@ -67,22 +67,23 @@
             <div class="frsp">
               <div>
                 <img
-                  :src="require(item.author.avatar_url+'')"
-                  style="wdith:30px;height:30px;border-radius:50px;display:inline"
+                  v-bind:src="require('../../../assets/imgs/avatar_'+item.author.avatar_url+'.png')"
+                  style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
                   alt
                 />
-                <span v-if="item.author">{{item.author.name}}</span>
+                <span v-if="item.author" style="margin-left:5px">{{item.author.name}}</span>
               </div>
             </div>
-            <p>{{item.content}}</p>
-            <p>
-              <i class="iconfont icon-dianzan">点赞</i>
+            <p style="margin:5px 0;padding-left:5px;font-size:12px;padding:5px">{{item.content}}</p>
+            <div style="border-top:1px solid #eee">
+              <i class="iconfont icon-dianzan" style="font-size:14px">点赞</i>
               --
               <i
                 class="iconfont icon-pinglun"
-                @click="()=>{ floor =index ;id= item.id}"
+                style="font-size:14px"
+                @click="()=>handleSecondFloorComment(index,item.id,item.author)"
               >回复</i>
-            </p>
+            </div>
             <div>
               <CommentInput v-if="floor===index && id === item.id" @release="releaseComment"></CommentInput>
             </div>
@@ -91,23 +92,23 @@
                 <div class="frsp">
                   <div v-if="childItem.author">
                     <img
-                      :src="require(childItem.author.avatar_url)"
-                      style="wdith:30px;height:30px;border-radius:50px;display:inline"
+                      v-bind:src="require('../../../assets/imgs/avatar_'+item.author.avatar_url+'.png')"
+                      style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
                       alt
                     />
                     <span>{{childItem.author.name}}</span>
                   </div>
                   <!-- 点击这里的评论出现@这个评论的楼主 -->
                 </div>
-                <p v-if="childItem.reply_owner">
+                <p v-if="childItem.reply_userInfo">
                   回复
-                  <span style="color:#06a5ff">{{childItem.reply_owner.name}}</span>
+                  <span style="color:#06a5ff">{{childItem.reply_userInfo.name}}</span>
                   : {{childItem.content}}
                 </p>
-                <p>
-                  <i class="iconfont icon-dianzan"></i> 点赞 --
+                <p style="border-top:1px solid #eee">
+                  <i class="iconfont icon-dianzan" style="font-size:14px">点赞</i> --
                   <span @click="()=>{ floor =index ;id= childItem.id}">
-                    <i class="iconfont icon-pinglun"></i> 回复
+                    <i class="iconfont icon-pinglun" style="font-size:14px">回复</i>
                   </span>
                 </p>
                 <div>
@@ -127,7 +128,7 @@
       <div class="article-quotes">
         <div class="title">
           <i class="iconfont icon-laba"></i>
-          人生感悟
+          每日一句
         </div>
         <p>{{articleInfo.quotes}}</p>
       </div>
@@ -227,8 +228,8 @@ export default class ArticleInfoModule extends Vue {
     const article_id = this.$route.params.id;
     const { author, parent_id, reply_userInfo } = this;
     const res: any = await HttpRequest.CommentModule.getCommentCreate({
-      article_id,
       author: JSON.stringify(author),
+      article_id,
       content,
       parent_id,
       is_root: parent_id === "",
@@ -239,6 +240,19 @@ export default class ArticleInfoModule extends Vue {
       this.getArticleInfoById();
       this.getArticleCommentList();
     }
+  }
+  /**
+   * 二楼回复
+   */
+  private handleSecondFloorComment(
+    index: number,
+    id: string,
+    author: DashoboardModule.UserInfo
+  ) {
+    this.floor = index;
+    this.id = id;
+    this.parent_id = id;
+    this.reply_userInfo = author;
   }
   /**
    * 请求详情
