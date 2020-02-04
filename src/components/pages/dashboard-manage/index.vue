@@ -114,7 +114,7 @@ export default class DashboardModule extends Vue {
   private async getArticleList() {
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleList({});
+    >> = await HttpRequest.ArticleModule.getArticleList({limit:5});
     if (res && res.data) {
       const datas = res.data.data;
       const total = res.data.total;

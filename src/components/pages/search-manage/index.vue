@@ -1,7 +1,7 @@
 <template>
   <div class="search-wrapper">
     <div class="search-input flex-row">
-      <el-input v-model="key" placeholder="请输入内容"></el-input>
+      <el-input v-model="key" placeholder="请输入内容进行搜索" :clearable="true"></el-input>
       <el-button
         type="primary"
         icon="el-icon-search"
@@ -23,8 +23,7 @@
     >
       <div class="article-list">
         <p>
-          未能找到如下有关"+
-          <span class="em">{{this.key}}</span>+"，为您智能推荐以下课程
+          未能找到如下有关"<span class="em">{{this.key}}</span>"，为您智能推荐以下课程
         </p>
         <ArticleItem v-for="(item,index) in intro_articles" :key="index" :articleInfo="item"></ArticleItem>
       </div>
@@ -32,12 +31,21 @@
         <RecommendArticle></RecommendArticle>
       </div>
     </div>
-    <div v-else></div>
+    <el-pagination
+      v-if="total>5 &&(JSON.stringify(articles)!=='[]' || JSON.stringify(intro_articles)!=='[]')"
+      style="text-align:center;margin-top:20px"
+      background
+      :page-size="5"
+      layout="prev, pager, next"
+      :current-page="page"
+      :total="total"
+      @current-change="handlePaginationChange"
+    ></el-pagination>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { Input, Button } from "element-ui";
+import { Input, Button, Pagination } from "element-ui";
 import RecommendArticle from "@/components/RecommendArticle.vue";
 import HttpRequest from "@/assets/api/modules/index";
 import ArticleItem from "@/components/ArticleItem.vue";
@@ -46,6 +54,7 @@ import ArticleItem from "@/components/ArticleItem.vue";
   components: {
     "el-input": Input,
     "el-button": Button,
+    "el-pagination": Pagination,
     ArticleItem,
     RecommendArticle
   }
@@ -56,14 +65,23 @@ export default class SearchModule extends Vue {
   private intro_articles: Array<ArticleModule.ArticleInfo> = [];
   private total: number = 0;
   private page: number = 1;
+  handlePaginationChange(value: number) {
+   this.page = value;
+   this.handleSearchByKey();
+  }
   /**
    * 搜索事件
    */
   private async handleSearchByKey() {
+    if(this.key ===''){
+      return ;
+    }
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
     >> = await HttpRequest.ArticleModule.getArticleSearchByKey({
-      key: this.key
+      key: this.key,
+      limit: 5,
+      page:this.page
     });
 
     if (res && res.data) {
@@ -74,7 +92,8 @@ export default class SearchModule extends Vue {
       this.handleSearchListFilter();
       if (JSON.stringify(res.data.data) === "[]") {
         const newres = await HttpRequest.ArticleModule.getArticleList({
-          page: 1
+          page: 1,
+          limit: 10
         });
         if (newres && newres.data) {
           const datas = newres.data.data;
