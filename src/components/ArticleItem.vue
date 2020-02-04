@@ -5,10 +5,10 @@
       <img :src="articleInfo.imgUrl" alt @click="()=>{$router.push('/article/'+articleInfo.id)}" />
       <div class="info flex-column">
         <div class="header frspace">
-          <h1 @click="()=>{$router.push('/article/'+articleInfo.id)}">{{articleInfo.title}}</h1>
+          <h1 @click="()=>{$router.push('/article/'+articleInfo.id)}" v-html="articleInfo.title"></h1>
           <span>--{{articleInfo.second_catalogName}}</span>
         </div>
-        <p>{{articleInfo.description}}</p>
+        <p v-html="articleInfo.description"></p>
         <span class="mobile-time">
           <i class="iconfont icon-rili"></i>
           {{formatDate(articleInfo.create_time)}}

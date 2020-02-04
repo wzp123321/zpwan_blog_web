@@ -81,7 +81,7 @@
               <i
                 class="iconfont icon-pinglun"
                 style="font-size:14px"
-                @click="()=>handleSecondFloorComment(index,item.id,item.author)"
+                @click="()=>handleSecondFloorComment(index,item.id,item.is_root?item.id :item.parent_id,item.author)"
               >回复</i>
             </div>
             <div>
@@ -107,7 +107,9 @@
                 </p>
                 <p style="border-top:1px solid #eee">
                   <i class="iconfont icon-dianzan" style="font-size:14px">点赞</i> --
-                  <span @click="()=>{ floor =index ;id= childItem.id}">
+                  <span
+                    @click="()=>handleSecondFloorComment(index,childItem.id,childItem.parent_id,childItem.author)"
+                  >
                     <i class="iconfont icon-pinglun" style="font-size:14px">回复</i>
                   </span>
                 </p>
@@ -204,7 +206,10 @@ export default class ArticleInfoModule extends Vue {
   // 评论的父级id
   private parent_id: string = "";
   // 文章详情
-  private articleInfo: ArticleModule.ArticleInfo = {};
+  private articleInfo: ArticleModule.ArticleInfo = {
+    title:"",
+    description:""
+  };
   // 评论数组
   private comments: Array<ArticleModule.CommentInfo> = [];
   /**
@@ -247,11 +252,12 @@ export default class ArticleInfoModule extends Vue {
   private handleSecondFloorComment(
     index: number,
     id: string,
+    parent_id:string,
     author: DashoboardModule.UserInfo
   ) {
     this.floor = index;
     this.id = id;
-    this.parent_id = id;
+    this.parent_id = parent_id;
     this.reply_userInfo = author;
   }
   /**

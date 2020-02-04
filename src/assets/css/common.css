@@ -47,3 +47,7 @@ body {
 ::-webkit-scrollbar-button {
     visibility: hidden;
 }
+
+.em{
+    color: #ec7259;
+}

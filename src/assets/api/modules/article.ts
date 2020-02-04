@@ -38,6 +38,11 @@ const ArticleModule = {
         return getRequest(url, params);
     },
 
+    async getArticleSearchByKey(params: { [key: string]: any }) {
+        const url = '/article/web/search'
+        return getRequest(url, params);
+    },
+
 }
 
 export default ArticleModule

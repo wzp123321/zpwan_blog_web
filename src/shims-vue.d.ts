@@ -81,10 +81,10 @@ declare namespace DashoboardModule {
 declare namespace ArticleModule {
   interface ArticleInfo {
     id?: string,
-    title?: string,
+    title: string,
     content?: string,
     imgUrl?: string,
-    description?: string,
+    description: string,
     author?: string,
     tags?: string,
     first_catalogId?: number,
