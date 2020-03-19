@@ -23,7 +23,7 @@
     >
       <div class="article-list">
         <p>
-          未能找到如下有关"<span class="em">{{this.key}}</span>"，为您智能推荐以下课程
+          未能找到如下有关"<span class="em">{{this.key}}</span>"，为您智能推荐以下文章
         </p>
         <ArticleItem v-for="(item,index) in intro_articles" :key="index" :articleInfo="item"></ArticleItem>
       </div>

@@ -3,7 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-
 Vue.config.productionTip = false
 
 // 引入公共样式
