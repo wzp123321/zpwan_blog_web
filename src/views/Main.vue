@@ -7,6 +7,9 @@
       <ContentBox :style="{marginTop:isCeil?'64px':'10px'}" class="boxW"></ContentBox>
     </div>
     <FooterBox></FooterBox>
+    <div class="scroll-to-top" v-show="isTop">
+      <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -29,6 +32,17 @@ import BreadcrumbModule from "@/components/Breadcrumb.vue";
 export default class Main extends Vue {
   // 顶部是否吸顶
   private isCeil: boolean = false;
+  // 是否显示回到顶骨图标
+  private isTop: boolean = false;
+  /**
+   * 回到顶部
+   */
+  private handleScrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
   /**
    * 添加全局监听
    */
@@ -41,6 +55,11 @@ export default class Main extends Vue {
       } else {
         this.isCeil = false;
       }
+      if (scrollTop > 60) {
+        this.isTop = true;
+      } else {
+        this.isTop = false;
+      }
     });
   }
 }
@@ -52,5 +71,17 @@ export default class Main extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 40px;
+    z-index: 999;
+    .iconfont {
+      transition: ease-in 1s linear;
+      color: #31c27c;
+      font-size: 50px;
+      cursor: pointer;
+    }
+  }
 }
 </style>

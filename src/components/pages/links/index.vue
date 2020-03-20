@@ -31,7 +31,7 @@
             <el-input v-model="form.url" style="width:400px" placeholder="请输入您的站点地址"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">立即提交</el-button>
+            <el-button type="primary" @click="onSubmit" style="padding:10px 20px">立即提交</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -135,6 +135,7 @@ export default class FriednlyLinkModule extends Vue {
   background: #fff;
   padding: 20px;
   .links {
+    min-height: 100px;
     padding: 10px 0;
     a {
       text-decoration: none;
@@ -160,5 +161,10 @@ export default class FriednlyLinkModule extends Vue {
       transform: translateY(-2px);
     }
   }
+}
+</style>
+<style>
+.el-collapse-item__header {
+  color: #06a5ff;
 }
 </style>

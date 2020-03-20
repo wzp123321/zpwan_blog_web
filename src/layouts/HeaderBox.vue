@@ -183,3 +183,8 @@ export default class HeaderBox extends Vue {
   }
 }
 </style>
+<style>
+.el-menu--horizontal>.el-menu-item{
+  height: 61px;
+}
+</style>

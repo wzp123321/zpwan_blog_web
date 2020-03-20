@@ -1,7 +1,6 @@
 <template>
   <div class="dashoboard-wrapper">
     <!-- 搜索也 -->
-    4.全局回到顶部滚轮
     <!-- 用户信息模块 -->
     <div class="userinfo-wrapper">userinfo</div>
     <!-- content模块 -->
