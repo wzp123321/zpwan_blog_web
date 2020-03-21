@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Route } from 'vue-router'
 
 const Main = () => import("@/views/Main.vue");
 const LeaveMessageModule = () => import("@/components/pages/leave-message/index.vue")
@@ -59,7 +60,15 @@ const routes = [
         path: '/404',
         component: NotFoundModule,
       },
-    ]
+    ],
+    //每次路由跳转后滚轮置顶
+    scrollBehavior(to:Route, from:Route, savedPosition:Function) {
+      // return 期望滚动到哪个的位置
+      return {
+        x: 0,
+        y: 0
+      }
+    }
   },
   {
     path: '/signin_github',

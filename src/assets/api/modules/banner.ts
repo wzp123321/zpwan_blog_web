@@ -23,7 +23,10 @@ const BannerModule = {
     const url = "/tag/list"
     return getRequest(url, params)
   },
-
+  async getNoticeList(params: { [key: string]: any }) {
+    const url = "/notice/web/list"
+    return getRequest(url, params)
+  },
 }
 
 export default BannerModule

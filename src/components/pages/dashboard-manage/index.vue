@@ -1,8 +1,21 @@
 <template>
   <div class="dashoboard-wrapper">
-    <!-- 搜索也 -->
     <!-- 用户信息模块 -->
-    <div class="userinfo-wrapper">userinfo</div>
+    <el-carousel
+      height="30px"
+      direction="vertical"
+      :autoplay="true"
+      :loop="true"
+      @change="handleCarouselChange"
+    >
+      <el-carousel-item v-for="(item,index) in notices" :key="index" class="notice-carousel-item">
+        <i
+          :style="{color:noticeInfo.isEmergency===1 ? '#ec3d06':'#f5db4b'}"
+          class="iconfont icon-laba"
+        ></i>
+        <span>{{noticeInfo.content}}</span>
+      </el-carousel-item>
+    </el-carousel>
     <!-- content模块 -->
     <div class="content-wrapper frspace">
       <!-- 文章模块 -->
@@ -66,7 +79,11 @@ import RecommendArticle from "@/components/RecommendArticle.vue";
 export default class DashboardModule extends Vue {
   // banner列表
   private banners: Array<DashoboardModule.BannerInfo> = [];
-  // 文章列表
+  // notice 列表
+  private notices: Array<NoticeInfo> = [];
+  // 当前通知详情
+  private noticeInfo: NoticeInfo = {};
+  // article 列表
   private articles: Array<ArticleModule.ArticleInfo> = [];
   // 分页
   private pagination: { [key: string]: any } = {
@@ -113,7 +130,7 @@ export default class DashboardModule extends Vue {
   private async getArticleList() {
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleList({limit:5});
+    >> = await HttpRequest.ArticleModule.getArticleList({ limit: 5 });
     if (res && res.data) {
       const datas = res.data.data;
       const total = res.data.total;
@@ -121,11 +138,29 @@ export default class DashboardModule extends Vue {
       this.pagination.total = total;
     }
   }
+  /**
+   * 请求通知列表
+   */
+  private async getNoticeList() {
+    const res: ApiResponse<any> = await HttpRequest.BannerModule.getNoticeList(
+      {}
+    );
+
+    if (res && res.data) {
+      this.notices = res.data.data;
+      this.noticeInfo = this.notices[0];
+    }
+  }
+  // 轮播
+  private handleCarouselChange(index: number) {
+    this.noticeInfo = this.notices[index];
+  }
   created() {
     this.$nextTick(() => {
       this.getBannerList();
       this.getArticleList();
       this.getTagList();
+      this.getNoticeList();
     });
   }
 }
@@ -133,11 +168,15 @@ export default class DashboardModule extends Vue {
 <style lang="less" scoped>
 .dashoboard-wrapper {
   position: relative;
-  .userinfo-wrapper {
-    width: 100%;
-    height: 32px;
-    border-radius: 5px;
+  .notice-carousel-item {
+    padding-top: 4px;
+    font-size: 14px;
     background: #fff;
+    .iconfont {
+      font-size: 14px;
+      display: inline-block;
+      margin: 0  10px;
+    }
   }
   .content-wrapper {
     margin-top: 10px;
@@ -161,7 +200,7 @@ export default class DashboardModule extends Vue {
     }
     .other-wrapper {
       width: 300px;
-      margin-left: 20px;
+      margin-left: 10px;
       .tag-wrapper {
         background: #fff;
         .title {
@@ -190,7 +229,6 @@ export default class DashboardModule extends Vue {
     }
   }
 }
-
 @media screen and (max-width: 768px) {
   .carousel {
     display: none;

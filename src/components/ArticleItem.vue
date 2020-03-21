@@ -85,18 +85,21 @@ export default class ArticleItem extends Vue {
     background: #ea3737;
   }
   img {
-    width: 150px !important;
-    height: 150px !important;
+    min-width: 120px;
+    min-height: 120px;
+    max-width: 120px;
+    max-height: 120px;
     border-radius: 3px;
+    border: 1px solid #f1efef;
   }
   .info {
     width: 100%;
     padding: 0 10px;
     .header {
       h1 {
-        margin: 0 0 10px 0;
+        margin:-3px 0 10px 0;
         font-weight: 500;
-        font-size: 20px;
+        font-size: 18px;
         color: #555555;
         overflow: hidden;
         white-space: nowrap;
@@ -114,12 +117,13 @@ export default class ArticleItem extends Vue {
         white-space: nowrap;
         text-align: right;
         text-overflow: ellipsis;
+        color: #666;
         font-size: 14px;
       }
     }
     p {
       margin: 0;
-      height: 80px;
+      height: 50px;
       font-size: 12px;
       background: #f1f1f1;
       padding: 5px;
@@ -138,11 +142,13 @@ export default class ArticleItem extends Vue {
       }
     }
     .read {
-      padding: 5px 10px;
+      padding: 0 10px;
       background: #31c27c;
       color: #fff;
       border-radius: 3px;
       cursor: pointer;
+      font-size: 12px;
+      line-height: 20px;
     }
     .read:hover {
       opacity: 0.9;

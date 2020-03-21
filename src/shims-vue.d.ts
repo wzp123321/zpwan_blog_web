@@ -117,6 +117,9 @@ declare namespace ArticleModule {
   }
 }
 
+/**
+ * 友情链接
+ */
 interface FriendlyLinkInfo {
   id: number,
   name: string,
@@ -125,4 +128,15 @@ interface FriendlyLinkInfo {
   isShelves: number,
   create_time: number,
   modify_time: number,
+}
+
+/**
+ * 通知
+ */
+interface NoticeInfo{
+  id?:number,
+  content?:string,
+  isEmergency?:number,
+  create_time?:number,
+  modify_time?:number
 }

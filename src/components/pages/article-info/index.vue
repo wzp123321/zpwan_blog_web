@@ -207,8 +207,8 @@ export default class ArticleInfoModule extends Vue {
   private parent_id: string = "";
   // 文章详情
   private articleInfo: ArticleModule.ArticleInfo = {
-    title:"",
-    description:""
+    title: "",
+    description: ""
   };
   // 评论数组
   private comments: Array<ArticleModule.CommentInfo> = [];
@@ -252,7 +252,7 @@ export default class ArticleInfoModule extends Vue {
   private handleSecondFloorComment(
     index: number,
     id: string,
-    parent_id:string,
+    parent_id: string,
     author: DashoboardModule.UserInfo
   ) {
     this.floor = index;
@@ -407,10 +407,11 @@ export default class ArticleInfoModule extends Vue {
       .count-info {
         .tag {
           display: inline-block;
-          padding: 3px 7px;
+          padding: 1px 7px;
           border-radius: 5px;
           color: #fff;
           background: #31c27c;
+          font-size: 14px;
         }
         .info {
           span {
@@ -427,6 +428,7 @@ export default class ArticleInfoModule extends Vue {
       .title {
         padding-top: 10px;
         font-size: 20px;
+        font-weight: 500;
       }
       p {
         background: #f1f1f1;
@@ -435,27 +437,22 @@ export default class ArticleInfoModule extends Vue {
       }
     }
     .ups {
+      font-size: 12px;
       padding: 5px 10px;
       .click-like {
-        .icon-dianzan {
-          cursor: pointer;
-          padding: 8px;
-          font-size: 18px;
-          border-radius: 50px;
-          border: 1px solid #eee;
-        }
         span {
-          font-size: 12px;
+          position: relative;
+          bottom: 2px;
+          left: 5px;
         }
       }
-      .catalog {
-        font-size: 14px;
-        .icon-wenjianjia {
-          padding: 8px;
-          font-size: 18px;
-          border-radius: 50px;
-          border: 1px solid #eee;
-        }
+      .click-like .iconfont,
+      .catalog .iconfont {
+        cursor: pointer;
+        padding: 6px;
+        font-size: 16px;
+        border-radius: 50px;
+        border: 1px solid #eee;
       }
     }
     .comment-wrapper {
