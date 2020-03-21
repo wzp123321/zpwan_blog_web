@@ -13,7 +13,7 @@
       <span>
         <a href="https://github.com/wzp123321" target="blank">
           <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-xiangmu" />
+            <use xlink:href="#icon-github" />
           </svg> 我的github
         </a>
       </span>
@@ -29,7 +29,7 @@
       </span>
       <span @click="()=>{dialogFormVisible = true}" v-if="name ===''">
         <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-github" />
+          <use xlink:href="#icon-denglu" />
         </svg> 登录
       </span>
       <span v-else class="username">
@@ -148,7 +148,7 @@ export default class TopBox extends Vue {
     font-size: 13px;
     span {
       display: inline-block;
-      padding: 0 5px;
+      padding: 0 10px;
       position: relative;
       .icon {
         width: 16px;
@@ -167,6 +167,7 @@ export default class TopBox extends Vue {
     }
     span:last-child{
       color: #31c27c;
+      padding-right:0;
     }
   }
   .link span:hover {

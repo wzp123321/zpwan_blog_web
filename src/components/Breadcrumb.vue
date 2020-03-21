@@ -1,6 +1,6 @@
 <template>
   <div class="boxW breadcrumb-wrapper">
-    <el-breadcrumb separator="/">
+    <el-breadcrumb separator="/" style="margin-left:10px">
       <el-breadcrumb-item v-for="(routeItem,index) in routers" :key="'route_'+index">
         <router-link :to="routeItem.path">{{ routeItem.meta.name }}</router-link>
       </el-breadcrumb-item>
@@ -61,7 +61,7 @@ export default class BreadcrumbModule extends Vue {
 <style lang="less" scoped>
 .breadcrumb-wrapper {
   margin-top: 10px;
-  padding: 10px 22px;
+  padding: 10px 0;
   border-radius: 3px;
   background: #fff;
 }

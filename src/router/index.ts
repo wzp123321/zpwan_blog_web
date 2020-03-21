@@ -54,7 +54,7 @@ const routes = [
       {
         path: '/about',
         component: AboutModule,
-        meta: { name: "关于我们" }
+        meta: { name: "关于本站" }
       },
       {
         path: '/404',

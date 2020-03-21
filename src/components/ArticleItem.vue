@@ -2,7 +2,9 @@
   <div class="article-item">
     <div class="flex-row">
       <span v-if="articleInfo.isTop===1" class="top">置顶</span>
-      <img :src="articleInfo.imgUrl" alt @click="()=>{$router.push('/article/'+articleInfo.id)}" />
+      <div class="img-div">
+        <img :src="articleInfo.imgUrl" alt @click="()=>{$router.push('/article/'+articleInfo.id)}" />
+      </div>
       <div class="info flex-column">
         <div class="header frspace">
           <h1 @click="()=>{$router.push('/article/'+articleInfo.id)}" v-html="articleInfo.title"></h1>
@@ -84,20 +86,27 @@ export default class ArticleItem extends Vue {
     border-radius: 5px;
     background: #ea3737;
   }
-  img {
+  .img-div {
+    background-image: url(../assets/imgs/img-error.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
     min-width: 120px;
     min-height: 120px;
     max-width: 120px;
     max-height: 120px;
     border-radius: 3px;
     border: 1px solid #f1efef;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
   .info {
     width: 100%;
     padding: 0 10px;
     .header {
       h1 {
-        margin:-3px 0 10px 0;
+        margin: -3px 0 10px 0;
         font-weight: 500;
         font-size: 18px;
         color: #555555;

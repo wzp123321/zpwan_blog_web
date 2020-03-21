@@ -1,16 +1,23 @@
 <template>
   <div class="type-article frspace">
     <div class="article-data">
-      <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
-      <div style="text-align:center">
-        <Pagination
-          style="margin-top:10px"
-          v-if="JSON.stringify(articles) !=='[]'"
-          layout="prev, pager, next"
-          :total="pagination.total"
-          :current-page="pagination.current"
-          @change="handlePaginationChange"
-        ></Pagination>
+      <!-- 有数据 -->
+      <div v-if="JSON.stringify(articles) !== '[]'">
+        <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
+        <div style="text-align:center">
+          <Pagination
+            style="margin-top:10px"
+            v-if="JSON.stringify(articles) !=='[]'"
+            layout="prev, pager, next"
+            :total="pagination.total"
+            :current-page="pagination.current"
+            @change="handlePaginationChange"
+          ></Pagination>
+        </div>
+      </div>
+      <div v-else class="no-data">
+        <img src="../../../assets/imgs/no-article.png" alt />
+        <h1>当前模块下暂无文章</h1>
       </div>
     </div>
     <div class="right-module">
@@ -107,6 +114,18 @@ export default class TypeModule extends Vue {
   position: relative;
   .article-data {
     flex: 1;
+  }
+  .no-data {
+    text-align: center;
+    padding: 60px 0;
+    img {
+      width: 200px;
+      height: 200px;
+    }
+    h1 {
+      font-size: 20px;
+      color: #333;
+    }
   }
   .right-module {
     width: 300px;
