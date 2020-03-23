@@ -10,6 +10,16 @@
     <div class="scroll-to-top" v-show="isTop">
       <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
     </div>
+    <!-- 音乐播放托盘 -->
+    <MusicPlayer
+      :isMin="isMin"
+      :isPlay="isPlay"
+      :cur_music="currentMusicInfo"
+      :musicList="musicList"
+      @change="handlePlayChange"
+      @index_change="handleMusicIndexChange"
+      @play_pause="handleMusicPlayPause"
+    ></MusicPlayer>
   </div>
 </template>
 <script lang="ts">
@@ -19,6 +29,13 @@ import HeaderBox from "@/layouts/HeaderBox.vue";
 import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
+import MusicPlayer from "@/components/MusicPlayer.vue";
+/**
+ * 引入vuex
+ */
+import { namespace } from "vuex-class";
+
+const musicModule = namespace("music");
 @Component({
   name: "Main",
   components: {
@@ -26,14 +43,30 @@ import BreadcrumbModule from "@/components/Breadcrumb.vue";
     HeaderBox,
     ContentBox,
     FooterBox,
-    BreadcrumbModule
+    BreadcrumbModule,
+    MusicPlayer
   }
 })
 export default class Main extends Vue {
+  // 引入vuex
+  @musicModule.Action("changeMusicData") public changeMusicData!: Function;
+  @musicModule.Mutation("changeCurMusicInfo")
+  public changeCurMusicInfo!: Function;
+  @musicModule.Getter("currentMusicInfo") public currentMusicInfo!: MusicInfo;
+  @musicModule.Getter("getMusicList") public getMusicList!: Array<MusicInfo>;
+  @musicModule.State("current_musicInfo") public current_musicInfo!: MusicInfo;
+  @musicModule.State("current_index") public current_index!: number;
+  @musicModule.State("musicList") public musicList!: MusicInfo[];
   // 顶部是否吸顶
   private isCeil: boolean = false;
   // 是否显示回到顶骨图标
   private isTop: boolean = false;
+  // 是否最小化
+  private isMin: boolean = true;
+  // 当前播放音乐索引
+  private cur_index: number = 0;
+  // 是否播放
+  private isPlay: boolean = false;
   /**
    * 回到顶部
    */
@@ -42,6 +75,20 @@ export default class Main extends Vue {
       top: 0,
       behavior: "smooth"
     });
+  }
+  /**
+   * 最大最小化
+   */
+  private handlePlayChange(flag: boolean) {
+    this.isMin = flag;
+  }
+  // 切换歌曲
+  private handleMusicIndexChange(index: number) {
+    this.changeMusicData(index);
+  }
+  // 播放暂停
+  private handleMusicPlayPause(flag: boolean) {
+    this.isPlay = flag;
   }
   /**
    * 添加全局监听

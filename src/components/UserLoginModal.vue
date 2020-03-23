@@ -53,7 +53,6 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
-import { UserModule } from "@/store/module/user";
 import generateUUId from "@/assets/js/crypto";
 import {
   Dialog,
@@ -107,14 +106,6 @@ export default class UserLoginModal extends Vue {
         localStorage.setItem("name", this.form.name);
         localStorage.setItem(
           "avatar_url",this.avaItem+'');
-        const state: any = UserModule.context.state;
-        const location = state.location;
-        UserModule.setUserInfo({
-          name: this.form.name,
-          avatar_url: this.avaItem+"",
-          location,
-          user_id
-        });
         flag = false;
       } else {
         flag = true;

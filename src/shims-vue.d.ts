@@ -3,6 +3,11 @@ declare module '*.vue' {
   export default Vue
 }
 
+// 声明vue-aplayer
+declare module 'vue-aplayer';
+// 声明拖拽缩放
+declare module 'vuedraggable';
+
 /**
  * api相关
  */
@@ -133,10 +138,23 @@ interface FriendlyLinkInfo {
 /**
  * 通知
  */
-interface NoticeInfo{
-  id?:number,
-  content?:string,
-  isEmergency?:number,
-  create_time?:number,
-  modify_time?:number
+interface NoticeInfo {
+  id?: number,
+  content?: string,
+  isEmergency?: number,
+  create_time?: number,
+  modify_time?: number
+}
+
+/**
+ * 音乐
+ */
+interface MusicInfo {
+  id?: number,
+  title?: string,
+  url?: string,
+  musicLen?: number,
+  pic?: string,
+  author?: string,
+  lrc?: string
 }

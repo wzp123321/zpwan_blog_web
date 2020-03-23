@@ -50,7 +50,6 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 // 解决AMap使用语法提示
 declare let AMap: any;
 import UserLoginModule from "@/components/UserLoginModal.vue";
-import { UserModule } from "@/store/module/user";
 
 @Component({
   name: "TopBox",
@@ -110,12 +109,6 @@ export default class TopBox extends Vue {
           const cityinfo = result.province + "" + result.city;
           that.cityinfo = cityinfo;
           localStorage.setItem("location", cityinfo);
-          UserModule.setUserInfo({
-            name: "",
-            avatar_url: "",
-            user_id: "",
-            location: cityinfo
-          });
         }
       }
     });

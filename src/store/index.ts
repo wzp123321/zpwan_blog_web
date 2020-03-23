@@ -1,11 +1,14 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import { IUserState } from './module/user'
+import Vuex, { StoreOptions } from 'vuex'
+import { RootState } from './types'
+import { music } from "./music/index"
 
 Vue.use(Vuex)
 
-interface IRootState {
-  user: IUserState
+const store: StoreOptions<RootState> = {
+  modules: {
+    music
+  }
 }
 
-export default new Vuex.Store<IRootState>({})
+export default new Vuex.Store<RootState>(store)

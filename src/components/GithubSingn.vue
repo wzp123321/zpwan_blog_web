@@ -14,7 +14,6 @@
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { UserModule } from "@/store/module/user";
 import HttpRequest from "@/assets/api/modules/index";
 import { Route } from "vue-router";
 import { Notification } from "element-ui";
@@ -42,12 +41,6 @@ export default class GithubLogin extends Vue {
     }).then(async res => {
       if (res && res.data) {
         const { id, avatar_url, name, location } = res.data;
-        UserModule.setUserInfo({
-          user_id: id,
-          avatar_url,
-          name,
-          location
-        });
         localStorage.setItem("id", id);
         localStorage.setItem("avatar_url", avatar_url);
         localStorage.setItem("name", name);
