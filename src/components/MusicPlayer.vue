@@ -1,5 +1,5 @@
 <template>
-  <div :class="['music_wrapper',isMin?'min-player':'max-player']" v-drag="greet">
+  <div :class="['music_wrapper',isMin?'min-player':'max-player']"  v-drag="greet">
     <!-- 最大化 -->
     <div class="max-music-player" v-if="!isMin">
       <VueAplayer
@@ -15,8 +15,9 @@
       <i class="iconfont icon-guanbi" @click="getMusicPlayMax(true)"></i>
     </div>
     <!-- 最小化 -->
-    <div class="min-music-player" v-else @click="getMusicPlayMax(false)">
+    <div :class="['min-music-player',isPlay?'playing':'']" v-else @click="getMusicPlayMax(false)">
       <i class="iconfont icon-yinle"></i>
+      <!-- <audio src="cur_music.url" v-if="isPlay"></audio> -->
     </div>
   </div>
 </template>
@@ -34,8 +35,6 @@ import VueAplayer from "vue-aplayer";
   }
 })
 export default class MusicPlayer extends Vue {
-  private left: number = 20;
-  private bottom: number = 30;
   private isDrag: boolean = false;
   // 是否最小化
   @Prop({ default: true })
@@ -51,7 +50,7 @@ export default class MusicPlayer extends Vue {
   // 最大化 最小化
   @Emit("change")
   private getMusicPlayMax(flag: boolean) {
-    return flag;
+    return this.isDrag ? false : flag;
   }
   // 切换歌曲
   @Emit("index_change")
@@ -66,7 +65,7 @@ export default class MusicPlayer extends Vue {
   // 播放中
   private onTimeupdate(value: any) {}
   //
-  greet(e: any) {}
+  greet() {}
 }
 </script>
 <style lang="less" scoped>
@@ -74,7 +73,7 @@ export default class MusicPlayer extends Vue {
   position: fixed;
   z-index: 999;
   left: 20px;
-  bottom: 20px;
+  bottom:40px;
   .min-music-player {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 30px;
@@ -110,4 +109,5 @@ export default class MusicPlayer extends Vue {
   width: 280px;
   height: 40px;
 }
+
 </style>
