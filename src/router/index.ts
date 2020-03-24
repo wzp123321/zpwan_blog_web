@@ -61,14 +61,6 @@ const routes = [
         component: NotFoundModule,
       },
     ],
-    //每次路由跳转后滚轮置顶
-    scrollBehavior(to:Route, from:Route, savedPosition:Function) {
-      // return 期望滚动到哪个的位置
-      return {
-        x: 0,
-        y: 0
-      }
-    }
   },
   {
     path: '/signin_github',
@@ -79,6 +71,13 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
+  // 路由回到顶部
+  scrollBehavior(to:Route, from:Route, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { x: 0, y: 0 }
+  },
   routes
 })
 
