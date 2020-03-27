@@ -18,9 +18,9 @@
         :key="index"
         @click="()=>{$router.push('/article/'+item.id)}"
       >
-        <i :class="['iconfont',index===2? 'icon-icon-test':'icon-'+index]"></i>
+        <i :class="['iconfont',icons[index]]"></i>
         <el-tooltip effect="dark" :content="item.title" placement="top-end">
-          <span>{{item.title}}</span>
+          <span style="position:relative;bottom:1px">{{item.title}}</span>
         </el-tooltip>
       </div>
     </div>
@@ -57,6 +57,8 @@ export default class RecommendArticle extends Vue {
       value: "热门文章"
     }
   ];
+  // icons
+  private icons:string[] = ['icon-12','icon-13','icon-14fuben','icon-4','icon-5','icon-6','icon-7','icon-8','icon-9'];
   /**
    * tab 切换
    */
@@ -64,10 +66,10 @@ export default class RecommendArticle extends Vue {
     this.articles = [];
     this.activeName = value;
     if (value === "first") {
-      this.getArticleList({ isRecommend: 1, limit: 10 });
+      this.getArticleList({ isRecommend: 1, limit: 9 });
     } else if (value === "second") {
       this.getArticleList({
-        limit: 10
+        limit: 9
       });
     } else {
       this.getHotArticle();

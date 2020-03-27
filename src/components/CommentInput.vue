@@ -1,10 +1,16 @@
 <template>
   <div class="comment-input">
-    <el-input type="textarea" :rows="4" placeholder="请输入您的评论" v-model="input_data" style="margin-bottom:10px"></el-input>
+    <el-input
+      type="textarea"
+      :rows="4"
+      placeholder="请输入您的评论"
+      v-model="input_data"
+      style="margin-bottom:10px"
+    ></el-input>
     <div class="frspace">
-      <div class="emoji" id="emoji" @mouseleave="handleMouseLeave()">
-        <i class="iconfont icon-iconsmile" @click="()=>{show = !show}"></i>
-        <div class="emoji-content" id="emoji-content" v-show="show">
+      <div class="emoji" id="emoji">
+        <i class="iconfont icon-iconsmile"></i>
+        <div class="emoji-content" id="emoji-content" >
           <span
             v-for="(item,index) in emojis"
             :key="index"
@@ -43,8 +49,6 @@ import { Input, Button } from "element-ui";
 export default class CommentInput extends Vue {
   // 输入框信息
   private input_data: string = "";
-  // emoji-show
-  private show: boolean = false;
   private emojis: Array<string> = [
     "🐷",
     "😄",
@@ -125,15 +129,8 @@ export default class CommentInput extends Vue {
   @Emit("release")
   handleCommentRelease() {
     const content = this.input_data.replace("\n", "");
-    this.show = false;
     this.input_data = "";
     return content;
-  }
-  /**
-   * emoji区域鼠标移出 隐藏
-   */
-  private handleMouseLeave() {
-    this.show = false;
   }
 }
 </script>
@@ -146,8 +143,10 @@ export default class CommentInput extends Vue {
   cursor: pointer;
 }
 .emoji {
+  cursor: pointer;
   position: relative;
   .emoji-content {
+    display: none;
     width: 363px;
     height: 170px;
     background: #fff;
@@ -156,6 +155,7 @@ export default class CommentInput extends Vue {
     top: 25px;
     left: -5px;
     padding: 5px;
+    z-index: 999;
     span {
       display: inline-block;
       padding: 3px 5px;
@@ -163,6 +163,11 @@ export default class CommentInput extends Vue {
     span:hover {
       background: #eee;
     }
+  }
+}
+.emoji:hover {
+  .emoji-content {
+    display: block;
   }
 }
 </style>

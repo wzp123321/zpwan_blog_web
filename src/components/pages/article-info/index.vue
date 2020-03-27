@@ -106,11 +106,11 @@
                   : {{childItem.content}}
                 </p>
                 <p style="border-top:1px solid #eee">
-                  <i class="iconfont icon-dianzan" style="font-size:14px">点赞</i> --
+                  <i class="iconfont icon-dianzan" style="font-size:12px">点赞</i> --
                   <span
                     @click="()=>handleSecondFloorComment(index,childItem.id,childItem.parent_id,childItem.author)"
                   >
-                    <i class="iconfont icon-pinglun" style="font-size:14px">回复</i>
+                    <i class="iconfont icon-pinglun" style="font-size:12px">回复</i>
                   </span>
                 </p>
                 <div>
