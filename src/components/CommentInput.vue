@@ -6,11 +6,13 @@
       placeholder="请输入您的评论"
       v-model="input_data"
       style="margin-bottom:10px"
+      @focus="handleInputFocusBlur()"
     ></el-input>
-    <div class="frspace">
+    <div class="frspace" v-show="btnShow">
       <div class="emoji" id="emoji">
         <i class="iconfont icon-iconsmile"></i>
-        <div class="emoji-content" id="emoji-content" >
+        <span>Ctrl + Enter 发表</span>
+        <div class="emoji-content" id="emoji-content">
           <span
             v-for="(item,index) in emojis"
             :key="index"
@@ -29,7 +31,7 @@
         >发布</el-button>
         <el-button
           style="border-radius:20px;margin-left:10px"
-          @click="()=>{input_data = ''}"
+          @click="handleInputCancel"
           size="mini"
         >取消</el-button>
       </div>
@@ -37,7 +39,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Emit } from "vue-property-decorator";
+import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import { Input, Button } from "element-ui";
 @Component({
   name: "CommentInput",
@@ -117,6 +119,8 @@ export default class CommentInput extends Vue {
     "🐛",
     "🖕"
   ];
+  // 控制按钮显示隐藏
+  private btnShow: boolean = false;
   /**
    * 添加emoji
    */
@@ -131,6 +135,25 @@ export default class CommentInput extends Vue {
     const content = this.input_data.replace("\n", "");
     this.input_data = "";
     return content;
+  }
+  // 取消
+  @Emit("inputCancel")
+  private handleInputCancel() {}
+  // 输入框聚焦离焦
+  private handleInputFocusBlur() {
+    this.btnShow = true;
+  }
+  created() {
+    const that = this;
+    if (this.$route.path.includes("article")) {
+      document.onkeydown = function(e) {
+        var keyCode = e.keyCode || e.which || e.charCode;
+        var ctrlKey = e.ctrlKey || e.metaKey;
+        if (ctrlKey && keyCode == 13 && that.btnShow) {
+          that.handleCommentRelease();
+        }
+      };
+    }
   }
 }
 </script>

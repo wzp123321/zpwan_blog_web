@@ -18,7 +18,6 @@
       </div>
       <div class="foot-right">
         <img src="../assets/imgs/qq.jpg" alt />
-        <span>QQ</span>
       </div>
     </div>
   </div>
@@ -70,12 +69,6 @@ export default class FooterBox extends Vue {}
       width: 120px;
       height: 120px;
       border-radius: 2px;
-    }
-    span {
-      margin-top: 10px;
-      display: block;
-      width: 120px;
-      text-align: center;
     }
   }
 }

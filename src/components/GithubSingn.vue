@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <div class="login-title">欢迎登陆万直鹏的博客</div>
     <div class="login-form">
       <svg class="icon" aria-hidden="true" style="width:50px;height:50px">
         <use xlink:href="#icon-github" />
@@ -99,12 +100,16 @@ export default class GithubLogin extends Vue {
   width: 100%;
   height: 100%;
   background: #fff;
-  display: flex;
-  justify-content: center;
-  padding-top: 200px;
+  .login-title {
+    padding-top: 150px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+  }
   .login-form {
     width: 400px;
     height: 80px;
+    margin: 0 auto;
     text-align: center;
     border: 1px solid #eee;
     position: relative;

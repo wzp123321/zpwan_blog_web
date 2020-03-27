@@ -1,7 +1,9 @@
 <template>
   <div class="article-wrapper frspace">
     <div class="article-info">
-      <!-- 实现分享文章 -->
+      <!-- 实现分享文章 
+        微信分享:https://segmentfault.com/a/1190000020163797
+      -->
       <!-- 头部 -->
       <div class="article-header">
         <div class="count-info frspace">
@@ -67,7 +69,7 @@
             <div class="frsp">
               <div>
                 <img
-                  v-bind:src="require('../../../assets/imgs/avatar_'+item.author.avatar_url+'.png')"
+                  v-bind:src="item.author.avatar_url"
                   style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
                   alt
                 />
@@ -75,24 +77,26 @@
               </div>
             </div>
             <p style="margin:5px 0;padding-left:5px;font-size:12px;padding:5px">{{item.content}}</p>
-            <div style="border-top:1px solid #eee">
-              <i class="iconfont icon-dianzan" style="font-size:14px">点赞</i>
-              --
+            <div class="operate-icon">
+              <i class="iconfont icon-dianzan">点赞</i>
               <i
                 class="iconfont icon-pinglun"
-                style="font-size:14px"
                 @click="()=>handleSecondFloorComment(index,item.id,item.is_root?item.id :item.parent_id,item.author)"
               >回复</i>
             </div>
             <div>
-              <CommentInput v-if="floor===index && id === item.id" @release="releaseComment"></CommentInput>
+              <CommentInput
+                v-if="floor===index && id === item.id"
+                @release="releaseComment"
+                @inputCancel="()=>{id===''}"
+              ></CommentInput>
             </div>
             <div style="margin-left:30px">
               <div v-for="(childItem,idx) in item.children" :key="idx">
                 <div class="frsp">
                   <div v-if="childItem.author">
                     <img
-                      v-bind:src="require('../../../assets/imgs/avatar_'+item.author.avatar_url+'.png')"
+                      v-bind:src="childItem.author.avatar_url"
                       style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
                       alt
                     />
@@ -105,18 +109,19 @@
                   <span style="color:#06a5ff">{{childItem.reply_userInfo.name}}</span>
                   : {{childItem.content}}
                 </p>
-                <p style="border-top:1px solid #eee">
-                  <i class="iconfont icon-dianzan" style="font-size:12px">点赞</i> --
+                <p class="operate-icon">
+                  <i class="iconfont icon-dianzan">点赞</i>
                   <span
                     @click="()=>handleSecondFloorComment(index,childItem.id,childItem.parent_id,childItem.author)"
                   >
-                    <i class="iconfont icon-pinglun" style="font-size:12px">回复</i>
+                    <i class="iconfont icon-pinglun">回复</i>
                   </span>
                 </p>
                 <div>
                   <CommentInput
                     v-if="floor===index && id === childItem.id"
                     @release="releaseComment"
+                    @inputCancel="()=>{id=''}"
                   ></CommentInput>
                 </div>
               </div>
@@ -242,6 +247,7 @@ export default class ArticleInfoModule extends Vue {
     });
     if (res && res.data) {
       this.$message.success("评论成功");
+      this.id = "";
       this.getArticleInfoById();
       this.getArticleCommentList();
     }
@@ -380,6 +386,12 @@ export default class ArticleInfoModule extends Vue {
     this.isUps = res.data;
   }
   created() {
+    this.author = {
+      user_id: localStorage.getItem("user_id") || "",
+      name: localStorage.getItem("name") || "",
+      avatar_url: localStorage.getItem("avatar_url") || "",
+      location: localStorage.getItem("location") || ""
+    };
     this.$nextTick(() => {
       this.getArticleInfoById();
       this.getArticleCommentList();
@@ -426,14 +438,15 @@ export default class ArticleInfoModule extends Vue {
         }
       }
       .title {
-        padding-top: 10px;
-        font-size: 20px;
-        font-weight: 500;
+        padding-top: 15px;
+        font-size: 28px;
+        font-weight: bold;
       }
       p {
         background: #f1f1f1;
-        padding: 1px 3px;
+        padding: 5px 3px;
         border-left: 3px solid #6f6f6f;
+        font-size: 12px;
       }
     }
     .ups {
@@ -466,6 +479,16 @@ export default class ArticleInfoModule extends Vue {
       .no-comment {
         text-align: center;
         padding: 30px 0;
+      }
+      .operate-icon {
+        color: #999;
+        border-top: 1px solid #eee;
+        .iconfont {
+          cursor: pointer;
+          display: inline-block;
+          font-size: 12px;
+          margin-right: 15px;
+        }
       }
     }
   }

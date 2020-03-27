@@ -25,12 +25,12 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="头像:" label-width="60px">
-        <template v-for="item in 6">
-          <span :key="item" class="avatar-span">
+        <template v-for="(item,index) in avatars">
+          <span :key="index" class="avatar-span">
             <img
-              :src="require('../assets/imgs/avatar_'+item+'.png')"
-              :class="{'choosed-img' :avaItem===item,}"
-              @click="()=>{avaItem= item}"
+              :src="item"
+              :class="{'choosed-img' :avatarUrl===item}"
+              @click="()=>{avatarUrl = item}"
               alt
             />
           </span>
@@ -79,13 +79,23 @@ export default class UserLoginModal extends Vue {
   private dialogFormVisible!: boolean;
   //表单数据
   private form: { [key: string]: any } = {};
+ // 头像地址数组
+  private avatars:string[] = [
+    'http://i1.fuimg.com/679181/b2318e217e2ef870.jpg',
+    'http://i1.fuimg.com/679181/7c1193e81a8ec668.jpg',
+    'http://i1.fuimg.com/679181/01beddcbb1c3ad92.jpg',
+    'http://i1.fuimg.com/679181/a427449c16dc710e.jpg',
+    'http://i1.fuimg.com/679181/d24c58fddc254ca1.jpg',
+    'http://i1.fuimg.com/679181/0f2ee164f946c295.jpg'
+  ]
+
   @Emit("cancel")
   private cancel() {}
 
   @Emit("cancel")
   private close() {}
   // 选择头像
-  private avaItem: number = 1;
+  private avatarUrl: string = "";
   /**
    * 用户登录
    */
@@ -105,7 +115,7 @@ export default class UserLoginModal extends Vue {
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("name", this.form.name);
         localStorage.setItem(
-          "avatar_url",this.avaItem+'');
+          "avatar_url",this.avatarUrl);
         flag = false;
       } else {
         flag = true;
