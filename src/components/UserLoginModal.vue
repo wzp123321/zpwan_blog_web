@@ -39,14 +39,14 @@
       <el-form-item style="text-align:center">
         <el-button size="small" type="primary" style="width:100%;" @click="handleUserLogin">登 录</el-button>
       </el-form-item>
-      <div class="other-login">
+      <!-- <div class="other-login">
         <div class="title">您还可以选择其他登录方式:</div>
         <div @click="handleGithubLogin" style="text-align:center">
           <svg class="icon" aria-hidden="true" style="width:24px;height:24px">
             <use xlink:href="#icon-github" />
           </svg>
         </div>
-      </div>
+      </div> -->
     </el-form>
   </el-dialog>
 </template>
