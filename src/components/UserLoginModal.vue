@@ -46,7 +46,7 @@
             <use xlink:href="#icon-github" />
           </svg>
         </div>
-      </div> -->
+      </div>-->
     </el-form>
   </el-dialog>
 </template>
@@ -79,15 +79,15 @@ export default class UserLoginModal extends Vue {
   private dialogFormVisible!: boolean;
   //表单数据
   private form: { [key: string]: any } = {};
- // 头像地址数组
-  private avatars:string[] = [
-    'http://i1.fuimg.com/679181/b2318e217e2ef870.jpg',
-    'http://i1.fuimg.com/679181/7c1193e81a8ec668.jpg',
-    'http://i1.fuimg.com/679181/01beddcbb1c3ad92.jpg',
-    'http://i1.fuimg.com/679181/a427449c16dc710e.jpg',
-    'http://i1.fuimg.com/679181/d24c58fddc254ca1.jpg',
-    'http://i1.fuimg.com/679181/0f2ee164f946c295.jpg'
-  ]
+  // 头像地址数组
+  private avatars: string[] = [
+    "http://132.232.66.140:81/D3212136A5479CF51D1F02AE86DB0A06.png",
+    "http://132.232.66.140:81/DA1050F08D8C0900C532A83F84124CDF.png",
+    "http://132.232.66.140:81/9ACFE155F36955B76AD7A158FAA58972.png",
+    "http://132.232.66.140:81/8D0573B1B95EBF1CE04915616531DE82.png",
+    "http://132.232.66.140:81/07520F7559417320348743EFCD977637.png",
+    "http://132.232.66.140:81/053FB25104C74AEFDC1771CABBFA4A2A.png"
+  ];
 
   @Emit("cancel")
   private cancel() {}
@@ -114,8 +114,7 @@ export default class UserLoginModal extends Vue {
         const user_id: string = generateUUId(16);
         localStorage.setItem("user_id", user_id);
         localStorage.setItem("name", this.form.name);
-        localStorage.setItem(
-          "avatar_url",this.avatarUrl);
+        localStorage.setItem("avatar_url", this.avatarUrl);
         flag = false;
       } else {
         flag = true;
