@@ -43,8 +43,6 @@
       </div>
       <!-- 标签信息模块 -->
       <div class="other-wrapper">
-        <!-- 标语 -->
-
         <!-- 标签 -->
         <div class="tag-wrapper">
           <div class="title">
