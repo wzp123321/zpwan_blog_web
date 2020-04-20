@@ -105,7 +105,7 @@ export default class UserLoginModal extends Vue {
     const form: any = this.$refs.form;
     form.validate((valid: any) => {
       if (valid) {
-        window.location.href = this.$route.path;
+        window.location.href = "/#/"+this.$route.path;
         this.$notify({
           title: "登录成功",
           message: "恭喜你登录成功",
