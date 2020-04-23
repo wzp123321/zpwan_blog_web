@@ -1,5 +1,5 @@
 <template>
-  <div class="about-wrapper">
+  <b-container class="about-wrapper">
     <div class="about-header">
       <h1>关于本站</h1>
       <div>本人前端新手,闲暇时间弄个博客玩玩,前后端都是自己开发的,后续在学习服务相关知识,希望能完成部署</div>
@@ -10,7 +10,7 @@
       <div class="title">关于博客</div>
       <p>搞这个博客纯属娱乐,希望能够学到更多技术</p>
     </div>
-  </div>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";

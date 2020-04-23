@@ -1,162 +1,156 @@
 <template>
-  <div class="article-wrapper frspace">
-    <div class="article-info">
-      <!-- 实现分享文章 
+  <b-container class="article-wrapper">
+    <b-row>
+      <b-col xl="9" md="9" cols="12" class="article-info">
+        <!-- 实现分享文章 
         微信分享:https://segmentfault.com/a/1190000020163797
-      -->
-      <!-- 头部 -->
-      <div class="article-header">
-        <div class="count-info frspace">
-          <span class="tag">原创</span>
-          <div class="info">
-            <span>
-              <i class="iconfont icon-rili"></i>
-              {{formatDate(articleInfo.create_time)}}
-            </span>
-            <span>
-              <i class="iconfont icon-liulan"></i>
-              浏览
-              {{articleInfo.visit_count}}
-            </span>
-            <span>
-              <i class="iconfont icon-xiai"></i>
-              点赞
-              {{articleInfo.like_count}}
-            </span>
-            <span>
-              <i class="iconfont icon-pinglun"></i>
-              评论
-              {{articleInfo.comment_count}}
-            </span>
+        -->
+        <!-- 头部 -->
+        <div class="article-header">
+          <div class="count-info frspace">
+            <span class="tag">原创</span>
+            <div class="info">
+              <span>
+                <i class="iconfont icon-rili"></i>
+                {{formatDate(articleInfo.create_time)}}
+              </span>
+              <span>
+                <i class="iconfont icon-liulan"></i>
+                浏览
+                {{articleInfo.visit_count}}
+              </span>
+              <span>
+                <i class="iconfont icon-xiai"></i>
+                点赞
+                {{articleInfo.like_count}}
+              </span>
+              <span>
+                <i class="iconfont icon-pinglun"></i>
+                评论
+                {{articleInfo.comment_count}}
+              </span>
+            </div>
+          </div>
+          <div class="title">{{articleInfo.title}}</div>
+          <p>{{articleInfo.description}}</p>
+        </div>
+        <!-- 正文 -->
+        <div class="markdown-body" v-html="articleInfo.content"></div>
+        <!-- 分割线 -->
+        <el-divider content-position="center">本文结束,感谢阅读</el-divider>
+        <!-- 点赞模块 -->
+        <div class="ups frspace">
+          <div class="click-like">
+            <i
+              class="iconfont icon-dianzan"
+              :style="{color:isUps?'#ec7259':'#9e9c9c'}"
+              @click="getArticleUps"
+            ></i>
+            <span>点个赞呗</span>
+          </div>
+          <div class="catalog">
+            <i class="iconfont icon-wenjianjia"></i>
+            {{
+            articleInfo.second_catalogName
+            }}
           </div>
         </div>
-        <div class="title">{{articleInfo.title}}</div>
-        <p>{{articleInfo.description}}</p>
-      </div>
-      <!-- 正文 -->
-      <div class="markdown-body" v-html="articleInfo.content"></div>
-      <!-- 分割线 -->
-      <el-divider content-position="center">本文结束,感谢阅读</el-divider>
-      <!-- 点赞模块 -->
-      <div class="ups frspace">
-        <div class="click-like">
-          <i
-            class="iconfont icon-dianzan"
-            :style="{color:isUps?'#ec7259':'#9e9c9c'}"
-            @click="getArticleUps"
-          ></i>
-          <span>点个赞呗</span>
-        </div>
-        <div class="catalog">
-          <i class="iconfont icon-wenjianjia"></i>
-          {{
-          articleInfo.second_catalogName
-          }}
-        </div>
-      </div>
-      <!-- 评论模块 -->
-      <div class="comment-wrapper">
-        <div class="title">
-          全部评论
-          <span style="font-size:12px;">共{{articleInfo.comment_count}}条</span>
-        </div>
-        <div v-if="JSON.stringify(comments) === '[]'" class="no-comment">暂无评论，期待您的优秀评论</div>
-        <!-- 顶部输入框 -->
-        <CommentInput @release="releaseComment"></CommentInput>
-        <!--有评论 -->
-        <div v-if="JSON.stringify(comments) !== '[]'" class="comment-data">
-          <div v-for="(item,index) in comments" :key="index">
-            <div class="frsp">
-              <div>
-                <img
-                  v-bind:src="item.author.avatar_url"
-                  style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
-                  alt
-                />
-                <span v-if="item.author" style="margin-left:5px">{{item.author.name}}</span>
+        <!-- 评论模块 -->
+        <div class="comment-wrapper">
+          <div class="title">
+            全部评论
+            <span style="font-size:12px;">共{{articleInfo.comment_count}}条</span>
+          </div>
+          <div v-if="JSON.stringify(comments) === '[]'" class="no-comment">暂无评论，期待您的优秀评论</div>
+          <!-- 顶部输入框 -->
+          <CommentInput @release="releaseComment"></CommentInput>
+          <!--有评论 -->
+          <div v-if="JSON.stringify(comments) !== '[]'" class="comment-data">
+            <div v-for="(item,index) in comments" :key="index">
+              <div class="frsp">
+                <div class="comment-data-item">
+                  <img class="user_avatar" v-bind:src="item.author.avatar_url" alt />
+                  <span v-if="item.author">{{item.author.name}}</span>
+                </div>
               </div>
-            </div>
-            <p style="margin:5px 0;padding-left:5px;font-size:12px;padding:5px">{{item.content}}</p>
-            <div class="operate-icon">
-              <i class="iconfont icon-dianzan">点赞</i>
-              <i
-                class="iconfont icon-pinglun"
-                @click="()=>handleSecondFloorComment(index,item.id,item.is_root?item.id :item.parent_id,item.author)"
-              >回复</i>
-            </div>
-            <div>
-              <CommentInput
-                v-if="floor===index && id === item.id"
-                @release="releaseComment"
-                @inputCancel="()=>{id===''}"
-              ></CommentInput>
-            </div>
-            <div style="margin-left:30px">
-              <div v-for="(childItem,idx) in item.children" :key="idx">
-                <div class="frsp">
-                  <div v-if="childItem.author">
-                    <img
-                      v-bind:src="childItem.author.avatar_url"
-                      style="width:25px;height:25px;border-radius:50px;display:inline;position:relative;bottom:-5px"
-                      alt
-                    />
-                    <span>{{childItem.author.name}}</span>
+              <p class="conment-item-content">{{item.content}}</p>
+              <div class="operate-icon">
+                <i class="iconfont icon-dianzan">点赞</i>
+                <i
+                  class="iconfont icon-pinglun"
+                  @click="()=>handleSecondFloorComment(index,item.id,item.is_root?item.id :item.parent_id,item.author)"
+                >回复</i>
+              </div>
+              <div class="comment-input-comp">
+                <CommentInput
+                  v-if="floor===index && id === item.id"
+                  @release="releaseComment"
+                  @inputCancel="()=>{id===''}"
+                ></CommentInput>
+              </div>
+              <div class="comment-item-child">
+                <div v-for="(childItem,idx) in item.children" :key="idx">
+                  <div class="frsp">
+                    <div v-if="childItem.author">
+                      <img v-bind:src="childItem.author.avatar_url" class="user_avatar" alt />
+                      <span>{{childItem.author.name}}</span>
+                    </div>
+                    <!-- 点击这里的评论出现@这个评论的楼主 -->
                   </div>
-                  <!-- 点击这里的评论出现@这个评论的楼主 -->
-                </div>
-                <p v-if="childItem.reply_userInfo">
-                  回复
-                  <span style="color:#06a5ff">{{childItem.reply_userInfo.name}}</span>
-                  : {{childItem.content}}
-                </p>
-                <p class="operate-icon">
-                  <i class="iconfont icon-dianzan">点赞</i>
-                  <span
-                    @click="()=>handleSecondFloorComment(index,childItem.id,childItem.parent_id,childItem.author)"
-                  >
-                    <i class="iconfont icon-pinglun">回复</i>
-                  </span>
-                </p>
-                <div>
-                  <CommentInput
-                    v-if="floor===index && id === childItem.id"
-                    @release="releaseComment"
-                    @inputCancel="()=>{id=''}"
-                  ></CommentInput>
+                  <p class="comment-item-child-reply" v-if="childItem.reply_userInfo">
+                    回复
+                    <span style="color:#06a5ff">{{childItem.reply_userInfo.name}}</span>
+                    : {{childItem.content}}
+                  </p>
+                  <p class="operate-icon">
+                    <i class="iconfont icon-dianzan">点赞</i>
+                    <span
+                      @click="()=>handleSecondFloorComment(index,childItem.id,childItem.parent_id,childItem.author)"
+                    >
+                      <i class="iconfont icon-pinglun">回复</i>
+                    </span>
+                  </p>
+                  <div>
+                    <CommentInput
+                      v-if="floor===index && id === childItem.id"
+                      @release="releaseComment"
+                      @inputCancel="()=>{id=''}"
+                    ></CommentInput>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="right-module">
-      <!-- 感悟模块 -->
-      <div class="article-quotes">
-        <div class="title">
-          <i class="iconfont icon-laba"></i>
-          每日一句
+      </b-col>
+      <b-col xl="3" md="3" cols="12" class="right-module">
+        <!-- 感悟模块 -->
+        <div class="article-quotes">
+          <div class="title">
+            <i class="iconfont icon-laba"></i>
+            每日一句
+          </div>
+          <p>{{articleInfo.quotes}}</p>
         </div>
-        <p>{{articleInfo.quotes}}</p>
-      </div>
-      <!-- 展示tag -->
-      <div class="tag-module">
-        <div class="title">
-          <i class="iconfont icon-tag"></i>
-          本文标签
+        <!-- 展示tag -->
+        <div class="tag-module">
+          <div class="title">
+            <i class="iconfont icon-tag"></i>
+            本文标签
+          </div>
+          <div class="tags" v-if="articleInfo.tags">
+            <span v-for="(item,index) in articleInfo.tags.split(',')" :key="index">{{item}}</span>
+          </div>
         </div>
-        <div class="tags" v-if="articleInfo.tags">
-          <span v-for="(item,index) in articleInfo.tags.split(',')" :key="index">{{item}}</span>
-        </div>
-      </div>
-      <RecommendArticle></RecommendArticle>
-    </div>
+        <RecommendArticle></RecommendArticle>
+      </b-col>
+    </b-row>
     <UserLoginModule
       :dialogFormVisible="dialogFormVisible"
       @cancel="()=>{dialogFormVisible = false}"
       @submit="(value)=>{dialogFormVisible = value}"
     ></UserLoginModule>
-  </div>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
@@ -413,9 +407,10 @@ export default class ArticleInfoModule extends Vue {
 .article-wrapper {
   .article-info {
     flex: 1;
-    padding: 10px;
+    padding: 20px;
     background: #fff;
     .article-header {
+      padding: 0 15px;
       .count-info {
         .tag {
           display: inline-block;
@@ -449,9 +444,12 @@ export default class ArticleInfoModule extends Vue {
         font-size: 12px;
       }
     }
+    .markdown-body {
+      padding: 0 15px;
+    }
     .ups {
       font-size: 12px;
-      padding: 5px 10px;
+      padding: 5px 15px;
       .click-like {
         span {
           position: relative;
@@ -469,7 +467,34 @@ export default class ArticleInfoModule extends Vue {
       }
     }
     .comment-wrapper {
+      padding: 0 15px;
       margin-top: 20px;
+      .user_avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50px;
+        display: inline;
+        position: relative;
+        bottom: 3px;
+        border: 1px solid #eee;
+        padding: 3px;
+      }
+      .comment-data {
+        .comment-data-item {
+          span {
+            margin-left: 5px;
+          }
+        }
+        .conment-item-content {
+          margin: 5px 0;
+          padding-left: 5px;
+          font-size: 12px;
+          padding: 5px;
+        }
+        .comment-item-child {
+          margin-left: 30px;
+        }
+      }
       .title {
         font-size: 18px;
         padding-left: 5px;
@@ -532,6 +557,79 @@ export default class ArticleInfoModule extends Vue {
           display: inline-block;
         }
       }
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .article-wrapper {
+    .article-info {
+      padding: 10px;
+      .article-header {
+        padding: 0 5px;
+        .count-info {
+          .tag {
+            font-size: 10px;
+          }
+          .info {
+            span {
+              font-size: 10px;
+              padding: 0 2px;
+              .iconfont {
+                font-size: 14px;
+              }
+            }
+          }
+        }
+      }
+      .markdown-body {
+        padding: 0 2px;
+      }
+      .comment-wrapper {
+        padding: 0 5px;
+        margin-top: 10px;
+        .user_avatar {
+          width: 23px;
+          height: 23px;
+        }
+        .comment-data {
+          .comment-data-item {
+            span {
+              font-size: 14px;
+              margin-left: 3px;
+            }
+          }
+          .conment-item-content{
+            padding: 0 5px;
+          }
+          .comment-item-child {
+            margin-left: 15px;
+            div {
+              div,
+              .comment-item-child-reply {
+                font-size: 14px;
+                margin-bottom: 5px;
+              }
+            }
+          }
+        }
+        .title {
+          font-size: 14px;
+          padding-left: 2px;
+          margin-bottom: 5px;
+          border-left: 1px solid #eee;
+        }
+        .no-comment {
+          padding: 15px 0;
+        }
+        .operate-icon {
+          .iconfont {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+    .right-module {
+      margin-left: 0 !important;
     }
   }
 }

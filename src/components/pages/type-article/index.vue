@@ -1,29 +1,31 @@
 <template>
-  <div class="type-article frspace">
-    <div class="article-data">
-      <!-- 有数据 -->
-      <div v-if="JSON.stringify(articles) !== '[]'">
-        <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
-        <div style="text-align:center">
-          <Pagination
-            style="margin-top:10px"
-            v-if="JSON.stringify(articles) !=='[]'"
-            layout="prev, pager, next"
-            :total="pagination.total"
-            :current-page="pagination.current"
-            @change="handlePaginationChange"
-          ></Pagination>
+  <b-container class="type-article">
+    <b-row>
+      <b-col xl="9" md="12" cols="12" class="article-data">
+        <!-- 有数据 -->
+        <div v-if="JSON.stringify(articles) !== '[]'">
+          <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
+          <div style="text-align:center">
+            <Pagination
+              style="margin-top:10px"
+              v-if="JSON.stringify(articles) !=='[]'"
+              layout="prev, pager, next"
+              :total="pagination.total"
+              :current-page="pagination.current"
+              @change="handlePaginationChange"
+            ></Pagination>
+          </div>
         </div>
-      </div>
-      <div v-else class="no-data">
-        <img src="../../../assets/imgs/no-article.png" alt />
-        <h1>当前模块下暂无文章</h1>
-      </div>
-    </div>
-    <div class="right-module">
-      <RecommendArticle></RecommendArticle>
-    </div>
-  </div>
+        <div v-else class="no-data">
+          <img src="../../../assets/imgs/no-article.png" alt />
+          <h1>当前模块下暂无文章</h1>
+        </div>
+      </b-col>
+      <b-col xl="3" md="12" cols="12" class="right-module">
+        <RecommendArticle></RecommendArticle>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
@@ -111,7 +113,6 @@ export default class TypeModule extends Vue {
 </script>
 <style lang="less" scoped>
 .type-article {
-  position: relative;
   .article-data {
     flex: 1;
   }
@@ -128,8 +129,25 @@ export default class TypeModule extends Vue {
     }
   }
   .right-module {
-    width: 300px;
     margin-left: 20px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .right-module {
+    margin-left: 0 !important;
+  }
+}
+@media screen and (max-width: 400px) {
+  .no-data {
+    padding: 20px 0 !important;
+    img {
+      width: 120px !important;
+      height: 120px !important;
+    }
+    h1 {
+      font-size: 14px !important;
+    }
   }
 }
 </style>

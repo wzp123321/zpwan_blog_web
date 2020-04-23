@@ -1,11 +1,15 @@
 <template>
-  <div class="boxW breadcrumb-wrapper">
-    <el-breadcrumb separator="/" style="margin-left:10px">
-      <el-breadcrumb-item v-for="(routeItem,index) in routers" :key="'route_'+index">
-        <router-link :to="routeItem.path">{{ routeItem.meta.name }}</router-link>
-      </el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
+  <b-container class="breadcrumb-wrapper">
+    <b-row>
+      <b-col>
+        <el-breadcrumb separator="/" style="margin-left:10px">
+          <el-breadcrumb-item v-for="(routeItem,index) in routers" :key="'route_'+index">
+            <router-link :to="routeItem.path">{{ routeItem.meta.name }}</router-link>
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";

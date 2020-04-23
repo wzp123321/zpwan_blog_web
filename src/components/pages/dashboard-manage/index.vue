@@ -1,27 +1,36 @@
 <template>
-  <div class="dashoboard-wrapper">
-    <!-- 用户信息模块 -->
-    <el-carousel
-      height="30px"
-      direction="vertical"
-      :autoplay="true"
-      :loop="true"
-      @change="handleCarouselChange"
-    >
-      <el-carousel-item v-for="(item,index) in notices" :key="index" class="notice-carousel-item">
-        <i
-          :style="{color:noticeInfo.isEmergency===1 ? '#ec3d06':'#f5db4b'}"
-          class="iconfont icon-laba"
-        ></i>
-        <span>{{noticeInfo.content}}</span>
-      </el-carousel-item>
-    </el-carousel>
+  <b-container class="dashoboard-wrapper">
+    <!-- 通知模块 -->
+    <b-row>
+      <b-col>
+        <el-carousel
+          width="100%"
+          height="30px"
+          direction="vertical"
+          :autoplay="true"
+          :loop="true"
+          @change="handleCarouselChange"
+        >
+          <el-carousel-item
+            v-for="(item,index) in notices"
+            :key="index"
+            class="notice-carousel-item"
+          >
+            <i
+              :style="{color:noticeInfo.isEmergency===1 ? '#ec3d06':'#f5db4b'}"
+              class="iconfont icon-laba"
+            ></i>
+            <span>{{noticeInfo.content}}</span>
+          </el-carousel-item>
+        </el-carousel>
+      </b-col>
+    </b-row>
     <!-- content模块 -->
-    <div class="content-wrapper frspace">
+    <b-row class="content-wrapper">
       <!-- 文章模块 -->
-      <div class="article-wrapper">
+      <b-col xl="8" md="12" cols="12" class="article-wrapper">
         <!-- banner模块 -->
-        <el-carousel :interval="4000" type="card" height="240px" class="carousel">
+        <el-carousel :interval="400000" height="240px" class="carousel">
           <el-carousel-item v-for="(item,index) in banners" :key="'banner_'+index">
             <img
               :src="item.imgUrl"
@@ -35,14 +44,15 @@
         <!-- 文章列表 -->
         <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
         <el-pagination
-          style="text-align:center;margin-top:10px"
+          v-if="pagination.total>10"
+          style="text-align:center;margin:10px 0"
           layout="prev, pager, next"
           :total="pagination.total"
           :current-page="pagination.page"
         ></el-pagination>
-      </div>
+      </b-col>
       <!-- 标签信息模块 -->
-      <div class="other-wrapper">
+      <b-col xl="4" md="12" cols="12" class="other-wrapper">
         <!-- 标签 -->
         <div class="tag-wrapper">
           <div class="title">
@@ -54,9 +64,9 @@
         </div>
         <!-- 文章列表 -->
         <RecommendArticle></RecommendArticle>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -173,7 +183,7 @@ export default class DashboardModule extends Vue {
     .iconfont {
       font-size: 14px;
       display: inline-block;
-      margin: 0  10px;
+      margin: 0 10px;
     }
   }
   .content-wrapper {
@@ -227,9 +237,10 @@ export default class DashboardModule extends Vue {
     }
   }
 }
-@media screen and (max-width: 768px) {
-  .carousel {
-    display: none;
+@media screen and (max-width: 500px) {
+  .other-wrapper {
+    margin-top: 10px;
+    margin-left: 0px !important;
   }
 }
 </style>

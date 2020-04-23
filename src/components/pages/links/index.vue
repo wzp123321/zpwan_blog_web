@@ -1,5 +1,5 @@
 <template>
-  <div class="friendly-link">
+  <b-container class="friendly-link">
     <h1>友情链接</h1>
     <el-divider content-position="center">以下友情链接，排名不分先后</el-divider>
     <div class="links">
@@ -36,7 +36,7 @@
         </el-form>
       </el-collapse-item>
     </el-collapse>
-  </div>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -134,6 +134,9 @@ export default class FriednlyLinkModule extends Vue {
 .friendly-link {
   background: #fff;
   padding: 20px;
+  h1 {
+    margin-left: 15px;
+  }
   .links {
     min-height: 100px;
     padding: 10px 0;
@@ -151,7 +154,7 @@ export default class FriednlyLinkModule extends Vue {
       }
       img {
         position: relative;
-        bottom: -5px;
+        bottom: 2px;
         width: 20px;
         height: 20px;
         border-radius: 50px;
@@ -161,9 +164,43 @@ export default class FriednlyLinkModule extends Vue {
       transform: translateY(-2px);
     }
   }
+  .el-collapse {
+    padding: 0 15px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .friendly-link {
+    padding: 10px;
+    h1 {
+      font-size: 20px;
+      margin-left: 5px;
+    }
+    .links {
+      padding: 0;
+      a {
+        padding: 4px;
+        margin: 6px 12px;
+        font-size: 12px;
+        span {
+          margin-left: 2px;
+        }
+      }
+    }
+    .el-divider__text .is-center {
+      padding: 0 !important;
+    }
+    .el-collapse {
+      padding: 0 15px;
+    }
+  }
 }
 </style>
 <style>
+@media screen and (max-width: 400px) {
+  .el-input__inner {
+    width: 56% !important;
+  }
+}
 .el-collapse-item__header {
   color: #06a5ff;
 }

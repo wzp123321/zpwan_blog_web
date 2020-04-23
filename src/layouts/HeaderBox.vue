@@ -1,11 +1,19 @@
 <template>
-  <div :class="[{'ceil': isCeil}, 'header-wrapper']">
-    <div class="boxW frspace">
-      <div class="info">
+  <b-container :class="[{'ceil': isCeil}, 'header-wrapper']" :style="`left:${positionLeft}px`">
+    <b-row>
+      <b-col xl="3" md="3" cols="11" offset-xl="0" offset-md="0" offset="0" class="info">
         <h1 @click="()=>{$router.push('/')}">万直鹏的博客</h1>
         <p>仰天大笑出门去，我辈岂是蓬蒿人</p>
-      </div>
-      <div class="menu flex-row">
+      </b-col>
+      <b-col
+        xl="6"
+        offset-xl="3"
+        md="9"
+        offset-md="0"
+        cols="11"
+        offset="0"
+        class="menu-wrapper flex-row"
+      >
         <Menu
           class="el-menu-demo"
           mode="horizontal"
@@ -29,9 +37,9 @@
         <div class="search-icon" @click="()=>{$router.push('/search')}">
           <i class="iconfont icon-sousuo"></i>
         </div>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
@@ -49,6 +57,8 @@ import HttpRequest from "@/assets/api/modules/index";
 export default class HeaderBox extends Vue {
   @Prop({ default: false })
   private isCeil!: boolean;
+  @Prop({ default: 0 })
+  private positionLeft!: number;
   // 目录数组
   private menus: Array<DashoboardModule.MenuInfo> = [];
   // menu--active
@@ -110,13 +120,13 @@ export default class HeaderBox extends Vue {
 <style lang="less" scoped>
 .header-wrapper {
   z-index: 999;
-  height: 62px;
-  width: 100%;
+  padding: 0 10px;
   background: #fff;
   .info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-left: 5px !important;
     h1,
     p {
       margin: 0;
@@ -132,15 +142,15 @@ export default class HeaderBox extends Vue {
       font-size: 13px;
     }
   }
-  .menu {
+  .menu-wrapper {
     .search-icon {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      margin-left: 20px;
+      margin-left: 10px;
       cursor: pointer;
       .iconfont {
-        padding: 10px;
+        padding: 5px 10px;
         background: #31c27c;
         color: #fff;
         font-size: 16px;
@@ -176,15 +186,75 @@ export default class HeaderBox extends Vue {
 @media screen and (max-width: 768px) {
   .header-wrapper {
     .info {
+      text-align: center;
       p {
         font-size: 10px !important;
       }
     }
   }
 }
+
+@media screen and (max-width: 576px) {
+  .header-wrapper {
+    .info {
+      text-align: left;
+    }
+  }
+  .menu-wrapper {
+    .search-icon {
+      margin-left: 5px;
+      .iconfont {
+        padding: 2px !important;
+        background: #fff !important;
+        color: #333 !important;
+        font-size: 12px !important;
+      }
+    }
+  }
+}
 </style>
 <style>
-.el-menu--horizontal>.el-menu-item{
-  height: 61px;
+@media screen and (min-width: 1140px) {
+  .el-menu--horizontal > .el-menu-item {
+    height: 61px;
+  }
+  .el-submenu__title,
+  .el-menu-item {
+    padding: 0 12px;
+  }
+}
+
+.el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+
+@media screen and (max-width: 768px) {
+  .el-submenu__title,
+  .el-menu-item {
+    padding: 0 12px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .el-submenu__title{
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .el-menu--collapse .el-menu .el-submenu, .el-menu--popup{
+    min-width: 100px;
+  }
+  .el-submenu__title,
+  .el-menu-item {
+    padding: 0 3px;
+    font-size: 10px;
+  }
+  .el-menu--horizontal,
+  .el-menu--horizontal > .el-menu-item,
+  .el-menu--horizontal > .el-submenu .el-submenu__title {
+    height: 31px;
+    line-height: 31px;
+  }
 }
 </style>

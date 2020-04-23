@@ -193,4 +193,9 @@ export default class CommentInput extends Vue {
     display: block;
   }
 }
+@media screen and (max-width: 500px){
+  .btn{
+    padding: 0;
+  }
+}
 </style>

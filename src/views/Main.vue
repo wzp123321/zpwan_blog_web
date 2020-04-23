@@ -1,10 +1,10 @@
 <template>
-  <div class="main-wrapper flex-column">
-    <div class="top-model">
+  <div class="main-wrapper">
+    <div style="flex:1">
       <TopBox></TopBox>
-      <HeaderBox :isCeil="isCeil"></HeaderBox>
+      <HeaderBox :isCeil="isCeil" :positionLeft="positionLeft"></HeaderBox>
       <BreadcrumbModule v-if="$route.path !=='/app'"></BreadcrumbModule>
-      <ContentBox :style="{marginTop:isCeil?'64px':'10px'}" class="boxW"></ContentBox>
+      <ContentBox :style="{marginTop:isCeil?'64px':'10px'}"></ContentBox>
     </div>
     <FooterBox></FooterBox>
     <div class="scroll-to-top" v-show="isTop">
@@ -59,6 +59,8 @@ export default class Main extends Vue {
   @musicModule.State("musicList") public musicList!: MusicInfo[];
   // 顶部是否吸顶
   private isCeil: boolean = false;
+  // 距离左边距离
+  private positionLeft: number = 0;
   // 是否显示回到顶骨图标
   private isTop: boolean = false;
   // 是否最小化
@@ -98,6 +100,13 @@ export default class Main extends Vue {
       const scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop;
       if (scrollTop > 30) {
+        let width =
+          document.documentElement.clientWidth > 1140
+            ? 1200
+            : document.documentElement.clientWidth > 700
+            ? 768
+            : 375;
+        this.positionLeft = (document.documentElement.clientWidth - width) / 2;
         this.isCeil = true;
       } else {
         this.isCeil = false;
@@ -114,7 +123,7 @@ export default class Main extends Vue {
 <style lang="less" scoped>
 .main-wrapper {
   position: relative;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

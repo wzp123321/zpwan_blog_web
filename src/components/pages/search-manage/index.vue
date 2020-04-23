@@ -1,5 +1,5 @@
 <template>
-  <div class="search-wrapper">
+  <b-container class="search-wrapper">
     <div class="search-input flex-row">
       <el-input v-model="key" placeholder="请输入内容进行搜索" :clearable="true"></el-input>
       <el-button
@@ -9,28 +9,26 @@
         @click="handleSearchByKey"
       >搜索</el-button>
     </div>
-    <div class="search-content frspace" v-if="JSON.stringify(articles)!=='[]'">
-      <div class="article-list">
-        <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
-      </div>
-      <div class="tags">
-        <RecommendArticle></RecommendArticle>
-      </div>
-    </div>
-    <div
-      class="search-content frspace"
-      v-if="JSON.stringify(articles)==='[]' && JSON.stringify(intro_articles)!=='[]'"
+    <b-row
+      class="search-content"
+      v-show="JSON.stringify(articles)!=='[]' || JSON.stringify(intro_articles)!=='[]'"
     >
-      <div class="article-list">
-        <p>
-          未能找到如下有关"<span class="em">{{this.key}}</span>"，为您智能推荐以下文章
-        </p>
-        <ArticleItem v-for="(item,index) in intro_articles" :key="index" :articleInfo="item"></ArticleItem>
-      </div>
-      <div class="tags">
+      <b-col xl="9" md="12" cols="12" class="article-list">
+        <div class="article-result" v-if="JSON.stringify(articles)!=='[]'">
+          <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
+        </div>
+        <div class="article-result" v-else>
+          <p>
+            未能找到如下有关"
+            <span class="em">{{this.key}}</span>"，为您智能推荐以下文章
+          </p>
+          <ArticleItem v-for="(item,index) in intro_articles" :key="index" :articleInfo="item"></ArticleItem>
+        </div>
+      </b-col>
+      <b-col xl="3" md="12" cols="12" class="tags">
         <RecommendArticle></RecommendArticle>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <el-pagination
       v-if="total>5 &&(JSON.stringify(articles)!=='[]' || JSON.stringify(intro_articles)!=='[]')"
       style="text-align:center;margin-top:20px"
@@ -41,7 +39,7 @@
       :total="total"
       @current-change="handlePaginationChange"
     ></el-pagination>
-  </div>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
@@ -66,22 +64,22 @@ export default class SearchModule extends Vue {
   private total: number = 0;
   private page: number = 1;
   handlePaginationChange(value: number) {
-   this.page = value;
-   this.handleSearchByKey();
+    this.page = value;
+    this.handleSearchByKey();
   }
   /**
    * 搜索事件
    */
   private async handleSearchByKey() {
-    if(this.key ===''){
-      return ;
+    if (this.key === "") {
+      return;
     }
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
     >> = await HttpRequest.ArticleModule.getArticleSearchByKey({
       key: this.key,
       limit: 5,
-      page:this.page
+      page: this.page
     });
 
     if (res && res.data) {
@@ -136,12 +134,28 @@ export default class SearchModule extends Vue {
     position: relative;
     padding-top: 90px;
     .article-list {
-      width: 72%;
-      padding: 0 1%;
+      flex: 1;
     }
     .tags {
-      width: 300px;
       margin-left: 20px;
+    }
+  }
+}
+@media screen and (max-width: 1100px) {
+  .search-wrapper {
+    .search-input {
+      width: 100%;
+      left: 0%;
+      padding: 15px;
+    }
+    .search-content {
+      padding-top: 70px;
+      .article-list {
+        flex: 1;
+      }
+      .tags {
+        margin-left: 0 !important;
+      }
     }
   }
 }

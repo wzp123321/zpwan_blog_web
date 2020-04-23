@@ -5,10 +5,9 @@
       <div class="img-div">
         <img :src="articleInfo.imgUrl" alt @click="()=>{$router.push('/article/'+articleInfo.id)}" />
       </div>
-      <div class="info flex-column">
+      <div class="info">
         <div class="header frspace">
           <h1 @click="()=>{$router.push('/article/'+articleInfo.id)}" v-html="articleInfo.title"></h1>
-          <span>--{{articleInfo.second_catalogName}}</span>
         </div>
         <p v-html="articleInfo.description"></p>
         <span class="mobile-time">
@@ -119,16 +118,6 @@ export default class ArticleItem extends Vue {
         cursor: pointer;
         color: #424141;
       }
-      span {
-        display: inline-block;
-        width: 135px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-align: right;
-        text-overflow: ellipsis;
-        color: #666;
-        font-size: 14px;
-      }
     }
     p {
       margin: 0;
@@ -188,6 +177,75 @@ export default class ArticleItem extends Vue {
   }
   .pc-time {
     display: none !important;
+  }
+}
+@media screen and (max-width: 400px) {
+  .article-item {
+    padding: 2px;
+    margin-top: 5px;
+    .top {
+      top: 11px;
+      left: 9px;
+      padding: 5px;
+      font-size: 10px;
+    }
+    .img-div {
+      min-width: 80px;
+      min-height: 80px;
+      max-width: 80px;
+      max-height: 80px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .info {
+      padding: 0 5px;
+      .header {
+        h1 {
+          margin: 5px 2px;
+          font-weight: blod;
+          font-size: 13px;
+          width: 150px;
+        }
+      }
+      p {
+        display: none;
+      }
+      .mobile-time {
+        display: none;
+      }
+      .count {
+        margin-top: 31px;
+        span {
+          font-size: 10px;
+          padding: 0 4px;
+          .iconfont {
+            position: relative;
+            top: 0;
+            font-size: 12px;
+          }
+        }
+      }
+      .read {
+        height: 15px;
+        margin-top: 38px;
+        padding: 2px 4px;
+        font-size: 10px;
+        line-height: 11px;
+      }
+    }
+  }
+  @keyframes item_show {
+    0% {
+      transform: scaley(0px);
+    }
+    50% {
+      transform: scaleY(3px);
+    }
+    100% {
+      transform: scaleY(0);
+    }
   }
 }
 </style>

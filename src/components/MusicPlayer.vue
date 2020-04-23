@@ -133,8 +133,7 @@ export default class MusicPlayer extends Vue {
           ) {
             this.getMusicPlayMax(true);
           }
-        } catch (error) {
-        }
+        } catch (error) {}
       }
     };
   }
@@ -180,5 +179,11 @@ export default class MusicPlayer extends Vue {
 .max-player {
   width: 280px;
   height: 40px;
+}
+
+@media screen and (max-width: 1200px) {
+  .music_wrapper {
+    display: none;
+  }
 }
 </style>

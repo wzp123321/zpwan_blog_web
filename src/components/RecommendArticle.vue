@@ -58,7 +58,17 @@ export default class RecommendArticle extends Vue {
     }
   ];
   // icons
-  private icons:string[] = ['icon-12','icon-13','icon-14fuben','icon-4','icon-5','icon-6','icon-7','icon-8','icon-9'];
+  private icons: string[] = [
+    "icon-12",
+    "icon-13",
+    "icon-14fuben",
+    "icon-4",
+    "icon-5",
+    "icon-6",
+    "icon-7",
+    "icon-8",
+    "icon-9"
+  ];
   /**
    * tab 切换
    */
@@ -126,7 +136,8 @@ export default class RecommendArticle extends Vue {
     }
   }
   .content {
-    height: 360px;
+    max-height: 360px;
+    overflow: scroll;
     div {
       padding: 8px 10px;
       cursor: pointer;
@@ -158,6 +169,13 @@ export default class RecommendArticle extends Vue {
     div:hover {
       opacity: 0.7;
     }
+  }
+}
+@media screen and (max-width: 800px){
+  .recommend-article .header span{
+    padding: 10px 8px !important;
+    font-size: 12px !important;
+
   }
 }
 </style>

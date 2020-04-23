@@ -1,49 +1,55 @@
 <template>
-  <div class="top-wrapper boxW frspace">
-    <div class="time">
-      <span>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-xingzhuanggongnengtubiao-" />
-        </svg>
-        {{cityinfo}}
-      </span>
-      <span>{{current_time}}</span>
-    </div>
-    <div class="link">
-      <span>
-        <a href="https://github.com/wzp123321" target="blank">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-github" />
-          </svg> 我的github
-        </a>
-      </span>
-      <span @click="()=>{$router.push('/about')}">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-gengduo-guanyuxitong" />
-        </svg> 关于
-      </span>
-      <span @click="()=>{$router.push('/links')}">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-lianjie" />
-        </svg> 友情链接
-      </span>
-      <span @click="()=>{dialogFormVisible = true}" v-if="name ===''">
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-denglu" />
-        </svg> 登录
-      </span>
-      <span v-else class="username">
-        <i class="el-icon-user-solid"></i>
-        {{name}}
-        <span @click="loginout" class="loginout">退出登录</span>
-      </span>
-    </div>
-    <UserLoginModule
-      :dialogFormVisible="dialogFormVisible"
-      @cancel="()=>{dialogFormVisible = false}"
-      @submit="(value)=>{dialogFormVisible = value}"
-    ></UserLoginModule>
-  </div>
+  <b-container>
+    <b-row class="top-wrapper">
+      <b-col xl="4" md="5" cols="5">
+        <div class="time">
+          <span>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-xingzhuanggongnengtubiao-" />
+            </svg>
+            {{cityinfo}}
+          </span>
+          <span>{{current_time}}</span>
+        </div>
+      </b-col>
+      <b-col xl="3" offset-xl="5" md="4" offset-md="3" cols="12">
+        <div class="link">
+          <span>
+            <a href="https://github.com/wzp123321" target="blank">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-github" />
+              </svg> github
+            </a>
+          </span>
+          <span @click="()=>{$router.push('/about')}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-gengduo-guanyuxitong" />
+            </svg> 关于
+          </span>
+          <span @click="()=>{$router.push('/links')}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-lianjie" />
+            </svg> 友情链接
+          </span>
+          <span @click="()=>{dialogFormVisible = true}" v-if="name ===''">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-denglu" />
+            </svg> 登录
+          </span>
+          <span v-else class="username">
+            <i class="el-icon-user-solid"></i>
+            {{name}}
+            <span @click="loginout" class="loginout">退出登录</span>
+          </span>
+        </div>
+      </b-col>
+      <UserLoginModule
+        :dialogFormVisible="dialogFormVisible"
+        @cancel="()=>{dialogFormVisible = false}"
+        @submit="(value)=>{dialogFormVisible = value}"
+      ></UserLoginModule>
+    </b-row>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
@@ -134,20 +140,19 @@ export default class TopBox extends Vue {
 <style lang="less" scoped>
 .top-wrapper {
   position: relative;
-  height: 30px;
-  padding-top: 5px;
+  padding: 5px 0;
   .time,
   .link {
     font-size: 13px;
     span {
+      padding: 0 5px;
       display: inline-block;
-      padding: 0 10px;
       position: relative;
       .icon {
         width: 16px;
         height: 16px;
         position: relative;
-        bottom: -3px;
+        bottom: 0px;
       }
       a {
         color: #000;
@@ -158,13 +163,21 @@ export default class TopBox extends Vue {
         color: #31c27c;
       }
     }
-    span:last-child{
+    span:first-child {
+      padding-left: 0;
+    }
+    span:last-child {
       color: #31c27c;
-      padding-right:0;
+      padding-right: 0;
     }
   }
   .link span:hover {
     text-decoration: underline;
+  }
+}
+@media screen and (max-width: 500px) {
+  .top-wrapper {
+    display: none;
   }
 }
 </style>

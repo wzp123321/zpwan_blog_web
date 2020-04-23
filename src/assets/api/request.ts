@@ -7,7 +7,7 @@ import axios, {
 // timeout 10min
 const Global_Delay = 10 * 60 * 1000;
 const env = process.env.NODE_ENV
-const BASE_URL = env==='production' ? 'http://132.232.66.140:9898/blogManage':'http://127.0.0.1:9899/blogManage';
+const BASE_URL = env==='production' ? 'http://132.232.66.140:9898/blogManage':'http://localhost:9898/blogManage';
 // 定义一个空的数组，用于存放请求中的参数
 
 // 创建axios实例
