@@ -119,6 +119,7 @@ export default class DashboardModule extends Vue {
    */
   private async getTagList() {
     let page: number = 1;
+    let datas: { [key: string]: any }[] = [];
     const queryAll = async (page: number) => {
       const res: ApiResponse<ListResponse<
         Array<{ [key: string]: any }>
@@ -126,10 +127,11 @@ export default class DashboardModule extends Vue {
         page
       });
       if (res && res.data) {
-        const datas = res.data.data;
-        this.tags = [...this.tags, ...this.getTagChange(datas)];
-        if (res.data.total > this.tags.length) {
+        datas = [...datas, ...this.getTagChange(res.data.data)];
+        if (res.data.total > datas.length) {
           queryAll(page + 1);
+        } else {
+          this.tags = datas;
         }
       }
     };
@@ -137,13 +139,15 @@ export default class DashboardModule extends Vue {
   }
   // tag转参数格式
   getTagChange(data: Array<{ [key: string]: any }>) {
+    let datas = data;
     let newData: Array<{ [key: string]: any }> = [];
-    data.forEach((item: { [key: string]: any }) => {
+    datas.forEach((item: { [key: string]: any }) => {
       newData.push({
         id: item.id,
         name: item.value
       });
     });
+    console.log(newData);
     return newData;
   }
   /**
@@ -259,7 +263,7 @@ export default class DashboardModule extends Vue {
       .content {
         padding: 0 !important;
       }
-      .tag-cloud{
+      .tag-cloud {
         width: 100% !important;
       }
     }

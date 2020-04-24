@@ -105,7 +105,7 @@ export default class Main extends Vue {
             ? 1200
             : document.documentElement.clientWidth > 700
             ? 768
-            : 375;
+            : document.documentElement.clientWidth;
         this.positionLeft = (document.documentElement.clientWidth - width) / 2;
         this.isCeil = true;
       } else {

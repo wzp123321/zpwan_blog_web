@@ -584,6 +584,7 @@ export default class ArticleInfoModule extends Vue {
       .article-header {
         padding: 0 5px;
         .count-info {
+          line-height: 24px;
           .tag {
             font-size: 10px;
           }

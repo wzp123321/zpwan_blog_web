@@ -179,7 +179,7 @@ export default class ArticleItem extends Vue {
     display: none !important;
   }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
   .article-item {
     padding: 2px;
     margin-top: 5px;
@@ -228,11 +228,7 @@ export default class ArticleItem extends Vue {
         }
       }
       .read {
-        height: 15px;
-        margin-top: 38px;
-        padding: 2px 4px;
-        font-size: 10px;
-        line-height: 11px;
+        display: none;
       }
     }
   }
