@@ -33,7 +33,7 @@ const publicReq = async (params: { [key: string]: any }) => {
         method,
         // 在请求头里面添加token 如果没有则为空字符串
         headers: {
-            'token': localStorage.getItem('token') === null ? '' : localStorage.getItem('token')
+            'token': localStorage.getItem('blog_token') === null ? '' : localStorage.getItem('blog_token')
         },
         [method === 'post' ? 'data' : 'params']: param || {},
         transformRequest: [function (data: { [key: string]: any }) {
@@ -53,10 +53,10 @@ const publicReq = async (params: { [key: string]: any }) => {
         if (res) {
             if (res.data.code === 403) {
                 window.location.href = "/";
-                localStorage.removeItem("name");
-                localStorage.removeItem("user_id");
-                localStorage.removeItem("avatar_url");
-                localStorage.removeItem("location");
+                localStorage.removeItem("blog_name");
+                localStorage.removeItem("blog_user_id");
+                localStorage.removeItem("blog_avatar_url");
+                localStorage.removeItem("blog_location");
                 throw new Error(res.statusText);
             }
             if (res.data.code !== 200) {
@@ -85,7 +85,7 @@ export async function req(params: { [key: string]: any }, delay = Global_Delay) 
             publicReq(params),
         ]);
         if (response.data.code === 401) {
-            localStorage.removeItem("token");
+            localStorage.removeItem("blog_token");
             location.href = '/';
         }
         return response;

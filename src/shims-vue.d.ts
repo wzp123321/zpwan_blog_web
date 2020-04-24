@@ -7,6 +7,8 @@ declare module '*.vue' {
 declare module 'vue-aplayer';
 // 声明拖拽缩放
 declare module 'vuedraggable';
+// tag云
+declare module 'v-tag-cloud';
 
 /**
  * api相关
@@ -41,10 +43,10 @@ declare namespace DashoboardModule {
    * 用户信息
    */
   interface UserInfo {
-    user_id: string,
-    name: string,
-    avatar_url: string,
-    location: string
+    user_id?: string,
+    name?: string,
+    avatar_url?: string,
+    location?: string
   }
 
   /**

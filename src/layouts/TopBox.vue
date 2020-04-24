@@ -31,23 +31,13 @@
               <use xlink:href="#icon-lianjie" />
             </svg> 友情链接
           </span>
-          <span @click="()=>{dialogFormVisible = true}" v-if="name ===''">
+          <span>
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-denglu" />
-            </svg> 登录
-          </span>
-          <span v-else class="username">
-            <i class="el-icon-user-solid"></i>
-            {{name}}
-            <span @click="loginout" class="loginout">退出登录</span>
+              <use xlink:href="#icon-liuyan" />
+            </svg> 留言
           </span>
         </div>
       </b-col>
-      <UserLoginModule
-        :dialogFormVisible="dialogFormVisible"
-        @cancel="()=>{dialogFormVisible = false}"
-        @submit="(value)=>{dialogFormVisible = value}"
-      ></UserLoginModule>
     </b-row>
   </b-container>
 </template>
@@ -55,19 +45,11 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 // 解决AMap使用语法提示
 declare let AMap: any;
-import UserLoginModule from "@/components/UserLoginModal.vue";
 
 @Component({
-  name: "TopBox",
-  components: {
-    UserLoginModule
-  }
+  name: "TopBox"
 })
 export default class TopBox extends Vue {
-  // 用户名
-  private name: string = localStorage.getItem("name") || "";
-  // 登录对话框
-  private dialogFormVisible: boolean = false;
   // 当前时间
   private current_time: string = "";
   // 定时器
@@ -114,17 +96,10 @@ export default class TopBox extends Vue {
         if (result && result.city && result.bounds) {
           const cityinfo = result.province + "" + result.city;
           that.cityinfo = cityinfo;
-          localStorage.setItem("location", cityinfo);
+          localStorage.setItem("blog_location", cityinfo);
         }
       }
     });
-  }
-  /**
-   * 登出
-   */
-  private loginout() {
-    localStorage.clear();
-    window.location.reload();
   }
   mounted() {
     this.showCityInfo();
@@ -145,7 +120,7 @@ export default class TopBox extends Vue {
   .link {
     font-size: 13px;
     span {
-      padding: 0 5px;
+      padding: 0 10px;
       display: inline-block;
       position: relative;
       .icon {
@@ -158,16 +133,11 @@ export default class TopBox extends Vue {
         color: #000;
         text-decoration: none;
       }
-      .loginout {
-        font-size: 12px;
-        color: #31c27c;
-      }
     }
     span:first-child {
       padding-left: 0;
     }
     span:last-child {
-      color: #31c27c;
       padding-right: 0;
     }
   }

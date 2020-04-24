@@ -24,6 +24,9 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+//引入tag云
+import tagCloud from 'v-tag-cloud'
+Vue.use(tagCloud)
 
 
 router.beforeEach((to, from, next) => {

@@ -69,7 +69,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   // 路由回到顶部
   scrollBehavior(to:Route, from:Route, savedPosition) {

@@ -59,7 +59,10 @@
             <i class="iconfont icon-tag"></i>全部标签
           </div>
           <div class="content">
-            <span v-for="(item,index) in tags" :key="index">{{item.value}}</span>
+            <tag-cloud
+              :data="tags"
+              :config="{rotateAngleXbase:400,rotateAngleYbase:400,hover:false}"
+            ></tag-cloud>
           </div>
         </div>
         <!-- 文章列表 -->
@@ -124,13 +127,24 @@ export default class DashboardModule extends Vue {
       });
       if (res && res.data) {
         const datas = res.data.data;
-        this.tags = [...this.tags, ...datas];
+        this.tags = [...this.tags, ...this.getTagChange(datas)];
         if (res.data.total > this.tags.length) {
           queryAll(page + 1);
         }
       }
     };
     queryAll(page);
+  }
+  // tag转参数格式
+  getTagChange(data: Array<{ [key: string]: any }>) {
+    let newData: Array<{ [key: string]: any }> = [];
+    data.forEach((item: { [key: string]: any }) => {
+      newData.push({
+        id: item.id,
+        name: item.value
+      });
+    });
+    return newData;
   }
   /**
    * 请求文章列表
@@ -241,6 +255,14 @@ export default class DashboardModule extends Vue {
   .other-wrapper {
     margin-top: 10px;
     margin-left: 0px !important;
+    .tag-wrapper {
+      .content {
+        padding: 0 !important;
+      }
+      .tag-cloud{
+        width: 100% !important;
+      }
+    }
   }
 }
 </style>

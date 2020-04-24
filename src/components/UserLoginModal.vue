@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="用户登录"
+    title="少侠,留个名吧！"
     :visible.sync="dialogFormVisible"
     @close="close"
     @cancel="close"
@@ -105,16 +105,10 @@ export default class UserLoginModal extends Vue {
     const form: any = this.$refs.form;
     form.validate((valid: any) => {
       if (valid) {
-        window.location.href = "/#" + this.$route.path;
-        this.$notify({
-          title: "登录成功",
-          message: "恭喜你登录成功",
-          type: "success"
-        });
         const user_id: string = generateUUId(16);
-        localStorage.setItem("user_id", user_id);
-        localStorage.setItem("name", this.form.name);
-        localStorage.setItem("avatar_url", this.avatarUrl);
+        localStorage.setItem("blog_user_id", user_id);
+        localStorage.setItem("blog_name", this.form.name);
+        localStorage.setItem("blog_avatar_url", this.avatarUrl);
         flag = false;
       } else {
         flag = true;
@@ -128,7 +122,6 @@ export default class UserLoginModal extends Vue {
   private handleGithubLogin() {
     window.location.href =
       "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8088/signin_github";
-    localStorage.setItem("current_url", this.$route.path);
   }
 }
 </script>

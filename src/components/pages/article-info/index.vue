@@ -123,7 +123,7 @@
           </div>
         </div>
       </b-col>
-      <b-col xl="3" md="3" cols="12" class="right-module">
+      <b-col md="3" cols="12" class="right-module">
         <!-- 感悟模块 -->
         <div class="article-quotes">
           <div class="title">
@@ -148,7 +148,7 @@
     <UserLoginModule
       :dialogFormVisible="dialogFormVisible"
       @cancel="()=>{dialogFormVisible = false}"
-      @submit="(value)=>{dialogFormVisible = value}"
+      @submit="handleLoginSuccess"
     ></UserLoginModule>
   </b-container>
 </template>
@@ -190,11 +190,21 @@ export default class ArticleInfoModule extends Vue {
   private id: string = "";
   // 评论的作者信息---即登录的用户
   private author: DashoboardModule.UserInfo = {
-    user_id: localStorage.getItem("user_id") || "",
-    name: localStorage.getItem("name") || "",
-    avatar_url: localStorage.getItem("avatar_url") || "",
-    location: localStorage.getItem("location") || ""
+    user_id: localStorage.getItem("blog_user_id") || "",
+    name: localStorage.getItem("blog_name") || "",
+    avatar_url: localStorage.getItem("blog_avatar_url") || "",
+    location: localStorage.getItem("blog_location") || ""
   };
+  // 登录回调
+  private handleLoginSuccess() {
+    this.dialogFormVisible = false;
+    this.author = {
+      user_id: localStorage.getItem("blog_user_id") || "",
+      name: localStorage.getItem("blog_name") || "",
+      avatar_url: localStorage.getItem("blog_avatar_url") || "",
+      location: localStorage.getItem("blog_location") || ""
+    };
+  }
   // 被评论的作者信息
   private reply_userInfo: DashoboardModule.UserInfo = {
     user_id: "",
@@ -221,7 +231,7 @@ export default class ArticleInfoModule extends Vue {
    * 评论输入回调
    */
   private async releaseComment(content: string) {
-    if (!localStorage.getItem("name")) {
+    if (!localStorage.getItem("blog_name")) {
       this.dialogFormVisible = true;
       return;
     }
@@ -339,11 +349,14 @@ export default class ArticleInfoModule extends Vue {
    * 文章点赞
    */
   private async getArticleUps() {
-    if (!localStorage.getItem("name") || !localStorage.getItem("user_id")) {
+    if (
+      !localStorage.getItem("blog_name") ||
+      !localStorage.getItem("blog_user_id")
+    ) {
       this.dialogFormVisible = true;
     } else {
       const article_id = this.$route.params.id;
-      const user_id = localStorage.getItem("user_id");
+      const user_id = localStorage.getItem("blog_user_id");
       if (!this.isUps) {
         const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
           { article_id, user_id }
@@ -370,7 +383,7 @@ export default class ArticleInfoModule extends Vue {
    */
   private async handleUpsCheck() {
     const article_id = this.$route.params.id;
-    const user_id = localStorage.getItem("user_id");
+    const user_id = localStorage.getItem("blog_user_id");
     const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleUpsCheck(
       {
         article_id,
@@ -381,16 +394,19 @@ export default class ArticleInfoModule extends Vue {
   }
   created() {
     this.author = {
-      user_id: localStorage.getItem("user_id") || "",
-      name: localStorage.getItem("name") || "",
-      avatar_url: localStorage.getItem("avatar_url") || "",
-      location: localStorage.getItem("location") || ""
+      user_id: localStorage.getItem("blog_user_id") || "",
+      name: localStorage.getItem("blog_name") || "",
+      avatar_url: localStorage.getItem("blog_avatar_url") || "",
+      location: localStorage.getItem("blog_location") || ""
     };
     this.$nextTick(() => {
       this.getArticleInfoById();
       this.getArticleCommentList();
       this.getArticleVisit();
-      if (localStorage.getItem("name") && localStorage.getItem("user_id")) {
+      if (
+        localStorage.getItem("blog_name") &&
+        localStorage.getItem("blog_user_id")
+      ) {
         this.handleUpsCheck();
       }
     });
@@ -405,6 +421,7 @@ export default class ArticleInfoModule extends Vue {
 </script>
 <style lang="less" scoped>
 .article-wrapper {
+  position: relative;
   .article-info {
     flex: 1;
     padding: 20px;
@@ -473,7 +490,7 @@ export default class ArticleInfoModule extends Vue {
         width: 26px;
         height: 26px;
         border-radius: 50px;
-        display: inline;
+        display: inline-block;
         position: relative;
         bottom: 3px;
         border: 1px solid #eee;
@@ -598,7 +615,7 @@ export default class ArticleInfoModule extends Vue {
               margin-left: 3px;
             }
           }
-          .conment-item-content{
+          .conment-item-content {
             padding: 0 5px;
           }
           .comment-item-child {
@@ -635,10 +652,24 @@ export default class ArticleInfoModule extends Vue {
 }
 </style>
 <style lang="less">
-.markdown-body {
-  img {
-    max-width: 800px !important;
-    max-height: 300px !important;
+@media screen and (min-width: 1100px) {
+  .markdown-body {
+    img {
+      max-width: 800px !important;
+      max-height: 300px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .markdown-body {
+    img {
+      width: 375px !important;
+      height: 180px !important;
+      margin: 0 auto;
+      max-width: 375px !important;
+      max-height: 180px !important;
+    }
   }
 }
 </style>

@@ -43,9 +43,9 @@ export default class GithubLogin extends Vue {
       if (res && res.data) {
         const { id, avatar_url, name, location } = res.data;
         localStorage.setItem("id", id);
-        localStorage.setItem("avatar_url", avatar_url);
-        localStorage.setItem("name", name);
-        localStorage.setItem("location", location);
+        localStorage.setItem("blog_avatar_url", avatar_url);
+        localStorage.setItem("blog_name", name);
+        localStorage.setItem("blog_location", location);
         window.location.href = localStorage.getItem("current_url") || "/";
         this.$notify({
           title: "登录成功",

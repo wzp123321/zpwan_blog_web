@@ -113,6 +113,7 @@ body {
 /* 自定义scrollbar */
 ::-webkit-scrollbar {
     width: 4px !important;
+    height: 4px !important;
     background: none;
 }
 
