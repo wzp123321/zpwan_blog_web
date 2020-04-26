@@ -1,3 +1,5 @@
+const USER_QQ_NUM = "1421209422";
+
 const links: { [key: string]: any }[] = [{
     title: "github",
     url: "https://github.com/wzp123321",
@@ -63,9 +65,10 @@ const visits: { [ksy: string]: any }[] = [
     {
         title: "QQ",
         imgUrl: "icon-QQ",
-        url: "tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=1421209422&website=www.oicqzone.com",
+        url: "tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=" + USER_QQ_NUM + "&website=www.oicqzone.com",
         isSvg: true
     }
 ]
+
 
 export { links, avatars, icons, visits }

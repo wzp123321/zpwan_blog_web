@@ -55,6 +55,21 @@
             }}
           </div>
         </div>
+        <el-divider content-position="center">分享本文</el-divider>
+        <div class="share-article">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-QQ" />
+          </svg>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-QQkongjian" />
+          </svg>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-weibo" />
+          </svg>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-weixin" />
+          </svg>
+        </div>
         <!-- 评论模块 -->
         <div class="comment-wrapper">
           <div class="title">
@@ -484,6 +499,16 @@ export default class ArticleInfoModule extends Vue {
         border: 1px solid #eee;
       }
     }
+    // 分享
+    .share-article {
+      text-align: center;
+      svg {
+        width: 28px;
+        height: 28px;
+        margin: 0 8px;
+      }
+    }
+    //评论
     .comment-wrapper {
       padding: 0 15px;
       margin-top: 20px;
