@@ -48,7 +48,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { formatDate } from "@/assets/js/index";
+import { formatDate } from "@/utils/index";
 import { Tooltip } from "element-ui";
 @Component({
   name: "ArticleItem",

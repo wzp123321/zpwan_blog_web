@@ -1,4 +1,17 @@
-export const formatDate = (date: number) => {
+'use strict';
+const crypto = require('crypto');
+
+const generateUUId = (len: number) => {
+    // isFinite 判断是否为有限数值
+    if (!Number.isFinite(len)) {
+        throw new TypeError('Expected a finite number');
+    }
+
+    return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len);
+};
+
+
+const formatDate = (date: number) => {
     const dateTime = new Date(date)
     const YY = dateTime.getFullYear()
     const MM =
@@ -13,3 +26,6 @@ export const formatDate = (date: number) => {
         dateTime.getSeconds() < 10 ? '0' + dateTime.getSeconds() : dateTime.getSeconds()
     return `${YY}-${MM}-${D} ${hh}:${mm}`
 }
+
+
+export { generateUUId, formatDate };

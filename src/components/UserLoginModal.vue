@@ -53,7 +53,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
-import generateUUId from "@/assets/js/crypto";
+import { generateUUId } from "@/utils/index";
+import { avatars } from "@/assets/js/common";
 import {
   Dialog,
   Form,
@@ -80,14 +81,7 @@ export default class UserLoginModal extends Vue {
   //表单数据
   private form: { [key: string]: any } = {};
   // 头像地址数组
-  private avatars: string[] = [
-    "http://132.232.66.140:81/D3212136A5479CF51D1F02AE86DB0A06.png",
-    "http://132.232.66.140:81/DA1050F08D8C0900C532A83F84124CDF.png",
-    "http://132.232.66.140:81/9ACFE155F36955B76AD7A158FAA58972.png",
-    "http://132.232.66.140:81/8D0573B1B95EBF1CE04915616531DE82.png",
-    "http://132.232.66.140:81/07520F7559417320348743EFCD977637.png",
-    "http://132.232.66.140:81/053FB25104C74AEFDC1771CABBFA4A2A.png"
-  ];
+  private avatars: string[] = avatars;
 
   @Emit("cancel")
   private cancel() {}

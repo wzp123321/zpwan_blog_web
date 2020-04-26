@@ -59,12 +59,17 @@ const routes = [
       {
         path: '/404',
         component: NotFoundModule,
+        meta: { name: "404" }
       },
     ],
   },
   {
     path: '/signin_github',
     component: GithubLogin
+  },
+  {
+    path: "*",
+    redirect: '/404'
   }
 ]
 
@@ -72,7 +77,7 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   // 路由回到顶部
-  scrollBehavior(to:Route, from:Route, savedPosition) {
+  scrollBehavior(to: Route, from: Route, savedPosition) {
     if (savedPosition) {
       return savedPosition
     }

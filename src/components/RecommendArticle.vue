@@ -29,6 +29,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { Tabs, TabPane, Tooltip } from "element-ui";
+import { icons } from "@/assets/js/common";
 import HttpRequest from "@/assets/api/modules/index";
 @Component({
   name: "RecommendArticle",
@@ -58,17 +59,7 @@ export default class RecommendArticle extends Vue {
     }
   ];
   // icons
-  private icons: string[] = [
-    "icon-12",
-    "icon-13",
-    "icon-14fuben",
-    "icon-4",
-    "icon-5",
-    "icon-6",
-    "icon-7",
-    "icon-8",
-    "icon-9"
-  ];
+  private icons: string[] = icons;
   /**
    * tab 切换
    */
@@ -171,11 +162,10 @@ export default class RecommendArticle extends Vue {
     }
   }
 }
-@media screen and (max-width: 800px){
-  .recommend-article .header span{
+@media screen and (max-width: 800px) {
+  .recommend-article .header span {
     padding: 10px 8px !important;
     font-size: 12px !important;
-
   }
 }
 </style>

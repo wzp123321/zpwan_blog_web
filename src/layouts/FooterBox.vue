@@ -1,5 +1,6 @@
 <template>
   <div class="footer-wrapper">
+    <!-- 简书  微博  github   qq  微信-->
     <b-container>
       <p>Copyright © 2020 万直鹏博客</p>
       <div class="record-content">

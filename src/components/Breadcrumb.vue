@@ -29,6 +29,7 @@ export default class BreadcrumbModule extends Vue {
    */
   private async handleBreabcrumb() {
     this.routers = this.$route.matched.filter(item => item.meta.name);
+    console.log(this.routers);
     // 修改首页path
     if (this.routers[0].path === "") {
       this.routers[0].path = "/";

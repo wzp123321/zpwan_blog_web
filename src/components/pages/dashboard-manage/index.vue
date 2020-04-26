@@ -147,7 +147,6 @@ export default class DashboardModule extends Vue {
         name: item.value
       });
     });
-    console.log(newData);
     return newData;
   }
   /**

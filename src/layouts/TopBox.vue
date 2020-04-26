@@ -14,27 +14,15 @@
       </b-col>
       <b-col xl="3" offset-xl="5" md="4" offset-md="3" cols="12">
         <div class="link">
-          <span>
-            <a href="https://github.com/wzp123321" target="blank">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-github" />
-              </svg> github
-            </a>
-          </span>
-          <span @click="()=>{$router.push('/about')}">
+          <span
+            v-for="(linkItem,linkIndex) in links"
+            :key="linkIndex"
+            @click="handleRouterLocation(linkItem)"
+          >
             <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-gengduo-guanyuxitong" />
-            </svg> 关于
-          </span>
-          <span @click="()=>{$router.push('/links')}">
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-lianjie" />
-            </svg> 友情链接
-          </span>
-          <span>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-liuyan" />
-            </svg> 留言
+              <use :xlink:href="`#${linkItem.svg}`" />
+            </svg>
+            {{linkItem.title}}
           </span>
         </div>
       </b-col>
@@ -43,6 +31,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
+import { links } from "@/assets/js/common";
 // 解决AMap使用语法提示
 declare let AMap: any;
 
@@ -56,6 +45,8 @@ export default class TopBox extends Vue {
   private timer: any = null;
   // 当前定位城市
   private cityinfo: string = "";
+  // 链接数组
+  private links: { [key: string]: any }[] = links;
   /**
    * 获取实时时间
    */
@@ -100,6 +91,14 @@ export default class TopBox extends Vue {
         }
       }
     });
+  }
+  // 路由跳转
+  private handleRouterLocation(item: { [key: string]: any }) {
+    if (item.isBlank) {
+      window.open(item.url, "_blank");
+    } else {
+      this.$router.push(item.url);
+    }
   }
   mounted() {
     this.showCityInfo();

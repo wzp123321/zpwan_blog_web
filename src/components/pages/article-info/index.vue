@@ -153,10 +153,11 @@
   </b-container>
 </template>
 <script lang="ts">
+// 加入分享功能  https://blog.csdn.net/weixin_44868881/article/details/100924143
 import { Vue, Component, Watch } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { Divider, Message } from "element-ui";
-import { formatDate } from "@/assets/js/index";
+import { formatDate } from "@/utils/index";
 import CommentInput from "@/components/CommentInput.vue";
 import { Route } from "vue-router";
 import RecommendArticle from "@/components/RecommendArticle.vue";
