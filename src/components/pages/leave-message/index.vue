@@ -1,5 +1,7 @@
 <template>
- <h1>LeaveMessageModule</h1>
+  <b-container>
+    <h1>LeaveMessageModule</h1>
+  </b-container>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";

@@ -39,14 +39,14 @@
       <el-form-item style="text-align:center">
         <el-button size="small" type="primary" style="width:100%;" @click="handleUserLogin">登 录</el-button>
       </el-form-item>
-      <!-- <div class="other-login">
+      <div class="other-login">
         <div class="title">您还可以选择其他登录方式:</div>
         <div @click="handleGithubLogin" style="text-align:center">
           <svg class="icon" aria-hidden="true" style="width:24px;height:24px">
             <use xlink:href="#icon-github" />
           </svg>
         </div>
-      </div>-->
+      </div>
     </el-form>
   </el-dialog>
 </template>
@@ -55,6 +55,7 @@ import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { generateUUId } from "@/utils/index";
 import { avatars } from "@/assets/js/common";
+const env = process.env.NODE_ENV;
 import {
   Dialog,
   Form,
@@ -114,8 +115,12 @@ export default class UserLoginModal extends Vue {
    * github登录
    */
   private handleGithubLogin() {
+    const url =
+      env === "production"
+        ? "http://zpwan-yz.com/signin_github"
+        : "http://localhost:8088/signin_github";
     window.location.href =
-      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=http://localhost:8088/signin_github";
+      "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=" + url;
   }
 }
 </script>

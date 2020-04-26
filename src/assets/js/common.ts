@@ -46,4 +46,26 @@ const icons: string[] = [
     "icon-9"
 ]
 
-export { links, avatars, icons }
+// 底部
+const visits: { [ksy: string]: any }[] = [
+    {
+        title: 'Github',
+        imgUrl: "icon-github",
+        url: 'https://github.com/wzp123321',
+        isSvg: true
+    },
+    {
+        title: '简书',
+        imgUrl: "../assets/imgs/jianshu.png",
+        url: 'https://www.jianshu.com/u/914a5045e1e4',
+        isSvg: false
+    },
+    {
+        title: "QQ",
+        imgUrl: "icon-QQ",
+        url: "tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=1421209422&website=www.oicqzone.com",
+        isSvg: true
+    }
+]
+
+export { links, avatars, icons, visits }

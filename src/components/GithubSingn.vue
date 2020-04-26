@@ -1,16 +1,24 @@
 <template>
   <div class="login">
-    <div class="login-title">欢迎登陆万直鹏的博客</div>
-    <div class="login-form">
-      <svg class="icon" aria-hidden="true" style="width:50px;height:50px">
-        <use xlink:href="#icon-github" />
-      </svg>
-      <div class="loading">
-        <span v-for="(item,index) in total%6" :key="index">-</span>
-      </div>
-      <img src="../assets/imgs/favicon.png" alt class="logo" />
-      <span class="logining">登录中</span>
-    </div>
+    <b-container>
+      <b-row class="login-title">
+        <b-col>欢迎登陆万直鹏的博客</b-col>
+      </b-row>
+      <b-row>
+        <b-col class="login-form">
+          <svg class="icon" aria-hidden="true" style="width:50px;height:50px">
+            <use xlink:href="#icon-github" />
+          </svg>
+          <div class="loading">
+            <div class="content">
+              <span v-for="(item,index) in total" :key="index">-</span>
+            </div>
+            <div class="loading-title">登录中</div>
+          </div>
+          <img src="../assets/imgs/favicon.png" alt class="logo" />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 <script lang="ts">
@@ -42,7 +50,7 @@ export default class GithubLogin extends Vue {
     }).then(async res => {
       if (res && res.data) {
         const { id, avatar_url, name, location } = res.data;
-        localStorage.setItem("id", id);
+        localStorage.setItem("blog_user_id", id);
         localStorage.setItem("blog_avatar_url", avatar_url);
         localStorage.setItem("blog_name", name);
         localStorage.setItem("blog_location", location);
@@ -85,6 +93,10 @@ export default class GithubLogin extends Vue {
     this.getAccessTokenByCode();
     this.timer = setInterval(() => {
       this.total += 1;
+      this.total = this.total % 5;
+      if (this.total === 0) {
+        this.total = 1;
+      }
     }, 500);
   }
   /**
@@ -97,27 +109,27 @@ export default class GithubLogin extends Vue {
 </script>
 <style lang="less" scoped>
 .login {
-  width: 100%;
   height: 100%;
   background: #fff;
   .login-title {
     padding-top: 150px;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 28px;
+    margin-bottom: 10px;
+    font-size: 24px;
   }
   .login-form {
     width: 400px;
     height: 80px;
     margin: 0 auto;
     text-align: center;
-    border: 1px solid #eee;
     position: relative;
     border-radius: 5px;
     padding-top: 12px;
     .loading {
       display: inline-block;
       width: 100px;
+      height: 100%;
+      line-height: 100%;
     }
     .logo {
       width: 53px;

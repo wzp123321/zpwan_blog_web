@@ -11,7 +11,7 @@
       <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
     </div>
     <!-- 音乐播放托盘 -->
-    <MusicPlayer
+    <!-- <MusicPlayer
       :isMin="isMin"
       :isPlay="isPlay"
       :cur_music="currentMusicInfo"
@@ -19,7 +19,7 @@
       @change="handlePlayChange"
       @index_change="handleMusicIndexChange"
       @play_pause="handleMusicPlayPause"
-    ></MusicPlayer>
+    ></MusicPlayer> -->
   </div>
 </template>
 <script lang="ts">
