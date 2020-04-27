@@ -70,5 +70,8 @@ const visits: { [ksy: string]: any }[] = [
     }
 ]
 
+// 微博分享Appkey
+const APP_KEY = "2697214670"
 
-export { links, avatars, icons, visits }
+
+export { links, avatars, icons, visits, APP_KEY }

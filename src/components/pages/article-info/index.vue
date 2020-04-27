@@ -2,9 +2,6 @@
   <b-container class="article-wrapper">
     <b-row>
       <b-col xl="9" md="9" cols="12" class="article-info">
-        <!-- 实现分享文章 
-        微信分享:https://segmentfault.com/a/1190000020163797
-        -->
         <!-- 头部 -->
         <div class="article-header">
           <div class="count-info frspace">
@@ -57,18 +54,18 @@
         </div>
         <el-divider content-position="center">分享本文</el-divider>
         <div class="share-article">
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" @click="handleShareByOtherPlateForm('qq')">
             <use xlink:href="#icon-QQ" />
           </svg>
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" @click="handleShareByOtherPlateForm('qzone')">
             <use xlink:href="#icon-QQkongjian" />
           </svg>
-          <svg class="icon" aria-hidden="true">
+          <svg class="icon" aria-hidden="true" @click="handleShareByOtherPlateForm('sina')">
             <use xlink:href="#icon-weibo" />
           </svg>
-          <svg class="icon" aria-hidden="true">
+          <!-- <svg class="icon weixin-share" aria-hidden="true" @click="handleWxShare">
             <use xlink:href="#icon-weixin" />
-          </svg>
+          </svg>-->
         </div>
         <!-- 评论模块 -->
         <div class="comment-wrapper">
@@ -168,7 +165,6 @@
   </b-container>
 </template>
 <script lang="ts">
-// 加入分享功能  https://blog.csdn.net/weixin_44868881/article/details/100924143
 import { Vue, Component, Watch } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { Divider, Message } from "element-ui";
@@ -183,7 +179,8 @@ import "mavon-editor/dist/katex/katex";
 import "mavon-editor/dist/highlightjs/languages/javascript.min.js";
 import "mavon-editor/dist/highlightjs/languages/java.min.js";
 import "highlight.js/lib/highlight.js";
-
+// 微博App-_key
+import { APP_KEY } from "@/assets/js/common";
 Vue.prototype.$message = Message;
 
 @Component({
@@ -237,11 +234,42 @@ export default class ArticleInfoModule extends Vue {
   };
   // 评论数组
   private comments: Array<ArticleModule.CommentInfo> = [];
+  // 当前路径
+  private locationUrl: string = "";
+  // 是否显示二维码
+  private isPreShow: boolean = false;
   /**
    * 格式化时间
    */
   private formatDate(time: number) {
     return formatDate(time);
+  }
+  // QQ分享
+  private handleShareByQQ() {
+    window.open("");
+  }
+  // 分享
+  private handleShareByOtherPlateForm(type: string) {
+    let shareUrl: string = "";
+    const url = encodeURIComponent(window.location.href);
+    // const url =
+    //   "https://blog.csdn.net/weixin_44868881/article/details/100924143";
+    const { title, description } = this.articleInfo;
+    const imgUrl =
+      "http://132.232.66.140:81/CF29D466835022C356A76F846432D832.jpg";
+    if (type === "sina") {
+      shareUrl = `http://service.weibo.com/share/share.php?url=${url}&sharesource=weibo&title=${title}&pic=${imgUrl}&appkey=${APP_KEY}`;
+    } else if (type === "qzone") {
+      shareUrl = `https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=${url}&sharesource=qzone&title=${title}&pics=${imgUrl}&summary=${description}`;
+    } else if (type === "qq") {
+      shareUrl = `http://connect.qq.com/widget/shareqq/index.html?url=${url}&sharesource=qzone&title=${title}&pics=${imgUrl}&summary=${description}&desc=${description}`;
+    }
+    window.open(shareUrl, "_blank");
+  }
+  // 二维码
+  private handleWxShare() {
+    this.locationUrl = encodeURIComponent(window.location.href);
+    this.isPreShow = true;
   }
   /**
    * 评论输入回调
@@ -501,11 +529,16 @@ export default class ArticleInfoModule extends Vue {
     }
     // 分享
     .share-article {
+      position: relative;
       text-align: center;
       svg {
         width: 28px;
         height: 28px;
         margin: 0 8px;
+      }
+      svg:hover {
+        transition: 200ms;
+        transform: scale(1.2);
       }
     }
     //评论
@@ -609,6 +642,11 @@ export default class ArticleInfoModule extends Vue {
       padding: 10px;
       .article-header {
         padding: 0 5px;
+        .title {
+          padding-top: 10px;
+          font-size: 24px;
+          font-weight: 500;
+        }
         .count-info {
           line-height: 24px;
           .tag {
@@ -627,6 +665,15 @@ export default class ArticleInfoModule extends Vue {
       }
       .markdown-body {
         padding: 0 2px;
+      }
+      // 分享
+      .share-article {
+        text-align: center;
+        svg {
+          width: 24px;
+          height: 24px;
+          margin: 0 4px;
+        }
       }
       .comment-wrapper {
         padding: 0 5px;
@@ -690,6 +737,15 @@ export default class ArticleInfoModule extends Vue {
 
 @media screen and (max-width: 400px) {
   .markdown-body {
+    h1 {
+      font-size: 1.5rem !important;
+    }
+    h2 {
+      font-size: 1.2rem !important;
+    }
+    p {
+      font-size: 0.8rem !important;
+    }
     img {
       width: 375px !important;
       height: 180px !important;

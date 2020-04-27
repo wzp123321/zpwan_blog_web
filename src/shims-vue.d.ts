@@ -9,6 +9,8 @@ declare module 'vue-aplayer';
 declare module 'vuedraggable';
 // tag云
 declare module 'v-tag-cloud';
+// 二维码插件
+declare module 'weixin-js-sdk';
 
 /**
  * api相关
@@ -159,4 +161,14 @@ interface MusicInfo {
   pic?: string,
   author?: string,
   lrc?: string
+}
+
+/**
+ * 分享参数
+ */
+interface WeiXinShareInfo {
+  title?: string,
+  desc?: string,
+  linkUrl?: string,
+  img?: string
 }

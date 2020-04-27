@@ -31,7 +31,8 @@
     "vuedraggable": "^2.23.2",
     "vuex": "^3.1.2",
     "vuex-class": "^0.3.2",
-    "vuex-module-decorators": "^0.11.0"
+    "vuex-module-decorators": "^0.11.0",
+    "weixin-js-sdk": "^1.4.0-test"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",

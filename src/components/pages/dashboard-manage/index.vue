@@ -30,11 +30,11 @@
       <!-- 文章模块 -->
       <b-col xl="8" md="12" cols="12" class="article-wrapper">
         <!-- banner模块 -->
-        <el-carousel :interval="400000" height="240px" class="carousel">
+        <el-carousel :interval="400000" height="300px" class="carousel">
           <el-carousel-item v-for="(item,index) in banners" :key="'banner_'+index">
             <img
               :src="item.imgUrl"
-              style="width:100%;height:240px"
+              style="width:100%;height:300px"
               @click="()=>{$router.push(item.url)}"
               alt
             />

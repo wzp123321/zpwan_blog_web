@@ -184,9 +184,9 @@ export default class ArticleItem extends Vue {
     padding: 2px;
     margin-top: 5px;
     .top {
-      top: 11px;
-      left: 9px;
-      padding: 5px;
+      top: 2px;
+      left: 1px;
+      padding: 3px;
       font-size: 10px;
     }
     .img-div {
