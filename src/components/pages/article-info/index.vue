@@ -465,7 +465,6 @@ export default class ArticleInfoModule extends Vue {
 </script>
 <style lang="less" scoped>
 .article-wrapper {
-  position: relative;
   .article-info {
     flex: 1;
     padding: 20px;
@@ -595,7 +594,7 @@ export default class ArticleInfoModule extends Vue {
   }
   .right-module {
     width: 300px;
-    margin-left: 20px;
+    margin-left: 10px;
     .article-quotes,
     .tag-module {
       border-radius: 4px;
