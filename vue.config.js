@@ -1,4 +1,6 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const smp = new SpeedMeasurePlugin(); // 打包速度分析
 const webpack = require('webpack')
 
 const moduleConfig = {
@@ -34,12 +36,12 @@ const moduleConfig = {
   publicPath: '/',
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
-      return {
+      return smp.wrap({
         plugins: [
-          new BundleAnalyzerPlugin(),
+          new BundleAnalyzerPlugin(), // 打包分析
           new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
         ]
-      }
+      })
     }
   },
 }

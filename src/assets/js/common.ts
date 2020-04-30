@@ -1,4 +1,18 @@
 const USER_QQ_NUM = "1421209422";
+let qqShareUrl: string = "";
+let ua: string = navigator.userAgent;
+let ipad: RegExpMatchArray | any = ua.match(/(iPad).*OS\s([\d_]+)/);
+let isIphone: boolean | RegExpMatchArray | any = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+let isAndroid: boolean | RegExpMatchArray | any = ua.match(/(Android)\s+([\d.]+)/);
+let isMobile: boolean = isIphone || isAndroid;
+//判断是否是移动端
+if (isMobile) {
+    qqShareUrl = `mqqwpa://im/chat?chat_type=wpa&uin=${USER_QQ_NUM}&version=1&src_type=web&web_src=oicqzone.com`;
+} else {
+    qqShareUrl = `tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=${USER_QQ_NUM}&website=www.oicqzone.com`;
+}
+
+
 
 const links: { [key: string]: any }[] = [{
     title: "github",
@@ -65,7 +79,7 @@ const visits: { [ksy: string]: any }[] = [
     {
         title: "QQ",
         imgUrl: "icon-QQ",
-        url: "tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=" + USER_QQ_NUM + "&website=www.oicqzone.com",
+        url: qqShareUrl,
         isSvg: true
     }
 ]

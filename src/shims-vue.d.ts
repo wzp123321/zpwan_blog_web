@@ -11,7 +11,7 @@ declare module 'vuedraggable';
 declare module 'v-tag-cloud';
 // 二维码插件
 declare module 'weixin-js-sdk';
-
+declare module 'qrcodejs2';
 /**
  * api相关
  */

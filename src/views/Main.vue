@@ -19,7 +19,8 @@
       @change="handlePlayChange"
       @index_change="handleMusicIndexChange"
       @play_pause="handleMusicPlayPause"
-    ></MusicPlayer> -->
+    ></MusicPlayer>-->
+    <UserInfo :blog_user_name="blog_user_name" :blog_user_avatar="blog_user_avatar"></UserInfo>
   </div>
 </template>
 <script lang="ts">
@@ -30,6 +31,7 @@ import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
+import UserInfo from "@/components/UserInfo.vue";
 /**
  * 引入vuex
  */
@@ -44,7 +46,8 @@ const musicModule = namespace("music");
     ContentBox,
     FooterBox,
     BreadcrumbModule,
-    MusicPlayer
+    MusicPlayer,
+    UserInfo
   }
 })
 export default class Main extends Vue {
@@ -69,6 +72,10 @@ export default class Main extends Vue {
   private cur_index: number = 0;
   // 是否播放
   private isPlay: boolean = false;
+  // 用户名
+  private blog_user_name: string = "";
+  // 用户头像
+  private blog_user_avatar: string = "";
   /**
    * 回到顶部
    */
@@ -96,6 +103,8 @@ export default class Main extends Vue {
    * 添加全局监听
    */
   mounted() {
+    this.blog_user_name = localStorage.getItem("blog_name") || "";
+    this.blog_user_avatar = localStorage.getItem("blog_avatar_url") || "";
     window.addEventListener("scroll", () => {
       const scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop;

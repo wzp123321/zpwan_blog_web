@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     title="少侠,留个名吧！"
-    :visible.sync="dialogFormVisible"
+    :visible.sync="show"
     @close="close"
     @cancel="close"
     width="420px"
@@ -51,7 +51,7 @@
   </el-dialog>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { generateUUId } from "@/utils/index";
 import { avatars } from "@/assets/js/common";
@@ -83,12 +83,13 @@ export default class UserLoginModal extends Vue {
   private form: { [key: string]: any } = {};
   // 头像地址数组
   private avatars: string[] = avatars;
+  private show: boolean = false;
 
   @Emit("cancel")
-  private cancel() {}
-
-  @Emit("cancel")
-  private close() {}
+  private close() {
+    this.show = false;
+    return false;
+  }
   // 选择头像
   private avatarUrl: string = "";
   /**
@@ -121,6 +122,10 @@ export default class UserLoginModal extends Vue {
         : "http://localhost:8088/signin_github";
     window.location.href =
       "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=" + url;
+  }
+  @Watch("dialogFormVisible")
+  private handledialogFormVisibleChange(newVal: boolean, oldVal: boolean) {
+    this.show = newVal;
   }
 }
 </script>
