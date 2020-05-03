@@ -283,49 +283,34 @@ export default class ArticleInfoModule extends Vue {
     if (width > 500) {
       return;
     }
+
     const that = this;
-    const url = window.location.href;
+    const url = encodeURIComponent(window.location.href.split("#")[0]);
     const res: ApiResponse<{
       [key: string]: any;
     }> = await HttpRequest.ShareModule.getShareConfig({ url });
     if (res && res.data) {
-      const { timestamp, noncestr, signature } = res.data.data;
-      const appId = "wx841716d35606aa11";
+      const { timestamp, nonceStr, signature, appId, shareUrl } = res.data.data;
       wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId, // 必填，公众号的唯一标识
         timestamp, // 必填，生成签名的时间戳
-        nonceStr: noncestr, // 必填，生成签名的随机串
+        nonceStr, // 必填，生成签名的随机串
         signature, // 必填，签名
         jsApiList
       });
-      wx.ready(function() {
-        const { title, description, imgUrl } = that.articleInfo;
-        const link = window.location.href;
-        that.handleWeiXinShareFun(title, description, imgUrl || "", link);
+      //处理验证失败的信息
+      wx.error(function(res: any) {
+        console.log("微信签名失败");
       });
-    }
-  }
-  // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-  handleWeiXinShareFun(
-    title: string,
-    desc: string,
-    imgUrl: string,
-    link: string
-  ) {
-    for (let i = 0; i < jsApiList.length; i++) {
-      wx[jsApiList[i]]({
-        title, // 分享标题
-        desc,
-        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-        success: function() {
-          // 用户确认分享后执行的回调函数
-          console.log("success");
-        },
-        cancel: function() {
-          console.log("fail");
-          // 用户取消分享后执行的回调函数
+      wx.ready(() => {
+        const { title, description, imgUrl } = that.articleInfo;
+        for (let i = 0; i < jsApiList.length; i++) {
+          wx[jsApiList[i]]({
+            title, // 分享标题
+            link: shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl // 分享图标
+          });
         }
       });
     }
@@ -540,6 +525,7 @@ export default class ArticleInfoModule extends Vue {
     this.getArticleInfoById();
     this.getArticleCommentList();
     this.getArticleVisit();
+    this.handleWxShare(); // 初始化微信分享
   }
 }
 </script>
@@ -843,10 +829,12 @@ export default class ArticleInfoModule extends Vue {
     p {
       font-size: 0.8rem !important;
       img {
+        width: 355px !important;
+        height: 180px !important;
         margin: 0 auto;
-        max-width: 375px !important;
+        max-width: 355px !important;
         max-height: 180px !important;
-        min-width: 375px !important;
+        min-width: 355px !important;
         min-height: 180px !important;
       }
     }
