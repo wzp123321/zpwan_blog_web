@@ -87,5 +87,8 @@ const visits: { [ksy: string]: any }[] = [
 // 微博分享Appkey
 const APP_KEY = "2697214670"
 
+// 微信公众号SDK
+const WEIXIN_SDK = "wx841716d35606aa11";
 
-export { links, avatars, icons, visits, APP_KEY }
+
+export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK }

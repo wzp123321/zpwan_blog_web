@@ -206,7 +206,7 @@ export default class ArticleItem extends Vue {
           margin: 5px 2px;
           font-weight: blod;
           font-size: 13px;
-          width: 150px;
+          width: 100%;
         }
       }
       p {

@@ -61,9 +61,9 @@ export default class UserInfo extends Vue {
       height: 42px;
     }
     div {
-      font-size: 5px;
+      font-size: 10px;
       top: 26px;
-      right: 10px;
+      right: 16px;
     }
   }
 }
