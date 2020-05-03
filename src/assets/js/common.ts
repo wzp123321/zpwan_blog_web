@@ -90,5 +90,11 @@ const APP_KEY = "2697214670"
 // 微信公众号SDK
 const WEIXIN_SDK = "wx841716d35606aa11";
 
+const jsApiList: Array<string> = [
+    "updateAppMessageShareData", // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
+    "updateTimelineShareData", // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
+    "onMenuShareQZone" // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+]
 
-export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK }
+
+export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK, jsApiList }

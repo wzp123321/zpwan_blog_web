@@ -70,7 +70,7 @@
               <use xlink:href="#icon-weibo" />
             </svg>
             <span class="wx-share-wrapper">
-              <svg class="icon weixin-share" aria-hidden="true" @click="handleWxShare">
+              <svg class="icon weixin-share" aria-hidden="true">
                 <use xlink:href="#icon-weixin" />
               </svg>
               <div id="qrcode" class="qrcode" />
@@ -191,7 +191,7 @@ import "mavon-editor/dist/highlightjs/languages/java.min.js";
 import "highlight.js/lib/highlight.js";
 import QRCode from "qrcodejs2";
 // 微博App-_key
-import { APP_KEY, WEIXIN_SDK } from "@/assets/js/common";
+import { APP_KEY, WEIXIN_SDK, jsApiList } from "@/assets/js/common";
 import wx from "weixin-js-sdk";
 Vue.prototype.$message = Message;
 Vue.use(Loading.directive);
@@ -279,8 +279,12 @@ export default class ArticleInfoModule extends Vue {
   }
   // 微信分享
   private async handleWxShare() {
+    const width = document.documentElement.clientWidth;
+    if (width > 500) {
+      return;
+    }
     const that = this;
-    const url = encodeURIComponent(window.location.href);
+    const url = window.location.href;
     const res: ApiResponse<{
       [key: string]: any;
     }> = await HttpRequest.ShareModule.getShareConfig({ url });
@@ -288,49 +292,43 @@ export default class ArticleInfoModule extends Vue {
       const { timestamp, noncestr, signature } = res.data.data;
       const appId = "wx841716d35606aa11";
       wx.config({
-        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId, // 必填，公众号的唯一标识
         timestamp, // 必填，生成签名的时间戳
         nonceStr: noncestr, // 必填，生成签名的随机串
         signature, // 必填，签名
-        jsApiList: [
-          "checkJsApi",
-          "onMenuShareTimeline",
-          "onMenuShareAppMessage",
-          "updateAppMessageShareData", //自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-          "updateTimelineShareData", //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
-          "onMenuShareWeibo" //获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口
-        ]
+        jsApiList
       });
       wx.ready(function() {
-        that.wxShareTimeline();
-        // that.wxShareAppMessage();
+        const { title, description, imgUrl } = that.articleInfo;
+        const link = window.location.href;
+        that.handleWeiXinShareFun(title, description, imgUrl || "", link);
       });
     }
   }
   // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-  wxShareTimeline() {
-    const { title, description, imgUrl } = this.articleInfo;
-    // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-    wx.updateAppMessageShareData({
-      title, // 分享标题
-      desc: description, // 分享描述
-      link: encodeURIComponent(window.location.href), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      imgUrl, // 分享图标
-      success: () => {
-        
-      }
-    });
-  }
-  //自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
-  wxShareAppMessage() {
-    wx.updateTimelineShareData({
-      title: "世界那么大，我想去看看-微信test2", // 分享标题
-      desc: "世界那么大，我想去看看-微信test2", // 分享描述
-      link: encodeURIComponent(window.location.href), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-      imgUrl: require("../../../assets/imgs/favicon.png"), // 分享图标(不能赋相对路径，一定要是绝对路径)
-      success: () => {}
-    });
+  handleWeiXinShareFun(
+    title: string,
+    desc: string,
+    imgUrl: string,
+    link: string
+  ) {
+    for (let i = 0; i < jsApiList.length; i++) {
+      wx[jsApiList[i]]({
+        title, // 分享标题
+        desc,
+        link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl, // 分享图标
+        success: function() {
+          // 用户确认分享后执行的回调函数
+          console.log("success");
+        },
+        cancel: function() {
+          console.log("fail");
+          // 用户取消分享后执行的回调函数
+        }
+      });
+    }
   }
   /**
    * 评论输入回调
@@ -524,6 +522,7 @@ export default class ArticleInfoModule extends Vue {
       this.getArticleInfoById();
       this.getArticleCommentList();
       this.getArticleVisit();
+      this.handleWxShare(); // 初始化微信分享
       // PC端
       if (clientWidth > 1000) {
         this.handleQRcodeCreate();
@@ -767,6 +766,9 @@ export default class ArticleInfoModule extends Vue {
           height: 24px;
           margin: 0 4px;
         }
+        .wx-share-wrapper {
+          display: none;
+        }
       }
       .comment-wrapper {
         padding: 0 5px;
@@ -841,11 +843,11 @@ export default class ArticleInfoModule extends Vue {
     p {
       font-size: 0.8rem !important;
       img {
-        width: 375px !important;
-        height: 180px !important;
         margin: 0 auto;
         max-width: 375px !important;
         max-height: 180px !important;
+        min-width: 375px !important;
+        min-height: 180px !important;
       }
     }
   }
