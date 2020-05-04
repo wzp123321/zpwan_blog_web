@@ -277,13 +277,8 @@ export default class ArticleInfoModule extends Vue {
     }
     window.open(shareUrl, "_blank");
   }
-  // 微信分享
+  // 微信分享----个人申请的订阅号无法获取分享接口
   private async handleWxShare() {
-    const width = document.documentElement.clientWidth;
-    if (width > 500) {
-      return;
-    }
-
     const that = this;
     const url = encodeURIComponent(window.location.href.split("#")[0]);
     const res: ApiResponse<{
@@ -301,6 +296,7 @@ export default class ArticleInfoModule extends Vue {
       });
       //处理验证失败的信息
       wx.error(function(res: any) {
+        that.$message.error("微信签名失败");
         console.log("微信签名失败");
       });
       wx.ready(() => {
@@ -807,37 +803,45 @@ export default class ArticleInfoModule extends Vue {
 }
 </style>
 <style lang="less">
-@media screen and (min-width: 1100px) {
-  .markdown-body {
-    p {
-      img {
-        max-width: 800px !important;
-        max-height: 300px !important;
-      }
+.markdown-body {
+  p {
+    img {
+      width: 100% !important;
+      height: auto !important;
     }
   }
 }
+// @media screen and (min-width: 1100px) {
+//   .markdown-body {
+//     p {
+//       img {
+//         max-width: 800px !important;
+//         max-height: 300px !important;
+//       }
+//     }
+//   }
+// }
 
-@media screen and (max-width: 400px) {
-  .markdown-body {
-    h1 {
-      font-size: 1.5rem !important;
-    }
-    h2 {
-      font-size: 1.2rem !important;
-    }
-    p {
-      font-size: 0.8rem !important;
-      img {
-        width: 355px !important;
-        height: 180px !important;
-        margin: 0 auto;
-        max-width: 355px !important;
-        max-height: 180px !important;
-        min-width: 355px !important;
-        min-height: 180px !important;
-      }
-    }
-  }
-}
+// @media screen and (max-width: 400px) {
+//   .markdown-body {
+//     h1 {
+//       font-size: 1.5rem !important;
+//     }
+//     h2 {
+//       font-size: 1.2rem !important;
+//     }
+//     p {
+//       font-size: 0.8rem !important;
+//       img {
+//         width: 355px !important;
+//         height: 180px !important;
+//         margin: 0 auto;
+//         max-width: 355px !important;
+//         max-height: 180px !important;
+//         min-width: 355px !important;
+//         min-height: 180px !important;
+//       }
+//     }
+//   }
+// }
 </style>

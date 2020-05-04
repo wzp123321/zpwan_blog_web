@@ -91,10 +91,10 @@ const APP_KEY = "2697214670"
 const WEIXIN_SDK = "wx841716d35606aa11";
 
 const jsApiList: Array<string> = [
-    "updateAppMessageShareData",
-    "updateTimelineShareData",
-    "onMenuShareTimeline", // 自定义“分享给朋友”及“分享到QQ”按钮的分享内容
-    "onMenuShareAppMessage" // 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
+    "onMenuShareAppMessage" ,// 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
+    "onMenuShareQQ",
+    "onMenuShareWeibo",
+    "onMenuShareQZone"
 ]
 
 
