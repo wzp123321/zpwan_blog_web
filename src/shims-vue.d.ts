@@ -35,6 +35,15 @@ interface RouteInfo {
   children?: Array<RouteInfo>,
 }
 
+/**
+ * 分页模块
+ */
+interface PaginationInfo {
+  page?: number,
+  total?: number,
+  limit?: number
+}
+
 
 /**
  * 首页模块
@@ -171,4 +180,19 @@ interface WeiXinShareInfo {
   desc?: string,
   linkUrl?: string,
   img?: string
+}
+
+interface LeaveMessageInfo {
+  leave_message_id?: string,
+  content?: string,
+  author?: any,
+  reply_user?: any,
+  is_parent?: number,
+  parent_id?: string,
+  is_delete?: number,
+  is_shelves?: number,
+  is_good?: number,
+  init_date?: string,
+  create_time?: number,
+  modify_time?: number,
 }

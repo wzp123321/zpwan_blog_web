@@ -4,6 +4,7 @@ const smp = new SpeedMeasurePlugin(); // 打包速度分析
 const webpack = require('webpack')
 
 const moduleConfig = {
+  outputDir:"blogWeb",
   devServer: {
     port: "8088",
     proxy: {

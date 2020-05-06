@@ -3,7 +3,7 @@
     <el-input
       type="textarea"
       :rows="4"
-      placeholder="请输入您的评论"
+      :placeholder="placeholder"
       v-model="input_data"
       style="margin-bottom:10px"
       @focus="handleInputFocusBlur()"
@@ -49,6 +49,9 @@ import { Input, Button } from "element-ui";
   }
 })
 export default class CommentInput extends Vue {
+  @Prop({ default: "请输入您的评论" })
+  private placeholder!: string;
+
   // 输入框信息
   private input_data: string = "";
   private emojis: Array<string> = [
@@ -139,6 +142,7 @@ export default class CommentInput extends Vue {
   // 取消
   @Emit("inputCancel")
   private handleInputCancel() {}
+
   // 输入框聚焦离焦
   private handleInputFocusBlur() {
     this.btnShow = true;
@@ -193,8 +197,8 @@ export default class CommentInput extends Vue {
     display: block;
   }
 }
-@media screen and (max-width: 500px){
-  .btn{
+@media screen and (max-width: 500px) {
+  .btn {
     padding: 0;
   }
 }

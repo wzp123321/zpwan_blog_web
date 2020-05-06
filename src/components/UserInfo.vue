@@ -40,7 +40,7 @@ export default class UserInfo extends Vue {
   }
 }
 .user-info:hover img {
-  animation: user_avatar_rorate 800ms infinite linear forwards;
+  animation: user_avatar_rorate 1s infinite linear forwards;
 }
 @keyframes user_avatar_rorate {
   from {
