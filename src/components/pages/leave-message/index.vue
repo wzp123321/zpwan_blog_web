@@ -71,7 +71,7 @@ export default class LeaveMessageModule extends Vue {
   private async releaseComment(content: string) {
     const { author } = this;
     const res: ApiResponse<boolean> = await HttpRequest.CommentModule.getLeaveMessageCreate(
-      { author, content }
+      { author:JSON.stringify(author), content }
     );
 
     if (res && res.data) {
