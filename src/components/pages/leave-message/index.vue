@@ -23,6 +23,12 @@
         <span>{{pagination.total}}</span>条留言
       </div>
       <LeaveMessageItem v-for="(item,index) in leavemessages" :key="index" :LeaveMessageInfo="item"></LeaveMessageItem>
+      <Button
+        class="load-more"
+        :loading="loading"
+        @click="loadMoreData"
+        v-if=" pagination.total>10 && pagination.total !==leavemessages.length"
+      >加载更多>>></Button>
     </div>
   </b-container>
 </template>
@@ -30,7 +36,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import CommentInput from "@/components/CommentInput.vue";
 import HttpRequest from "@/assets/api/modules/index";
-import { Divider, Message } from "element-ui";
+import { Divider, Message, Button } from "element-ui";
 import LeaveMessageItem from "@/components/LeaveMessageItem.vue";
 
 Vue.prototype.$message = Message;
@@ -39,11 +45,14 @@ Vue.prototype.$message = Message;
   name: "LeaveMessageModule",
   components: {
     Divider,
+    Button,
     CommentInput,
     LeaveMessageItem
   }
 })
 export default class LeaveMessageModule extends Vue {
+  private loading: boolean = false;
+
   private placeholder: string = "请输入您的留言吧";
 
   private leavemessages: Array<LeaveMessageInfo> = [];
@@ -85,6 +94,18 @@ export default class LeaveMessageModule extends Vue {
 
       this.pagination.total = total;
       this.leavemessages = [...this.leavemessages, ...list];
+      this.loading = false;
+    }
+  }
+
+  // 加载更多
+  private loadMoreData() {
+    this.loading = true;
+    const { total } = this.pagination;
+    const { leavemessages } = this;
+    if (total > leavemessages.length) {
+      this.pagination.page += 1;
+      this.getLeaveMessageList();
     }
   }
 
@@ -120,10 +141,15 @@ export default class LeaveMessageModule extends Vue {
 }
 .leave-message-list {
   background: #fff;
+  padding-bottom: 5px;
   .leave-message-header {
     border-bottom: 1px solid #eee;
     margin: 0 10px;
     padding: 5px;
+  }
+  .load-more {
+    width: 100%;
+    margin-top: 15px;
   }
 }
 </style>

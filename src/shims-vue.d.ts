@@ -39,8 +39,8 @@ interface RouteInfo {
  * 分页模块
  */
 interface PaginationInfo {
-  page?: number,
-  total?: number,
+  page: number,
+  total: number,
   limit?: number
 }
 

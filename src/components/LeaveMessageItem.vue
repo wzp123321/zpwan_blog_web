@@ -1,6 +1,7 @@
 <template>
   <div class="leave-message-wrapper">
     <div class="header flex-row">
+      <i v-if="LeaveMessageInfo.is_good===1" class="iconfont icon-jingpin"></i>
       <img :src="LeaveMessageInfo.author.avatar_url" alt />
       <div class="flex-column">
         <div class="leave-item-uname">{{LeaveMessageInfo.author.name}}</div>
@@ -35,8 +36,17 @@ export default class LeaveMessageItem extends Vue {
   background: #fff;
   padding: 5px;
   .header {
+    position: relative;
     padding: 5px;
     border-bottom: 1px dotted #eee;
+    .icon-jingpin {
+      display: inline-block;
+      color: #FBBF08;
+      position: absolute;
+      top: -3px;
+      left: 6px;
+      transform: rotate(-45deg);
+    }
     img {
       width: 42px;
       height: 42px;
