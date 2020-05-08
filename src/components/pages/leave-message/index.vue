@@ -29,6 +29,11 @@
         @click="loadMoreData"
         v-if=" pagination.total>10 && pagination.total !==leavemessages.length"
       >加载更多>>></Button>
+      <UserLoginModule
+        :dialogFormVisible="dialogFormVisible"
+        @cancel="handleLoginCancel"
+        @submit="handleLoginSuccess"
+      ></UserLoginModule>
     </div>
   </b-container>
 </template>
@@ -38,6 +43,7 @@ import CommentInput from "@/components/CommentInput.vue";
 import HttpRequest from "@/assets/api/modules/index";
 import { Divider, Message, Button } from "element-ui";
 import LeaveMessageItem from "@/components/LeaveMessageItem.vue";
+import UserLoginModule from "@/components/UserLoginModal.vue";
 
 Vue.prototype.$message = Message;
 
@@ -47,10 +53,13 @@ Vue.prototype.$message = Message;
     Divider,
     Button,
     CommentInput,
-    LeaveMessageItem
+    LeaveMessageItem,
+    UserLoginModule
   }
 })
 export default class LeaveMessageModule extends Vue {
+  private dialogFormVisible: boolean = false;
+
   private loading: boolean = false;
 
   private placeholder: string = "请输入您的留言吧";
@@ -66,12 +75,34 @@ export default class LeaveMessageModule extends Vue {
     total: 0,
     limit: 100
   };
-
+  //登录取消
+  private handleLoginCancel(value: boolean) {
+    this.dialogFormVisible = value;
+  }
+  // 登录回调
+  private handleLoginSuccess() {
+    this.dialogFormVisible = false;
+    this.author = {
+      user_id: localStorage.getItem("blog_user_id") || "",
+      name: localStorage.getItem("blog_name") || "",
+      avatar_url: localStorage.getItem("blog_avatar_url") || "",
+      location: localStorage.getItem("blog_location") || ""
+    };
+  }
   // 留言
   private async releaseComment(content: string) {
+    if (
+      !localStorage.getItem("blog_user_id") ||
+      !localStorage.getItem("blog_name") ||
+      !localStorage.getItem("blog_avatar_url") ||
+      !localStorage.getItem("blog_location")
+    ) {
+      this.dialogFormVisible = true;
+      return;
+    }
     const { author } = this;
     const res: ApiResponse<boolean> = await HttpRequest.CommentModule.getLeaveMessageCreate(
-      { author:JSON.stringify(author), content }
+      { author: JSON.stringify(author), content }
     );
 
     if (res && res.data) {

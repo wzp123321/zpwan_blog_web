@@ -4,6 +4,7 @@
       type="textarea"
       :rows="4"
       :placeholder="placeholder"
+      maxlength="140"
       v-model="input_data"
       style="margin-bottom:10px"
       @focus="handleInputFocusBlur()"

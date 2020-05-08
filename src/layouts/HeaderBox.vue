@@ -22,8 +22,13 @@
           :default-active="activeIndex"
         >
           <MenuItem index="1" @click="()=>{$router.push('/')}">首页</MenuItem>
+          <MenuItem
+            index="2"
+            @click="()=>{$router.push('/leave_message')}"
+            class="leave-message-item"
+          >留言板</MenuItem>
           <template v-for="(item,index) in menus">
-            <Submenu :index="index+2+''" :key="'menu_'+index">
+            <Submenu :index="index+3+''" :key="'menu_'+index">
               <template slot="title">{{item.value}}</template>
               <MenuItem
                 v-for="(childItem,idx) in item.children"
@@ -143,6 +148,9 @@ export default class HeaderBox extends Vue {
     }
   }
   .menu-wrapper {
+    .leave-message-item {
+      display: none;
+    }
     .search-icon {
       display: flex;
       flex-direction: column;
@@ -201,6 +209,9 @@ export default class HeaderBox extends Vue {
     }
   }
   .menu-wrapper {
+    .leave-message-item {
+      display: inline-block !important;
+    }
     .search-icon {
       margin-left: 5px;
       .iconfont {
@@ -236,13 +247,14 @@ export default class HeaderBox extends Vue {
 }
 
 @media screen and (max-width: 576px) {
-  .el-submenu__title{
+  .el-submenu__title {
     max-width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .el-menu--collapse .el-menu .el-submenu, .el-menu--popup{
+  .el-menu--collapse .el-menu .el-submenu,
+  .el-menu--popup {
     min-width: 100px;
   }
   .el-submenu__title,
