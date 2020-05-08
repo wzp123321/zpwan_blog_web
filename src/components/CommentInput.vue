@@ -6,10 +6,10 @@
       :placeholder="placeholder"
       maxlength="140"
       v-model="input_data"
-      style="margin-bottom:10px"
+      style="margin-bottom:10px;z-index:2"
       @focus="handleInputFocusBlur()"
     ></el-input>
-    <div class="frspace" v-show="btnShow">
+    <div class="frspace comment-operation" v-show="btnShow">
       <div class="emoji" id="emoji">
         <i class="iconfont icon-iconsmile"></i>
         <span>Ctrl + Enter 发表</span>
@@ -163,41 +163,50 @@ export default class CommentInput extends Vue {
 }
 </script>
 <style lang="less" scoped>
-.first_comment {
-  margin-bottom: 10px;
-}
-.icon-smile {
-  font-size: 18px;
-  cursor: pointer;
-}
-.emoji {
-  cursor: pointer;
-  position: relative;
-  .emoji-content {
-    display: none;
-    width: 363px;
-    height: 170px;
-    background: #fff;
-    border: 1px solid #eee;
-    position: absolute;
-    top: 25px;
-    left: -5px;
-    padding: 5px;
-    z-index: 999;
-    span {
-      display: inline-block;
-      padding: 3px 5px;
+.comment-operation {
+  // infinite无限
+  animation:operation_show 500ms linear forwards;
+  .emoji {
+    cursor: pointer;
+    position: relative;
+    .emoji-content {
+      display: none;
+      width: 363px;
+      height: 170px;
+      background: #fff;
+      border: 1px solid #eee;
+      position: absolute;
+      top: 25px;
+      left: -5px;
+      padding: 5px;
+      z-index: 999;
+      span {
+        display: inline-block;
+        padding: 3px 5px;
+      }
+      span:hover {
+        background: #eee;
+      }
     }
-    span:hover {
-      background: #eee;
+  }
+  .emoji:hover {
+    .emoji-content {
+      display: block;
     }
   }
 }
-.emoji:hover {
-  .emoji-content {
-    display: block;
+
+@keyframes operation_show {
+  from{
+    z-index: -10;
+    transform: translateY(-35px);
+  }
+  to{
+    z-index: 1;
+    transform: translateY(0)
   }
 }
+
 @media screen and (max-width: 500px) {
   .btn {
     padding: 0;

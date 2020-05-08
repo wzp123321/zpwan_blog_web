@@ -15,6 +15,10 @@
     >
       <b-col xl="9" md="12" cols="12" class="article-list">
         <div class="article-result" v-if="JSON.stringify(articles)!=='[]'">
+          <p>
+            已为您找到共{{total}}篇关于"
+            <span class="em">{{this.key}}</span>"的文章
+          </p>
           <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
         </div>
         <div class="article-result" v-else>
