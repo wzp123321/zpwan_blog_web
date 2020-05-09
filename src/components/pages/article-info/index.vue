@@ -803,45 +803,14 @@ export default class ArticleInfoModule extends Vue {
 }
 </style>
 <style lang="less">
-.markdown-body {
-  p {
-    img {
-      width: 100% !important;
-      height: auto !important;
+@media screen and (max-width: 500px) {
+  .markdown-body {
+    p {
+      img {
+        width: 100% !important;
+        height: auto !important;
+      }
     }
   }
 }
-// @media screen and (min-width: 1100px) {
-//   .markdown-body {
-//     p {
-//       img {
-//         max-width: 800px !important;
-//         max-height: 300px !important;
-//       }
-//     }
-//   }
-// }
-
-// @media screen and (max-width: 400px) {
-//   .markdown-body {
-//     h1 {
-//       font-size: 1.5rem !important;
-//     }
-//     h2 {
-//       font-size: 1.2rem !important;
-//     }
-//     p {
-//       font-size: 0.8rem !important;
-//       img {
-//         width: 355px !important;
-//         height: 180px !important;
-//         margin: 0 auto;
-//         max-width: 355px !important;
-//         max-height: 180px !important;
-//         min-width: 355px !important;
-//         min-height: 180px !important;
-//       }
-//     }
-//   }
-// }
 </style>

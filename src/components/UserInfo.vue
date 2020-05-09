@@ -18,6 +18,7 @@ export default class UserInfo extends Vue {
 </script>
 <style lang="less" scoped>
 .user-info {
+  z-index: 999;
   cursor: pointer;
   position: fixed;
   top: 120px;

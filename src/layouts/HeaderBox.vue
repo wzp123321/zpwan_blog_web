@@ -259,7 +259,7 @@ export default class HeaderBox extends Vue {
   }
   .el-submenu__title,
   .el-menu-item {
-    padding: 0 3px;
+    padding: 0 1px;
     font-size: 10px;
   }
   .el-menu--horizontal,

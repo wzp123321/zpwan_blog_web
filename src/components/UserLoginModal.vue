@@ -65,6 +65,7 @@ import {
   Notification
 } from "element-ui";
 Vue.prototype.$notify = Notification;
+// https://docs.justauth.whnb.wang/#/oauth/qq
 
 @Component({
   name: "UserLoginModal",
