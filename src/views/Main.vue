@@ -32,10 +32,12 @@ import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
 import UserInfo from "@/components/UserInfo.vue";
+import { Notification } from "element-ui";
 /**
  * 引入vuex
  */
 import { namespace } from "vuex-class";
+Vue.prototype.$notify = Notification;
 
 const musicModule = namespace("music");
 @Component({
@@ -76,6 +78,8 @@ export default class Main extends Vue {
   private blog_user_name: string = "";
   // 用户头像
   private blog_user_avatar: string = "";
+  // websocket对象
+  private socket: any = {};
   /**
    * 回到顶部
    */
@@ -99,10 +103,52 @@ export default class Main extends Vue {
   private handleMusicPlayPause(flag: boolean) {
     this.isPlay = flag;
   }
+  //初始化websocket
+  private initWebSocket() {
+    if (typeof WebSocket === "undefined") {
+      this.$message.error("您的浏览器不支持socket");
+    } else {
+      const env = process.env.NODE_ENV;
+      const BASE_URL:string = env==='production' ?'132.232.66.140:9898':'localhost:9898'
+      console.log("BASE_URL",BASE_URL)
+      // 实例化socket
+      this.socket = new WebSocket(`ws://${BASE_URL}/websocket`);
+      // 监听socket连接
+      this.socket.onopen = () => {
+        console.log("socket连接成功");
+      };
+      // 监听socket错误信息
+      this.socket.onerror = () => {
+        console.log("连接错误");
+      };
+      // 监听socket消息
+      this.socket.onmessage = (msg: any) => {
+        console.log("msg", msg);
+        this.notificationMessage(msg.data);
+      };
+    }
+  }
+  // 消息提醒
+  private notificationMessage(data: string) {
+    const info: { [key: string]: any } = JSON.parse(data);
+    const href: string = `/article/${info.article_id}`;
+    const title: string = info.type === 1 ? "文章新增" : "文章更新";
+    const message: string =
+      info.type === 1
+        ? `又有新文章发布啦,<a href=${href}>快去浏览吧</a>`
+        : `有文章更新啦,<a href=${href}>快去浏览吧</a>`;
+    this.$notify({
+      title,
+      message,
+      dangerouslyUseHTMLString: true,
+      type: "success"
+    });
+  }
   /**
    * 添加全局监听
    */
   mounted() {
+    this.initWebSocket();
     this.blog_user_name = localStorage.getItem("blog_name") || "";
     this.blog_user_avatar = localStorage.getItem("blog_avatar_url") || "";
     window.addEventListener("scroll", () => {
@@ -126,6 +172,10 @@ export default class Main extends Vue {
         this.isTop = false;
       }
     });
+  }
+  // 销毁前
+  beforeDestroy() {
+    this.socket = null;
   }
 }
 </script>

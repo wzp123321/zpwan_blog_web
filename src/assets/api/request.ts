@@ -1,19 +1,14 @@
 import axios, {
-    AxiosRequestConfig,
-    AxiosResponse,
-    AxiosError
+    AxiosResponse
 } from 'axios'
+import { BASE_URL, Global_Delay } from "@/assets/js/common"
 
-// timeout 10min
-const Global_Delay = 10 * 60 * 1000;
-const env = process.env.NODE_ENV
-const BASE_URL = env==='production' ? 'http://zpwan-yz.com/blogManage':'http://localhost:9898/blogManage';
 // 定义一个空的数组，用于存放请求中的参数
 
 // 创建axios实例
 const axiosInstance = () => {
     const instance = axios.create({
-        baseURL: BASE_URL,
+        baseURL: BASE_URL + "blogManage/",
         timeout: Global_Delay,
     });
     return instance;

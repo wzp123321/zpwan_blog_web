@@ -1,4 +1,5 @@
 const USER_QQ_NUM = "1421209422";
+const env = process.env.NODE_ENV;
 let qqShareUrl: string = "";
 let ua: string = navigator.userAgent;
 let ipad: RegExpMatchArray | any = ua.match(/(iPad).*OS\s([\d_]+)/);
@@ -91,11 +92,17 @@ const APP_KEY = "2697214670"
 const WEIXIN_SDK = "wx841716d35606aa11";
 
 const jsApiList: Array<string> = [
-    "onMenuShareAppMessage" ,// 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
+    "onMenuShareAppMessage",// 自定义“分享到朋友圈”及“分享到QQ空间”按钮的分享内容
     "onMenuShareQQ",
     "onMenuShareWeibo",
     "onMenuShareQZone"
 ]
 
+// 请求路径
+const BASE_URL = env === 'production' ? 'http://zpwan-yz.com/' : 'http://localhost:9898/';
 
-export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK, jsApiList }
+//超时时间
+const Global_Delay = 10 * 60 * 1000;
+
+
+export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK, jsApiList, BASE_URL, Global_Delay }
