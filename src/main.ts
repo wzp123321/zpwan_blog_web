@@ -51,6 +51,7 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+
 // Vue.directive('drag',//自定义指令          
 //   {
 //     bind: function (el, binding) {

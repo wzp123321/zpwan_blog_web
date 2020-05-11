@@ -99,7 +99,7 @@ const jsApiList: Array<string> = [
 ]
 
 // 请求路径
-const BASE_URL = env === 'production' ? 'http://zpwan-yz.com/' : 'http://localhost:9898/';
+const BASE_URL = env === 'production' ? 'http://server.zpwan-yz.com/' : 'http://localhost:9898/';
 
 //超时时间
 const Global_Delay = 10 * 60 * 1000;
