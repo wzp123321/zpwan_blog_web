@@ -47,6 +47,7 @@
           v-if="pagination.total>10"
           style="text-align:center;margin:10px 0"
           layout="prev, pager, next"
+          @current-change="handlePaginationChange"
           :total="pagination.total"
           :current-page="pagination.page"
         ></el-pagination>
@@ -99,6 +100,7 @@ export default class DashboardModule extends Vue {
   // 分页
   private pagination: { [key: string]: any } = {
     page: 1,
+    limit: 10,
     total: 10
   };
   private tags: Array<{ [key: string]: any }> = [];
@@ -153,9 +155,10 @@ export default class DashboardModule extends Vue {
    * 请求文章列表
    */
   private async getArticleList() {
+    const { page, limit } = this.pagination;
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleList({ limit: 5 });
+    >> = await HttpRequest.ArticleModule.getArticleList({ page, limit });
     if (res && res.data) {
       const datas = res.data.data;
       const total = res.data.total;
@@ -179,6 +182,11 @@ export default class DashboardModule extends Vue {
   // 轮播
   private handleCarouselChange(index: number) {
     this.noticeInfo = this.notices[index];
+  }
+  // 文章分页
+  private handlePaginationChange(value: any) {
+    this.pagination.page = value;
+    this.getArticleList();
   }
   created() {
     this.$nextTick(() => {

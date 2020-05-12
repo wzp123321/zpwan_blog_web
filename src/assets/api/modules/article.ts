@@ -39,7 +39,7 @@ const ArticleModule = {
     },
 
     async getArticleSearchByKey(params: { [key: string]: any }) {
-        const url = '/article/web/search'
+        const url = '/article/list'
         return getRequest(url, params);
     },
 

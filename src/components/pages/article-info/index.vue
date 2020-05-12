@@ -503,7 +503,7 @@ export default class ArticleInfoModule extends Vue {
       this.getArticleInfoById();
       this.getArticleCommentList();
       this.getArticleVisit();
-      this.handleWxShare(); // 初始化微信分享
+      // this.handleWxShare(); // 初始化微信分享
       // PC端
       if (clientWidth > 1000) {
         this.handleQRcodeCreate();
@@ -521,7 +521,7 @@ export default class ArticleInfoModule extends Vue {
     this.getArticleInfoById();
     this.getArticleCommentList();
     this.getArticleVisit();
-    this.handleWxShare(); // 初始化微信分享
+    // this.handleWxShare(); // 初始化微信分享
   }
 }
 </script>
@@ -598,8 +598,8 @@ export default class ArticleInfoModule extends Vue {
         margin: 0 8px;
       }
       svg:hover {
-        transition: 200ms;
-        transform: scale(1.2);
+        transition: 300ms;
+        transform: scale(1.3);
       }
       .wx-share-wrapper {
         position: relative;

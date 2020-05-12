@@ -82,7 +82,7 @@ export default class RecommendArticle extends Vue {
   private async getArticleList(params: { [key: string]: any }) {
     const res: ApiResponse<ListResponse<
       Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleList(params);
+    >> = await HttpRequest.ArticleModule.getArticleSearchByKey(params);
     if (res && res.data) {
       const datas = res.data.data;
       this.articles = datas;
@@ -127,7 +127,7 @@ export default class RecommendArticle extends Vue {
     }
   }
   .content {
-    max-height: 360px;
+    max-height: 375px;
     overflow: scroll;
     div {
       padding: 8px 10px;
