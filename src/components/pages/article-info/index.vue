@@ -669,7 +669,6 @@ export default class ArticleInfoModule extends Vue {
   }
   .right-module {
     width: 300px;
-    margin-left: 10px;
     .article-quotes,
     .tag-module {
       border-radius: 4px;

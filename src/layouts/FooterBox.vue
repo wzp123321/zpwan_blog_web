@@ -10,6 +10,10 @@
           <img v-else src="../assets/imgs/jianshu.png" alt="简书" />
         </a>
       </div>
+      <div class="run-day">
+        <i class="iconfont icon-diqiu"></i>
+        <span>本站已经运行了{{run_date}}</span>
+      </div>
       <div class="record-content">
         <a
           target="_blank"
@@ -19,7 +23,7 @@
           <p>皖公网安备 34019202000830号</p>
         </a>
       </div>
-      <p>Copyright © 2020 万直鹏博客</p>
+      <p style="text-align:center">Copyright © 2020 万直鹏博客</p>
     </b-container>
   </div>
 </template>
@@ -31,6 +35,40 @@ import { visits } from "@/assets/js/common";
 })
 export default class FooterBox extends Vue {
   private visits: { [key: string]: any }[] = visits;
+
+  private run_date: string = "";
+
+  private timer: any = null;
+
+  mounted() {
+    const start = new Date("2020-04-18 12:37:49.211").getTime();
+    this.timer = setInterval(() => {
+      const end = new Date().getTime();
+      const days = Math.floor((end - start) / 24 / 60 / 60 / 1000);
+      const hours = Math.floor(
+        (end - start - days * 24 * 60 * 60 * 1000) / 60 / 60 / 1000
+      );
+      const minutes = Math.floor(
+        (end - start - days * 24 * 60 * 60 * 1000 - hours * 60 * 60 * 1000) /
+          60 /
+          1000
+      );
+      const seconds = Math.floor(
+        (end -
+          start -
+          days * 24 * 60 * 60 * 1000 -
+          hours * 60 * 60 * 1000 -
+          minutes * 60 * 1000) /
+          1000
+      );
+      this.run_date =
+        days + "天" + hours + "时" + minutes + "分" + seconds + "秒";
+    });
+  }
+
+  beforeDestroy() {
+    clearInterval(this.timer);
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -57,6 +95,17 @@ export default class FooterBox extends Vue {
       }
     }
   }
+  .run-day {
+    padding: 5px 0;
+    .icon-diqiu {
+      display: inline-block;
+      animation: user_avatar_rorate 1500ms infinite linear;
+    }
+    span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
   .record-content {
     a {
       display: inline-block;
@@ -71,6 +120,14 @@ export default class FooterBox extends Vue {
       margin: 0px 0px 0px 5px;
       color: #fff;
     }
+  }
+}
+@keyframes user_avatar_rorate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
   }
 }
 
