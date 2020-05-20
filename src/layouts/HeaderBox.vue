@@ -27,8 +27,9 @@
             @click="()=>{$router.push('/leave_message')}"
             class="leave-message-item"
           >留言板</MenuItem>
+          <MenuItem index="3" @click="()=>{$router.push('/picture')}" class="leave-message-item">照片墙</MenuItem>
           <template v-for="(item,index) in menus">
-            <Submenu :index="index+3+''" :key="'menu_'+index">
+            <Submenu :index="index+4+''" :key="'menu_'+index">
               <template slot="title">{{item.value}}</template>
               <MenuItem
                 v-for="(childItem,idx) in item.children"

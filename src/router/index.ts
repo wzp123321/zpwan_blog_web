@@ -4,6 +4,7 @@ import { Route } from 'vue-router'
 
 const Main = () => import("@/views/Main.vue");
 const LeaveMessageModule = () => import("@/components/pages/leave-message/index.vue")
+const PictureModule = () => import("@/components/pages/picture/index.vue")
 const ArticleInfoModule = () => import("@/components/pages/article-info/index.vue")
 const DashboardModule = () => import("@/components/pages/dashboard-manage/index.vue")
 const SearchModule = () => import("@/components/pages/search-manage/index.vue")
@@ -30,6 +31,11 @@ const routes = [
         path: '/leave_message',
         component: LeaveMessageModule,
         meta: { name: "留言板" }
+      },
+      {
+        path: "/picture",
+        component: PictureModule,
+        meta: { name: "照片墙" }
       },
       {
         path: '/article/:id',

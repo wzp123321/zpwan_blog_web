@@ -28,21 +28,21 @@
           </p>
           <ArticleItem v-for="(item,index) in intro_articles" :key="index" :articleInfo="item"></ArticleItem>
         </div>
+        <el-pagination
+          v-if="total>5 &&(JSON.stringify(articles)!=='[]' || JSON.stringify(intro_articles)!=='[]')"
+          style="text-align:center;margin-top:20px"
+          background
+          :page-size="5"
+          layout="prev, pager, next"
+          :current-page="page"
+          :total="total"
+          @current-change="handlePaginationChange"
+        ></el-pagination>
       </b-col>
       <b-col xl="3" md="12" cols="12" class="tags">
         <RecommendArticle></RecommendArticle>
       </b-col>
     </b-row>
-    <el-pagination
-      v-if="total>5 &&(JSON.stringify(articles)!=='[]' || JSON.stringify(intro_articles)!=='[]')"
-      style="text-align:center;margin-top:20px"
-      background
-      :page-size="5"
-      layout="prev, pager, next"
-      :current-page="page"
-      :total="total"
-      @current-change="handlePaginationChange"
-    ></el-pagination>
   </b-container>
 </template>
 <script lang="ts">
@@ -90,7 +90,7 @@ export default class SearchModule extends Vue {
       const total = res.data.total;
       const articles = res.data.data;
       this.total = total;
-      this.articles = articles;
+      this.articles = [...this.articles, ...articles];
       this.handleSearchListFilter();
       if (JSON.stringify(res.data.data) === "[]") {
         const newres = await HttpRequest.ArticleModule.getArticleList({
@@ -99,7 +99,7 @@ export default class SearchModule extends Vue {
         });
         if (newres && newres.data) {
           const datas = newres.data.data;
-          this.intro_articles = datas;
+          this.intro_articles = [...this.intro_articles, ...datas];
         }
       }
     }

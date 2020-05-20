@@ -1,6 +1,5 @@
 <template>
   <div class="footer-wrapper">
-    <!-- 简书  微博  github   qq  微信-->
     <b-container>
       <div class="personal-wrapper">
         <a v-for="(item,index) in visits" :key="index" :href="item.url" target="_blank">

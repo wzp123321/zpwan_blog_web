@@ -43,14 +43,30 @@
         </el-carousel>
         <!-- 文章列表 -->
         <ArticleItem v-for="(item,index) in articles" :key="index" :articleInfo="item"></ArticleItem>
-        <el-pagination
-          v-if="pagination.total>10"
-          style="text-align:center;margin:10px 0"
-          layout="prev, pager, next"
-          @current-change="handlePaginationChange"
-          :total="pagination.total"
-          :current-page="pagination.page"
-        ></el-pagination>
+        <el-button
+          v-if="pagination.total>10 && this.pagination.total!==articles.length"
+          :loading="loading"
+          @click="loadMore"
+          class="load-more"
+          type="primary"
+        >阅读更多</el-button>
+        <div
+          class="load-more-mobile"
+          v-if="pagination.total>10 && this.pagination.total!==articles.length "
+          @click="loadMore"
+        >
+          <span v-if="!loading">
+            阅读更多
+            <i class="iconfont icon-down"></i>
+          </span>
+          <div v-else class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
       </b-col>
       <!-- 标签信息模块 -->
       <b-col xl="4" md="12" cols="12" class="other-wrapper">
@@ -75,7 +91,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
-import { Carousel, CarouselItem, Pagination } from "element-ui";
+import { Carousel, CarouselItem, Button } from "element-ui";
 import ArticleItem from "@/components/ArticleItem.vue";
 import RecommendArticle from "@/components/RecommendArticle.vue";
 @Component({
@@ -83,12 +99,13 @@ import RecommendArticle from "@/components/RecommendArticle.vue";
   components: {
     "el-carousel": Carousel,
     "el-carousel-item": CarouselItem,
-    "el-pagination": Pagination,
+    "el-button": Button,
     ArticleItem,
     RecommendArticle
   }
 })
 export default class DashboardModule extends Vue {
+  private loading: boolean = false;
   // banner列表
   private banners: Array<DashoboardModule.BannerInfo> = [];
   // notice 列表
@@ -162,8 +179,9 @@ export default class DashboardModule extends Vue {
     if (res && res.data) {
       const datas = res.data.data;
       const total = res.data.total;
-      this.articles = datas;
+      this.articles = [...this.articles, ...datas];
       this.pagination.total = total;
+      this.loading = false;
     }
   }
   /**
@@ -184,9 +202,14 @@ export default class DashboardModule extends Vue {
     this.noticeInfo = this.notices[index];
   }
   // 文章分页
-  private handlePaginationChange(value: any) {
-    this.pagination.page = value;
-    this.getArticleList();
+  private loadMore() {
+    if (this.articles.length < this.pagination.total) {
+      this.loading = true;
+      this.pagination.page += 1;
+      setTimeout(() => {
+        this.getArticleList();
+      }, 800);
+    }
   }
   created() {
     this.$nextTick(() => {
@@ -260,9 +283,71 @@ export default class DashboardModule extends Vue {
         }
       }
     }
+    .load-more {
+      width: 100%;
+      border-radius: 30px;
+      margin-top: 20px;
+    }
+    .load-more-mobile {
+      display: none;
+    }
   }
 }
 @media screen and (max-width: 500px) {
+  .load-more {
+    display: none;
+  }
+  .load-more-mobile {
+    font-size: 13px;
+    background: #fff;
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    display: block !important;
+    .iconfont {
+      position: relative;
+      top: 2px;
+    }
+    .loading {
+      width: 150px;
+      height: 15px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .loading span {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: lightgreen;
+      -webkit-animation: load 700ms ease-in infinite alternate;
+    }
+    @-webkit-keyframes load {
+      0% {
+        opacity: 1;
+        -webkit-transform: translate(-35px);
+      }
+      100% {
+        opacity: 0.2;
+        -webkit-transform: translate(35px);
+      }
+    }
+    .loading span:nth-child(1) {
+      -webkit-animation-delay: 0.13s;
+    }
+    .loading span:nth-child(2) {
+      -webkit-animation-delay: 0.26s;
+    }
+    .loading span:nth-child(3) {
+      -webkit-animation-delay: 0.39s;
+    }
+    .loading span:nth-child(4) {
+      -webkit-animation-delay: 0.52s;
+    }
+    .loading span:nth-child(5) {
+      -webkit-animation-delay: 0.65s;
+    }
+  }
   .other-wrapper {
     margin-top: 10px;
     margin-left: 0px !important;

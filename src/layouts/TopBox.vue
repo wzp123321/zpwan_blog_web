@@ -12,7 +12,7 @@
           <span>{{current_time}}</span>
         </div>
       </b-col>
-      <b-col xl="3" offset-xl="5" md="4" offset-md="3" cols="12">
+      <b-col xl="4" offset-xl="4" md="6" offset-md="1" cols="12">
         <div class="link">
           <span
             v-for="(linkItem,linkIndex) in links"

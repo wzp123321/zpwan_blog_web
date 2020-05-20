@@ -38,6 +38,12 @@ const links: { [key: string]: any }[] = [{
     url: "/leave_message",
     svg: "icon-liuyan",
     isBlank: false
+},
+{
+    title: "照片墙",
+    url: "/picture",
+    svg: "icon-tupian",
+    isBlank: false
 }]
 
 // 头像数组
