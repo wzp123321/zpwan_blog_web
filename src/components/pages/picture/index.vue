@@ -1,14 +1,43 @@
 <template>
+  <!-- https://liuxiaodeng.github.io/handle/image-layout.html -->
   <div>
     <b-container class="picture-wrapper">
-      <b-row>
-        <b-col style="text-align:right;margin:10px">
+      <b-row class="picture-header">
+        <b-col class="frspace" style="margin:0.2rem">
           <el-button type="primary" @click="handleUserUploadOpen">我要上传</el-button>
+          <div class="date-switch">
+            按日期展示
+            <el-switch v-model="isShowByDate" @change="handleSwitchChange"></el-switch>
+          </div>
         </b-col>
       </b-row>
-      <div>111</div>
+      <el-divider></el-divider>
+      <div class="picture-list" v-if="JSON.stringify(dataList) !=='{}'">
+        <div class="show-date" v-if="isShowByDate">
+          <div v-for="(value,key,index) in dataList" :key="index">
+            <el-divider class="date">{{key}}</el-divider>
+            <div class="img-list">
+              <img v-for="(item,imgIndex) in value" :key="imgIndex" :src="item" alt />
+            </div>
+          </div>
+        </div>
+        <div class="v-waterfall-content" v-else>
+          <div v-for="(item,index) in pictureList" :key="index" class="v-waterfall-item">
+            <img :src="item.picture_url" alt />
+          </div>
+        </div>
+      </div>
+      <div v-else class="no-data">
+        <img src="../../../assets/imgs/no-article.png" alt />
+        <p>暂时还没有图片哦，期待你的上传！</p>
+      </div>
     </b-container>
-    <el-dialog title="图片上传" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog
+      :width="dislogWidth"
+      title="图片上传"
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+    >
       <el-upload
         class="upload-demo"
         :limit="6"
@@ -22,27 +51,57 @@
         <el-button size="small" type="primary">点击上传</el-button>
         <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
       </el-upload>
-      <el-button type="primary" v-show="urls.length!==0" class="submitbtn">提交</el-button>
+      <el-button
+        type="primary"
+        v-show="urls.length!==0"
+        class="submitbtn"
+        @click="handlePictureBathUpload"
+      >提交</el-button>
     </el-dialog>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { Upload, Dialog, Button } from "element-ui";
+import { Upload, Dialog, Button, Message, Switch, Divider } from "element-ui";
+import HttpRequest from "@/assets/api/modules/index";
+Vue.prototype.$message = Message;
 @Component({
   name: "PictureModule",
   components: {
     "el-upload": Upload,
     "el-dialog": Dialog,
-    "el-button": Button
+    "el-button": Button,
+    "el-switch": Switch,
+    "el-divider": Divider
   }
 })
 export default class PictureModule extends Vue {
+  private dislogWidth: string = "30%";
+
+  private isShowByDate: boolean = false;
+
   private dialogVisible: boolean = false;
 
   private urls: string[] = [];
 
   private fileList: any = [];
+
+  private pictureList: PictureInfo[] = [];
+
+  private dataList: { [init_date: string]: string[] } = {};
+
+  private startDate: number = new Date("2020-05-01").getTime();
+
+  private endDate: number = new Date().getTime();
+
+  private pagination: PaginationInfo = {
+    page: 1,
+    total: 0
+  };
+
+  private handleSwitchChange(value: boolean) {
+    this.isShowByDate = value;
+  }
 
   private handleUserUploadOpen() {
     this.dialogVisible = true;
@@ -59,6 +118,79 @@ export default class PictureModule extends Vue {
   private handleUploadSuccess(response: any, file: File, fileList: File[]) {
     this.urls.push(response.data.url);
   }
+
+  // 请求图片列表
+  private async getPictureList(
+    page: number,
+    startDate: number,
+    endDate: number
+  ) {
+    const res: ApiResponse<ListResponse<
+      PictureInfo[]
+    >> = await HttpRequest.PictureModule.getPictureList({
+      startDate,
+      endDate,
+      page,
+      limit: 10
+    });
+
+    if (res && res.data) {
+      const total = res.data.total;
+      const list = res.data.data;
+      this.pagination.total = total;
+      this.pictureList = [...this.pictureList, ...list];
+      this.dataList = this.getDataListCalculate(this.pictureList);
+      if (res.data.hasNext) {
+        const timestamp =
+          this.pictureList[this.pictureList.length - 1].create_time || 0;
+        let date = new Date(timestamp).setHours(0, 0, 0, 0);
+        this.getPictureList(this.pagination.page + 1, date, this.endDate);
+      }
+    }
+  }
+  // 封装数据
+  getDataListCalculate(list: PictureInfo[]) {
+    let newData: { [init_date: string]: string[] } = {};
+
+    list.forEach(item => {
+      newData[item.init_date] = [
+        ...(newData[item.init_date] || []),
+        ...[item.picture_url]
+      ];
+    });
+    return newData;
+  }
+  // 新增图片
+  private async handlePictureBathUpload() {
+    const { startDate } = this;
+    const urls = this.urls.join(",");
+    const res: ApiResponse<boolean> = await HttpRequest.PictureModule.getPictureBathCreate(
+      { urls }
+    );
+    if (res && res.data) {
+      this.$message.success("新增成功");
+      this.urls = [];
+      this.fileList = [];
+      this.dialogVisible = false;
+      this.urls = [];
+      this.dataList = {};
+      this.pictureList = [];
+      this.getPictureList(
+        this.pagination.page,
+        this.startDate,
+        new Date().getTime()
+      );
+    }
+  }
+
+  mounted() {
+    this.dislogWidth =
+      document.documentElement.clientWidth > 500 ? "30%" : "80%";
+    this.$nextTick(() => {
+      const { startDate, endDate } = this;
+      this.getPictureList(this.pagination.page, startDate, endDate);
+    });
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -66,10 +198,105 @@ export default class PictureModule extends Vue {
   position: relative;
   width: 100%;
   background: #fff;
+  padding-bottom: 3.3rem;
+
+  .picture-header {
+    padding-top: 0.875rem;
+    .el-button {
+      height: 1.875rem;
+      line-height: 1.25rem;
+      font-size: 0.875rem;
+      padding: 0.3125rem 0.625rem;
+    }
+    .date-switch {
+      font-size: 0.8125rem;
+      line-height: 2.5rem;
+      .el-switch {
+        position: relative;
+        top: -1px;
+      }
+    }
+  }
+
+  .picture-list {
+    position: relative;
+    padding: 0 2.5rem;
+    .show-date {
+      margin-bottom: 1.25rem;
+      .date {
+        text-align: center;
+        font-family: monospace;
+        font-size: 1.25rem;
+        color: #333;
+      }
+      .img-list {
+        column-count: 5;
+        column-gap: 0.625rem;
+      }
+    }
+    // 不按日期展示
+    .v-waterfall-content {
+      column-count: 5;
+      column-gap: 0.625rem;
+    }
+    // 图片
+    img {
+      cursor: pointer;
+      margin-bottom: 0.625rem;
+      display: block;
+      width: 100%;
+      border-radius: 4px;
+    }
+    img:hover {
+      transform: scale(1.1);
+      transition: 500ms all;
+    }
+  }
+  .no-data {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 3.125rem;
+    font-size: 1.5rem;
+    img {
+      width: 22.5rem;
+      height: 22.5rem;
+      margin: 0 auto;
+    }
+  }
 }
 .submitbtn {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 0.625rem;
   text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  .img-list {
+    column-count: 4 !important;
+    column-gap: 0.875rem !important;
+  }
+  // 不按日期展示
+  .v-waterfall-content {
+    column-count: 4 !important;
+    column-gap: 0.875rem !important;
+  }
+  .el-button {
+    height: 3.875rem !important;
+    line-height: 1.875rem !important;
+    font-size: 0.875rem !important;
+    padding: 0.9375rem !important;
+  }
+  .el-switch {
+    width: 30px !important;
+    height: 15px !important;
+    line-height: 15px !important;
+    .el-switch__core {
+      height: 14px !important;
+    }
+    .el-switch__core::after {
+      width: 10px !important;
+      height: 10px !important;
+    }
+  }
 }
 </style>

@@ -4,6 +4,7 @@ import { RootState } from './types'
 import { music } from "./music/index"
 
 Vue.use(Vuex)
+// https://www.jianshu.com/p/25a2b9b45c99
 
 const store: StoreOptions<RootState> = {
   modules: {

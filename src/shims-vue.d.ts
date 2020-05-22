@@ -23,7 +23,8 @@ interface ApiResponse<T> {
 
 interface ListResponse<T> {
   total: number,
-  data: T
+  data: T,
+  hasNext?: boolean,
 }
 
 /**
@@ -195,4 +196,13 @@ interface LeaveMessageInfo {
   init_date?: string,
   create_time?: number,
   modify_time?: number,
+}
+
+interface PictureInfo {
+  createDate?: number,
+  create_time?: number,
+  init_date: string,
+  modify_time?: number,
+  picture_id?: string,
+  picture_url: string
 }
