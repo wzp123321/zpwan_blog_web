@@ -42,7 +42,7 @@
         class="upload-demo"
         :limit="6"
         :multiple="true"
-        action="http://localhost:9898/blogManage/filemodule/web/upload"
+        :action="action"
         :on-remove="handleRemove"
         :on-success="handleUploadSuccess"
         :file-list="fileList"
@@ -64,6 +64,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { Upload, Dialog, Button, Message, Switch, Divider } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
+const env = process.env.NODE_ENV;
 Vue.prototype.$message = Message;
 @Component({
   name: "PictureModule",
@@ -76,6 +77,10 @@ Vue.prototype.$message = Message;
   }
 })
 export default class PictureModule extends Vue {
+  private actions: string =
+    env === "production"
+      ? "http://server.zpwan-yz.com/blogManage/filemodule/web/upload"
+      : "http://localhost:9898/blogManage/filemodule/web/upload";
   private dislogWidth: string = "30%";
 
   private isShowByDate: boolean = false;
