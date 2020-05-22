@@ -77,10 +77,8 @@ Vue.prototype.$message = Message;
   }
 })
 export default class PictureModule extends Vue {
-  private actions: string =
-    env === "production"
-      ? "http://server.zpwan-yz.com/blogManage/filemodule/web/upload"
-      : "http://localhost:9898/blogManage/filemodule/web/upload";
+  private action: string = "";
+
   private dislogWidth: string = "30%";
 
   private isShowByDate: boolean = false;
@@ -182,13 +180,17 @@ export default class PictureModule extends Vue {
       this.pictureList = [];
       this.getPictureList(
         this.pagination.page,
-        this.startDate,
+        startDate,
         new Date().getTime()
       );
     }
   }
 
   mounted() {
+    this.action =
+      env === "production"
+        ? "http://server.zpwan-yz.com/blogManage/filemodule/web/upload"
+        : "http://localhost:9898/blogManage/filemodule/web/upload";
     this.dislogWidth =
       document.documentElement.clientWidth > 500 ? "30%" : "80%";
     this.$nextTick(() => {

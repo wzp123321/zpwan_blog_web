@@ -39,30 +39,34 @@ export default class FooterBox extends Vue {
 
   private timer: any = null;
 
+  getBlogRunDays() {
+    const start = 1587184669000;
+    const end = new Date().getTime();
+    const days = Math.floor((end - start) / 24 / 60 / 60 / 1000);
+    const hours = Math.floor(
+      (end - start - days * 24 * 60 * 60 * 1000) / 60 / 60 / 1000
+    );
+    const minutes = Math.floor(
+      (end - start - days * 24 * 60 * 60 * 1000 - hours * 60 * 60 * 1000) /
+        60 /
+        1000
+    );
+    const seconds = Math.floor(
+      (end -
+        start -
+        days * 24 * 60 * 60 * 1000 -
+        hours * 60 * 60 * 1000 -
+        minutes * 60 * 1000) /
+        1000
+    );
+    this.run_date =
+      days + "天" + hours + "时" + minutes + "分" + seconds + "秒";
+  }
+
   mounted() {
-    const start = new Date("2020-04-18 12:37:49.211").getTime();
     this.timer = setInterval(() => {
-      const end = new Date().getTime();
-      const days = Math.floor((end - start) / 24 / 60 / 60 / 1000);
-      const hours = Math.floor(
-        (end - start - days * 24 * 60 * 60 * 1000) / 60 / 60 / 1000
-      );
-      const minutes = Math.floor(
-        (end - start - days * 24 * 60 * 60 * 1000 - hours * 60 * 60 * 1000) /
-          60 /
-          1000
-      );
-      const seconds = Math.floor(
-        (end -
-          start -
-          days * 24 * 60 * 60 * 1000 -
-          hours * 60 * 60 * 1000 -
-          minutes * 60 * 1000) /
-          1000
-      );
-      this.run_date =
-        days + "天" + hours + "时" + minutes + "分" + seconds + "秒";
-    });
+      this.getBlogRunDays();
+    }, 1000);
   }
 
   beforeDestroy() {
