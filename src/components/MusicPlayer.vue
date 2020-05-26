@@ -3,7 +3,7 @@
   <div
     :class="['music_wrapper',isMin?'min-player':'max-player']"
     id="music_player"
-    @mousedown="handlemousedown"
+    @mousedown.stop="handlemousedown"
   >
     <!-- 最大化 -->
     <div class="max-music-player" v-if="!isMin">

@@ -108,11 +108,15 @@ export default class Main extends Vue {
     if (typeof WebSocket === "undefined") {
       this.$message.error("您的浏览器不支持socket");
     } else {
+      // 判断环境
       const env = process.env.NODE_ENV;
-      const BASE_URL:string = env==='production' ?'132.232.66.140:9898':'localhost:9898'
-      console.log("BASE_URL",BASE_URL)
+      const BASE_URL: string =
+        env === "production" ? "www.server.zpwan-yz.com" : "localhost:9898";
+      // 判断请求协议http&https
+      const protocol = document.location.protocol==='https:' ? "wss" : "ws";
+      console.log("BASE_URL", BASE_URL);
       // 实例化socket
-      this.socket = new WebSocket(`ws://${BASE_URL}/websocket`);
+      this.socket = new WebSocket(`wss://${BASE_URL}/websocket`);
       // 监听socket连接
       this.socket.onopen = () => {
         console.log("socket连接成功");
