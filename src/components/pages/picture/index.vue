@@ -189,7 +189,7 @@ export default class PictureModule extends Vue {
   mounted() {
     this.action =
       env === "production"
-        ? "https://server.zpwan-yz.com/blogManage/filemodule/web/upload"
+        ? `${window.location.protocol}//server.zpwan-yz.com/blogManage/filemodule/web/upload`
         : "http://localhost:9898/blogManage/filemodule/web/upload";
     this.dislogWidth =
       document.documentElement.clientWidth > 500 ? "30%" : "80%";
