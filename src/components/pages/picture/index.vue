@@ -45,7 +45,6 @@
         :action="action"
         :on-remove="handleRemove"
         :on-success="handleUploadSuccess"
-        :before-upload="beforeUploadFile"
         :on-change="handleFileChange"
         :file-list="fileList"
         list-type="picture"
@@ -134,6 +133,7 @@ export default class PictureModule extends Vue {
       }
     });
     this.fileList = newFileList;
+    return true;
   }
 
   private handleRemove(file: any, fileList: any) {
@@ -193,7 +193,6 @@ export default class PictureModule extends Vue {
     const res: ApiResponse<boolean> = await HttpRequest.PictureModule.getPictureBathCreate(
       { urls }
     );
-    console.log("res", res);
     if (res && res.data) {
       this.$message.success("新增成功");
       this.urls = [];

@@ -16,40 +16,40 @@ declare module 'qrcodejs2';
 
 declare namespace ArticleModule {
   interface ArticleInfo {
-      id?: string,
-      title: string,
-      content?: string,
-      imgUrl?: string,
-      description: string,
-      author?: string,
-      tags?: string,
-      first_catalogId?: number,
-      first_catalogName?: string,
-      second_catalogId?: 9
-      second_catalogName?: string,
-      isDelete?: number,
-      isShelves?: number,
-      isRecommend?: number,
-      isTop?: number,
-      visit_count?: number,
-      like_count?: number,
-      comment_count?: number,
-      create_time?: number,
-      modify_time?: number,
+    id?: string,
+    title: string,
+    content?: string,
+    imgUrl?: string,
+    description: string,
+    author?: string,
+    tags?: string,
+    first_catalogId?: number,
+    first_catalogName?: string,
+    second_catalogId?: 9
+    second_catalogName?: string,
+    isDelete?: number,
+    isShelves?: number,
+    isRecommend?: number,
+    isTop?: number,
+    visit_count?: number,
+    like_count?: number,
+    comment_count?: number,
+    create_time?: number,
+    modify_time?: number,
   }
   interface CommentInfo {
-      id: string,
-      author: DashoboardModule.UserInfo,
-      article_id: string,
-      content: string,
-      is_delete: number,
-      ups: number,
-      downs: number,
-      parent_id: string,
-      is_root: string,
-      reply_userInfo: DashoboardModule.UserInfo,
-      create_time: number,
-      children?: []
+    id: string,
+    author: DashoboardModule.UserInfo,
+    article_id: string,
+    content: string,
+    is_delete: number,
+    ups: number,
+    downs: number,
+    parent_id: string,
+    is_root: string,
+    reply_userInfo: DashoboardModule.UserInfo,
+    create_time: number,
+    children?: []
   }
 }
 
@@ -138,6 +138,15 @@ interface ListResponse<T> {
   total: number,
   data: T,
   hasNext?: boolean,
+}
+
+interface FileInfo {
+  id: string,
+  fileName: string,
+  md5: string,
+  url: string,
+  length: number,
+  create_time: number,
 }
 
 /**
