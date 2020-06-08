@@ -45,6 +45,7 @@
         :action="action"
         :on-remove="handleRemove"
         :on-success="handleUploadSuccess"
+        :before-upload="beforeUploadFile"
         :on-change="handleFileChange"
         :file-list="fileList"
         list-type="picture"
@@ -65,6 +66,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import { Upload, Dialog, Button, Message, Switch, Divider } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
+import { compressImage } from "@/utils/compress";
 const env = process.env.NODE_ENV;
 Vue.prototype.$message = Message;
 @Component({
@@ -116,7 +118,22 @@ export default class PictureModule extends Vue {
 
   // 选择图片
   private handleFileChange(file: File, fileList: File[]) {
-    console.log(fileList);
+    this.fileList = fileList;
+  }
+
+  /**
+   * 上传前 遍历文件数组如果文件大小超过1M则压缩
+   */
+  private beforeUploadFile(file: File) {
+    let newFileList: any[] = [];
+    this.fileList.forEach(async (item: File, index: number) => {
+      const fileSize = item.size;
+      if (fileSize > 1 * 1024 * 1024) {
+        let newItem = await compressImage(item);
+        newFileList.push(newItem);
+      }
+    });
+    this.fileList = newFileList;
   }
 
   private handleRemove(file: any, fileList: any) {
@@ -176,7 +193,7 @@ export default class PictureModule extends Vue {
     const res: ApiResponse<boolean> = await HttpRequest.PictureModule.getPictureBathCreate(
       { urls }
     );
-    console.log('res', res)
+    console.log("res", res);
     if (res && res.data) {
       this.$message.success("新增成功");
       this.urls = [];
