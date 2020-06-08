@@ -10,7 +10,7 @@
         offset-xl="3"
         md="9"
         offset-md="0"
-        cols="11"
+        cols="12"
         offset="0"
         class="menu-wrapper flex-row"
       >

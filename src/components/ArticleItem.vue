@@ -79,7 +79,7 @@ export default class ArticleItem extends Vue {
   .top {
     position: absolute;
     top: 11px;
-    left: 9px;
+    left: 12px;
     display: inline-block;
     padding: 5px;
     font-size: 12px;
@@ -95,11 +95,12 @@ export default class ArticleItem extends Vue {
     min-height: 120px;
     max-width: 120px;
     max-height: 120px;
-    border-radius: 3px;
+    border-radius: 8px;
     border: 1px solid #f1efef;
     img {
       width: 100%;
       height: 100%;
+      border-radius: 8px;
     }
   }
   .info {
@@ -186,15 +187,15 @@ export default class ArticleItem extends Vue {
     padding: 2px;
     margin-top: 5px;
     .top {
-      top: 2px;
-      left: 1px;
+      top: 3px;
+      left: 2px;
       padding: 3px;
       font-size: 10px;
     }
     .img-div {
-      min-width: 80px;
+      min-width: 90px;
       min-height: 80px;
-      max-width: 80px;
+      max-width: 90px;
       max-height: 80px;
       img {
         width: 100%;

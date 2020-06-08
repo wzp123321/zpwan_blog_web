@@ -22,9 +22,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // 引入flexible
 import '@/assets/js/flexible'
-import vConsole from 'vconsole'
-new vConsole()
-// Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)

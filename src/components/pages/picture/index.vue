@@ -62,7 +62,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { Upload, Dialog, Button, Message, Switch, Divider } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
 import { compressImage } from "@/utils/compress";
@@ -116,24 +116,15 @@ export default class PictureModule extends Vue {
   }
 
   // 选择图片
-  private handleFileChange(file: File, fileList: File[]) {
-    this.fileList = fileList;
-  }
-
-  /**
-   * 上传前 遍历文件数组如果文件大小超过1M则压缩
-   */
-  private beforeUploadFile(file: File) {
-    let newFileList: any[] = [];
-    this.fileList.forEach(async (item: File, index: number) => {
-      const fileSize = item.size;
-      if (fileSize > 1 * 1024 * 1024) {
-        let newItem = await compressImage(item);
-        newFileList.push(newItem);
+  private handleFileChange(file: File, fileList: any) {
+    let newFileList = fileList;
+    newFileList.forEach(async (item: any, index: number) => {
+      if (item.size > 1 * 1024 * 1024) {
+        let newFile = await compressImage(item);
+        newFileList[index] = newFile;
       }
     });
     this.fileList = newFileList;
-    return true;
   }
 
   private handleRemove(file: any, fileList: any) {
@@ -195,11 +186,7 @@ export default class PictureModule extends Vue {
     );
     if (res && res.data) {
       this.$message.success("新增成功");
-      this.urls = [];
-      this.fileList = [];
       this.dialogVisible = false;
-      this.dataList = {};
-      this.pictureList = [];
       this.getPictureList(
         this.pagination.page,
         startDate,
@@ -219,6 +206,16 @@ export default class PictureModule extends Vue {
       const { startDate, endDate } = this;
       this.getPictureList(this.pagination.page, startDate, endDate);
     });
+  }
+
+  @Watch("dialogVisible")
+  private handleModalClose(newVal: boolean, oldVal: boolean) {
+    if (!newVal) {
+      this.urls = [];
+      this.fileList = [];
+      this.dataList = {};
+      this.pictureList = [];
+    }
   }
 }
 </script>
