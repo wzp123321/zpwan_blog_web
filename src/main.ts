@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+// import store from './store'
 import './registerServiceWorker'
 Vue.config.productionTip = false
 
@@ -22,6 +22,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // 引入flexible
 import '@/assets/js/flexible'
+import vConsole from 'vconsole'
+new vConsole()
 // Install BootstrapVue
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
@@ -49,7 +51,7 @@ router.afterEach(route => {
 
 new Vue({
   router,
-  store,
+  // store,
   render: h => h(App)
 }).$mount('#app')
 

@@ -74,6 +74,8 @@ export default class ArticleItem extends Vue {
   background: #fff;
   border-radius: 5px;
   margin-top: 10px;
+  transition: bottom 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+    box-shadow 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   .top {
     position: absolute;
     top: 11px;

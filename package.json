@@ -23,6 +23,7 @@
     "qrcodejs2": "0.0.2",
     "register-service-worker": "^1.6.2",
     "v-tag-cloud": "^1.0.3",
+    "vconsole": "^3.3.4",
     "vue": "^2.6.11",
     "vue-aplayer": "^1.6.1",
     "vue-class-component": "^7.0.2",

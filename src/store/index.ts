@@ -1,15 +1,24 @@
-import Vue from 'vue'
-import Vuex, { StoreOptions } from 'vuex'
-import { RootState } from './types'
-import { music } from "./music/index"
+// import Vue from 'vue'
+// import Vuex, { Store } from 'vuex'
+// import actions from './actions'
+// import mutations from './mutations'
+// import state from './state'
+// import getters from './getters'
+// // modules
+// import user from './module/user'
 
-Vue.use(Vuex)
-// https://www.jianshu.com/p/25a2b9b45c99
+// Vue.use(Vuex)
 
-const store: StoreOptions<RootState> = {
-  modules: {
-    music
-  }
-}
+// const store: Store<any> = new Vuex.Store({
+//   actions,
+//   mutations,
+//   getters,
+//   state,
+//   modules: {
+//     user
+//   }
+// })
 
-export default new Vuex.Store<RootState>(store)
+// export default store
+
+// https://segmentfault.com/a/1190000011744210

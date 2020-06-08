@@ -19,8 +19,7 @@
       @change="handlePlayChange"
       @index_change="handleMusicIndexChange"
       @play_pause="handleMusicPlayPause"
-    ></MusicPlayer>-->
-    <UserInfo :blog_user_name="blog_user_name" :blog_user_avatar="blog_user_avatar"></UserInfo>
+    ></MusicPlayer> -->
   </div>
 </template>
 <script lang="ts">
@@ -30,8 +29,7 @@ import HeaderBox from "@/layouts/HeaderBox.vue";
 import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
-import MusicPlayer from "@/components/MusicPlayer.vue";
-import UserInfo from "@/components/UserInfo.vue";
+// import MusicPlayer from "@/components/MusicPlayer.vue";
 import { Notification } from "element-ui";
 /**
  * 引入vuex
@@ -39,7 +37,6 @@ import { Notification } from "element-ui";
 import { namespace } from "vuex-class";
 Vue.prototype.$notify = Notification;
 
-const musicModule = namespace("music");
 @Component({
   name: "Main",
   components: {
@@ -47,21 +44,10 @@ const musicModule = namespace("music");
     HeaderBox,
     ContentBox,
     FooterBox,
-    BreadcrumbModule,
-    MusicPlayer,
-    UserInfo
+    BreadcrumbModule
   }
 })
 export default class Main extends Vue {
-  // 引入vuex
-  @musicModule.Action("changeMusicData") public changeMusicData!: Function;
-  @musicModule.Mutation("changeCurMusicInfo")
-  public changeCurMusicInfo!: Function;
-  @musicModule.Getter("currentMusicInfo") public currentMusicInfo!: MusicInfo;
-  @musicModule.Getter("getMusicList") public getMusicList!: Array<MusicInfo>;
-  @musicModule.State("current_musicInfo") public current_musicInfo!: MusicInfo;
-  @musicModule.State("current_index") public current_index!: number;
-  @musicModule.State("musicList") public musicList!: MusicInfo[];
   // 顶部是否吸顶
   private isCeil: boolean = false;
   // 距离左边距离
@@ -97,7 +83,7 @@ export default class Main extends Vue {
   }
   // 切换歌曲
   private handleMusicIndexChange(index: number) {
-    this.changeMusicData(index);
+    // this.changeMusicData(index);
   }
   // 播放暂停
   private handleMusicPlayPause(flag: boolean) {
@@ -111,7 +97,7 @@ export default class Main extends Vue {
       // 判断环境
       const env = process.env.NODE_ENV;
       const BASE_URL: string =
-        env === "production" ? "www.server.zpwan-yz.com" : "localhost:9898";
+        env === "production" ? "132.232.66.140:9898" : "localhost:9898";
       // 判断请求协议http&https
       const protocol = document.location.protocol==='https:' ? "wss" : "ws";
       console.log("BASE_URL", BASE_URL);

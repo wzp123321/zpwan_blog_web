@@ -2,7 +2,7 @@
   <b-container :class="[{'ceil': isCeil}, 'header-wrapper']" :style="`left:${positionLeft}px`">
     <b-row>
       <b-col xl="3" md="3" cols="11" offset-xl="0" offset-md="0" offset="0" class="info">
-        <h1 @click="()=>{$router.push('/')}">万直鹏的博客</h1>
+        <h1 @click="()=>{$router.push('/')}" class="blog-title">万直鹏的博客</h1>
         <p>仰天大笑出门去，我辈岂是蓬蒿人</p>
       </b-col>
       <b-col
@@ -137,12 +137,10 @@ export default class HeaderBox extends Vue {
     p {
       margin: 0;
     }
-    h1 {
+    .blog-title {
       font-size: 20px;
       color: #31c27c;
-    }
-    h1:hover {
-      animation: titleHover 200ms linear infinite forwards;
+      animation: titleHover 300ms linear forwards;
     }
     p {
       font-size: 13px;
@@ -174,21 +172,19 @@ export default class HeaderBox extends Vue {
 }
 
 @keyframes titleHover {
-  0% {
-    transform: translateX(0);
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.1, 0.1, 0.1) translate3d(-100px, 0, 0);
+    transform: scale3d(0.1, 0.1, 0.1) translate3d(-100px, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(0);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-
-  100% {
-    transform: translateX(0);
+  to {
+    opacity: 1;
+    -webkit-transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    -webkit-animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
 }
 

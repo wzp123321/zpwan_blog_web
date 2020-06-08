@@ -5,6 +5,7 @@
     id="music_player"
     @mousedown.stop="handlemousedown"
   >
+  <!-- 使用video  把音乐播放放到这里面就可以了 无论收缩还是打开都不影响 -->
     <!-- 最大化 -->
     <div class="max-music-player" v-if="!isMin">
       <VueAplayer
@@ -68,8 +69,7 @@ export default class MusicPlayer extends Vue {
   }
   // 播放中
   private onTimeupdate(value: any) {}
-  //
-  greet() {}
+
   handlemousedown(e: any) {
     // 当前元素
     let music_player: any = document.querySelector("#music_player");
@@ -149,7 +149,7 @@ export default class MusicPlayer extends Vue {
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 30px;
     .iconfont {
-      padding: 9px 10px;
+      padding: 4px 10px;
       display: inline-block;
       color: #fff;
       font-size: 24px;

@@ -3,7 +3,7 @@
   <div>
     <b-container class="picture-wrapper">
       <b-row class="picture-header">
-        <b-col class="frspace" style="margin:0.2rem">
+        <b-col class="frspace" style="margin:0.2rem 1rem">
           <el-button type="primary" @click="handleUserUploadOpen">我要上传</el-button>
           <div class="date-switch">
             按日期展示
@@ -45,6 +45,7 @@
         :action="action"
         :on-remove="handleRemove"
         :on-success="handleUploadSuccess"
+        :on-change="handleFileChange"
         :file-list="fileList"
         list-type="picture"
       >
@@ -113,6 +114,11 @@ export default class PictureModule extends Vue {
     this.dialogVisible = false;
   }
 
+  // 选择图片
+  private handleFileChange(file: File, fileList: File[]) {
+    console.log(fileList);
+  }
+
   private handleRemove(file: any, fileList: any) {
     this.urls = this.urls.filter(item => {
       return item !== file.response.data.url;
@@ -170,12 +176,12 @@ export default class PictureModule extends Vue {
     const res: ApiResponse<boolean> = await HttpRequest.PictureModule.getPictureBathCreate(
       { urls }
     );
+    console.log('res', res)
     if (res && res.data) {
       this.$message.success("新增成功");
       this.urls = [];
       this.fileList = [];
       this.dialogVisible = false;
-      this.urls = [];
       this.dataList = {};
       this.pictureList = [];
       this.getPictureList(
@@ -189,7 +195,7 @@ export default class PictureModule extends Vue {
   mounted() {
     this.action =
       env === "production"
-        ? `${window.location.protocol}//server.zpwan-yz.com/blogManage/filemodule/web/upload`
+        ? "https://server.zpwan-yz.com/blogManage/filemodule/web/upload"
         : "http://localhost:9898/blogManage/filemodule/web/upload";
     this.dislogWidth =
       document.documentElement.clientWidth > 500 ? "30%" : "80%";
@@ -227,7 +233,7 @@ export default class PictureModule extends Vue {
 
   .picture-list {
     position: relative;
-    padding: 0 2.5rem;
+    padding: 0 1rem;
     .show-date {
       margin-bottom: 1.25rem;
       .date {
@@ -278,13 +284,9 @@ export default class PictureModule extends Vue {
 }
 
 @media screen and (max-width: 500px) {
-  .img-list {
-    column-count: 4 !important;
-    column-gap: 0.875rem !important;
-  }
   // 不按日期展示
   .v-waterfall-content {
-    column-count: 4 !important;
+    column-count: 2 !important;
     column-gap: 0.875rem !important;
   }
   .el-button {

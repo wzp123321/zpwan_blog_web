@@ -30,7 +30,7 @@
       <!-- 文章模块 -->
       <b-col xl="8" md="12" cols="12" class="article-wrapper">
         <!-- banner模块 -->
-        <el-carousel :interval="400000" height="300px" class="carousel">
+        <el-carousel :interval="4000" height="300px" class="carousel">
           <el-carousel-item v-for="(item,index) in banners" :key="'banner_'+index">
             <img
               :src="item.imgUrl"
