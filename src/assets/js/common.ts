@@ -110,5 +110,8 @@ const BASE_URL = env === 'production' ? 'https://server.zpwan-yz.com/' : 'http:/
 //超时时间
 const Global_Delay = 10 * 60 * 1000;
 
+const ID = '1278996461'
 
-export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK, jsApiList, BASE_URL, Global_Delay }
+const WEB_ID = '1278996461'
+
+export { links, avatars, icons, visits, APP_KEY, WEIXIN_SDK, jsApiList, BASE_URL, Global_Delay, ID, WEB_ID }

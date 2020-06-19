@@ -166,11 +166,6 @@
           <RecommendArticle></RecommendArticle>
         </b-col>
       </b-row>
-      <UserLoginModule
-        :dialogFormVisible="dialogFormVisible"
-        @cancel="handleLoginCancel"
-        @submit="handleLoginSuccess"
-      ></UserLoginModule>
     </b-container>
   </div>
 </template>
@@ -182,7 +177,6 @@ import { formatDate } from "@/utils/index";
 import CommentInput from "@/components/CommentInput.vue";
 import { Route } from "vue-router";
 import RecommendArticle from "@/components/RecommendArticle.vue";
-import UserLoginModule from "@/components/UserLoginModal.vue";
 import "mavon-editor/dist/css/index.css";
 import "mavon-editor/dist/highlightjs/highlight.min.js";
 import "mavon-editor/dist/katex/katex";
@@ -201,15 +195,12 @@ Vue.use(Loading.directive);
   components: {
     "el-divider": Divider,
     CommentInput,
-    RecommendArticle,
-    UserLoginModule
+    RecommendArticle
   }
 })
 export default class ArticleInfoModule extends Vue {
   // 页面加载
   private loading: boolean = false;
-  // 登录对话框
-  private dialogFormVisible: boolean = false;
   // 用户是否点赞过
   private isUps: boolean = false;
   // 标识当前评论的大楼层
@@ -223,13 +214,8 @@ export default class ArticleInfoModule extends Vue {
     avatar_url: localStorage.getItem("blog_avatar_url") || "",
     location: localStorage.getItem("blog_location") || ""
   };
-  // 取消登录
-  private handleLoginCancel(value: boolean) {
-    this.dialogFormVisible = value;
-  }
   // 登录回调
   private handleLoginSuccess() {
-    this.dialogFormVisible = false;
     this.author = {
       user_id: localStorage.getItem("blog_user_id") || "",
       name: localStorage.getItem("blog_name") || "",
@@ -263,8 +249,6 @@ export default class ArticleInfoModule extends Vue {
   private handleShareByOtherPlateForm(type: string) {
     let shareUrl: string = "";
     const url = encodeURIComponent(window.location.href);
-    // const url =
-    //   "https://blog.csdn.net/weixin_44868881/article/details/100924143";
     const { title, description } = this.articleInfo;
     const imgUrl =
       "http://132.232.66.140:81/CF29D466835022C356A76F846432D832.jpg";
@@ -316,13 +300,18 @@ export default class ArticleInfoModule extends Vue {
    */
   private async releaseComment(content: string) {
     if (!localStorage.getItem("blog_name")) {
-      this.dialogFormVisible = true;
+      window.eventBus.$emit("blogEventHandle", {
+        type: "user-login-show",
+        data: true
+      });
       return;
     }
+
     if (content.replace(/\s+/g, "") === "") {
       this.$message.error("评论不能为空！");
       return;
     }
+    this.handleUserInfoGet();
     this.loading = true;
     const article_id = this.$route.params.id;
     const { author, parent_id, reply_userInfo } = this;
@@ -433,6 +422,15 @@ export default class ArticleInfoModule extends Vue {
       { id }
     );
   }
+  // 登录回调
+  private handleUserInfoGet() {
+    this.author = {
+      user_id: localStorage.getItem("blog_user_id") || "",
+      name: localStorage.getItem("blog_name") || "",
+      avatar_url: localStorage.getItem("blog_avatar_url") || "",
+      location: localStorage.getItem("blog_location") || ""
+    };
+  }
   /**
    * 文章点赞
    */
@@ -441,28 +439,32 @@ export default class ArticleInfoModule extends Vue {
       !localStorage.getItem("blog_name") ||
       !localStorage.getItem("blog_user_id")
     ) {
-      this.dialogFormVisible = true;
+      window.eventBus.$emit("blogEventHandle", {
+        type: "user-login-show",
+        data: true
+      });
+      return;
+    }
+    this.handleUserInfoGet();
+    const article_id = this.$route.params.id;
+    const user_id = localStorage.getItem("blog_user_id");
+    if (!this.isUps) {
+      const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
+        { article_id, user_id }
+      );
+      if (res && res.data) {
+        this.$message.success("点赞成功");
+        this.handleUpsCheck();
+        this.getArticleInfoById();
+      }
     } else {
-      const article_id = this.$route.params.id;
-      const user_id = localStorage.getItem("blog_user_id");
-      if (!this.isUps) {
-        const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
-          { article_id, user_id }
-        );
-        if (res && res.data) {
-          this.$message.success("点赞成功");
-          this.handleUpsCheck();
-          this.getArticleInfoById();
-        }
-      } else {
-        const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUpsDelete(
-          { article_id, user_id }
-        );
-        if (res && res.data) {
-          this.$message.success("已取消点赞");
-          this.handleUpsCheck();
-          this.getArticleInfoById();
-        }
+      const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUpsDelete(
+        { article_id, user_id }
+      );
+      if (res && res.data) {
+        this.$message.success("已取消点赞");
+        this.handleUpsCheck();
+        this.getArticleInfoById();
       }
     }
   }

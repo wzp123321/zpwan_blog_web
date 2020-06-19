@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    title="少侠,留个名吧！"
-    :visible.sync="show"
-    @close="close"
-    @cancel="close"
-    width="420px"
-  >
+  <el-dialog title="少侠,留个名吧！" :visible.sync="dialogFormVisible" width="420px">
     <el-form :model="form" ref="form">
       <el-form-item
         prop="name"
@@ -51,7 +45,7 @@
   </el-dialog>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import HttpRequest from "@/assets/api/modules/index";
 import { generateUUId } from "@/utils/index";
 import { avatars } from "@/assets/js/common";
@@ -65,7 +59,6 @@ import {
   Notification
 } from "element-ui";
 Vue.prototype.$notify = Notification;
-// https://docs.justauth.whnb.wang/#/oauth/qq
 
 @Component({
   name: "UserLoginModal",
@@ -78,27 +71,18 @@ Vue.prototype.$notify = Notification;
   }
 })
 export default class UserLoginModal extends Vue {
-  @Prop({ default: false })
-  private dialogFormVisible!: boolean;
+  private dialogFormVisible: boolean = false;
   //表单数据
   private form: { [key: string]: any } = {};
   // 头像地址数组
   private avatars: string[] = avatars;
-  private show: boolean = false;
 
-  @Emit("cancel")
-  private close() {
-    this.show = false;
-    return false;
-  }
   // 选择头像
   private avatarUrl: string = "";
   /**
    * 用户登录
    */
-  @Emit("submit")
   private handleUserLogin() {
-    let flag: boolean = true;
     const form: any = this.$refs.form;
     form.validate((valid: any) => {
       if (valid) {
@@ -106,12 +90,9 @@ export default class UserLoginModal extends Vue {
         localStorage.setItem("blog_user_id", user_id);
         localStorage.setItem("blog_name", this.form.name);
         localStorage.setItem("blog_avatar_url", this.avatarUrl);
-        flag = false;
-      } else {
-        flag = true;
+        this.dialogFormVisible = false;
       }
     });
-    return flag;
   }
   /**
    * github登录
@@ -124,9 +105,15 @@ export default class UserLoginModal extends Vue {
     window.location.href =
       "/githubAuthorize?client_id=e8066bfd81332a5fd345&redirect_uri=" + url;
   }
-  @Watch("dialogFormVisible")
-  private handledialogFormVisibleChange(newVal: boolean, oldVal: boolean) {
-    this.show = newVal;
+  // 显示对话框
+  handleLoginModalShow(args: boolean) {
+    this.dialogFormVisible = args;
+  }
+  mounted() {
+    window.eventBus.$on("handleLoginModalShow", this.handleLoginModalShow);
+  }
+  beforeDestroy() {
+    window.eventBus.$off("handleLoginModalShow", this.handleLoginModalShow);
   }
 }
 </script>

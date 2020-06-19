@@ -10,6 +10,7 @@
     <div class="scroll-to-top" v-show="isTop">
       <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
     </div>
+    <UserLoginModule></UserLoginModule>
     <!-- 音乐播放托盘 -->
     <!-- <MusicPlayer
       :isMin="isMin"
@@ -19,7 +20,7 @@
       @change="handlePlayChange"
       @index_change="handleMusicIndexChange"
       @play_pause="handleMusicPlayPause"
-    ></MusicPlayer> -->
+    ></MusicPlayer>-->
   </div>
 </template>
 <script lang="ts">
@@ -29,6 +30,7 @@ import HeaderBox from "@/layouts/HeaderBox.vue";
 import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
+import UserLoginModule from "@/components/UserLoginModal.vue";
 // import MusicPlayer from "@/components/MusicPlayer.vue";
 import { Notification } from "element-ui";
 /**
@@ -44,7 +46,8 @@ Vue.prototype.$notify = Notification;
     HeaderBox,
     ContentBox,
     FooterBox,
-    BreadcrumbModule
+    BreadcrumbModule,
+    UserLoginModule
   }
 })
 export default class Main extends Vue {
@@ -99,7 +102,7 @@ export default class Main extends Vue {
       const BASE_URL: string =
         env === "production" ? "132.232.66.140:9898" : "localhost:9898";
       // 判断请求协议http&https
-      const protocol = document.location.protocol==='https:' ? "wss" : "ws";
+      const protocol = document.location.protocol === "https:" ? "wss" : "ws";
       console.log("BASE_URL", BASE_URL);
       // 实例化socket
       this.socket = new WebSocket(`wss://${BASE_URL}/websocket`);

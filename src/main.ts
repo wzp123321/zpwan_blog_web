@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-// import store from './store'
+import store from './store'
 import './registerServiceWorker'
 Vue.config.productionTip = false
 
@@ -28,6 +28,10 @@ Vue.use(IconsPlugin)
 //引入tag云
 import tagCloud from 'v-tag-cloud'
 Vue.use(tagCloud)
+// 引入event bus
+import bus from '@/utils/EventBus'
+Vue.prototype.bus = bus
+window.eventBus = Vue.prototype.bus
 
 router.beforeEach((to, from, next) => {
   var u = navigator.userAgent;
@@ -45,10 +49,9 @@ router.afterEach(route => {
   NProgress.done();
 })
 
-
 new Vue({
   router,
-  // store,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

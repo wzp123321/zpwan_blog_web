@@ -13,6 +13,9 @@ declare module 'v-tag-cloud';
 declare module 'weixin-js-sdk';
 declare module 'qrcodejs2';
 
+interface Window {
+  eventBus: any;
+}
 
 declare namespace ArticleModule {
   interface ArticleInfo {
