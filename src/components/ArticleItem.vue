@@ -149,7 +149,7 @@ export default class ArticleItem extends Vue {
       border-radius: 3px;
       cursor: pointer;
       font-size: 12px;
-      line-height: 20px;
+      line-height: 26px;
     }
     .read:hover {
       opacity: 0.9;

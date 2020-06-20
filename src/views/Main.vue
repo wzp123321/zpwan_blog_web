@@ -11,6 +11,7 @@
       <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
     </div>
     <UserLoginModule></UserLoginModule>
+    <LoadingModule></LoadingModule>
     <!-- 音乐播放托盘 -->
     <!-- <MusicPlayer
       :isMin="isMin"
@@ -32,6 +33,7 @@ import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
 import UserLoginModule from "@/components/UserLoginModal.vue";
 // import MusicPlayer from "@/components/MusicPlayer.vue";
+import LoadingModule from "@/components/Loading.vue";
 import { Notification } from "element-ui";
 /**
  * 引入vuex
@@ -47,7 +49,8 @@ Vue.prototype.$notify = Notification;
     ContentBox,
     FooterBox,
     BreadcrumbModule,
-    UserLoginModule
+    UserLoginModule,
+    LoadingModule
   }
 })
 export default class Main extends Vue {

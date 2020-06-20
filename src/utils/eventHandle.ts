@@ -11,5 +11,8 @@ export const blogEventHandle = (args: { type: string, data: any }) => {
         case 'user-login-show':
             window.eventBus.$emit('handleLoginModalShow', data);
             break;
+        case 'loading-show':
+            window.eventBus.$emit('handleLoadingShow', data);
+            break;
     }
 }

@@ -17,6 +17,7 @@ const axiosInstance = () => {
 
 // 请求实例
 const publicReq = async (params: { [key: string]: any }) => {
+    window.eventBus.$emit('blogEventHandle', { type: 'loading-show', data: true })
     const {
         url,
         method,
@@ -52,11 +53,14 @@ const publicReq = async (params: { [key: string]: any }) => {
                 localStorage.removeItem("blog_user_id");
                 localStorage.removeItem("blog_avatar_url");
                 localStorage.removeItem("blog_location");
+                window.eventBus.$emit('blogEventHandle', { type: 'loading-show', data: false })
                 throw new Error(res.statusText);
             }
             if (res.data.code !== 200) {
+                window.eventBus.$emit('blogEventHandle', { type: 'loading-show', data: false })
                 throw new Error(res.data.data)
             } else {
+                window.eventBus.$emit('blogEventHandle', { type: 'loading-show', data: false })
                 return res.data;
             }
         }

@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './registerServiceWorker'
-Vue.config.productionTip = false
-
 // 引入公共样式
 import "@/assets/css/common.css"
 // 引入element
@@ -22,14 +20,15 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 // 引入flexible
 import '@/assets/js/flexible'
+//引入tag云
+import tagCloud from 'v-tag-cloud'
+import bus from '@/utils/EventBus'
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
-//引入tag云
-import tagCloud from 'v-tag-cloud'
+Vue.config.productionTip = false
 Vue.use(tagCloud)
 // 引入event bus
-import bus from '@/utils/EventBus'
 Vue.prototype.bus = bus
 window.eventBus = Vue.prototype.bus
 
@@ -48,6 +47,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(route => {
   NProgress.done();
 })
+
 
 new Vue({
   router,
