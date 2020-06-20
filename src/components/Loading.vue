@@ -48,4 +48,10 @@ export default class LoadingModule extends Vue {
     }
   }
 }
+@media screen and (max-width: 500px) {
+  .content {
+    top: 40% !important;
+    left: 40% !important;
+  }
+}
 </style>
