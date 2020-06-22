@@ -49,10 +49,7 @@ const publicReq = async (params: { [key: string]: any }) => {
         if (res) {
             if (res.data.code === 403) {
                 window.location.href = "/";
-                localStorage.removeItem("blog_name");
-                localStorage.removeItem("blog_user_id");
-                localStorage.removeItem("blog_avatar_url");
-                localStorage.removeItem("blog_location");
+                localStorage.clear();
                 window.eventBus.$emit('blogEventHandle', { type: 'loading-show', data: false })
                 throw new Error(res.statusText);
             }

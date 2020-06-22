@@ -87,9 +87,11 @@ export default class UserLoginModal extends Vue {
     form.validate((valid: any) => {
       if (valid) {
         const user_id: string = generateUUId(16);
-        localStorage.setItem("blog_user_id", user_id);
-        localStorage.setItem("blog_name", this.form.name);
-        localStorage.setItem("blog_avatar_url", this.avatarUrl);
+        const userInfo = this.$store.state.permission.userInfo;
+        userInfo.user_id = user_id;
+        userInfo.name = this.form.name;
+        userInfo.avatar_url = this.avatarUrl;
+        this.$store.dispatch("permission/setUserInfo", userInfo);
         this.dialogFormVisible = false;
       }
     });

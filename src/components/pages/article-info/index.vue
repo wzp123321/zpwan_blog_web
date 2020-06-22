@@ -198,20 +198,10 @@ export default class ArticleInfoModule extends Vue {
   // 当前需要评论的评论id
   private id: string = "";
   // 评论的作者信息---即登录的用户
-  private author: DashoboardModule.UserInfo = {
-    user_id: localStorage.getItem("blog_user_id") || "",
-    name: localStorage.getItem("blog_name") || "",
-    avatar_url: localStorage.getItem("blog_avatar_url") || "",
-    location: localStorage.getItem("blog_location") || ""
-  };
+  private author: DashoboardModule.UserInfo = {};
   // 登录回调
   private handleLoginSuccess() {
-    this.author = {
-      user_id: localStorage.getItem("blog_user_id") || "",
-      name: localStorage.getItem("blog_name") || "",
-      avatar_url: localStorage.getItem("blog_avatar_url") || "",
-      location: localStorage.getItem("blog_location") || ""
-    };
+    this.author = this.$store.state.permission.userInfo;
   }
   // 被评论的作者信息
   private reply_userInfo: DashoboardModule.UserInfo = {
@@ -289,7 +279,7 @@ export default class ArticleInfoModule extends Vue {
    * 评论输入回调
    */
   private async releaseComment(content: string) {
-    if (!localStorage.getItem("blog_name")) {
+    if (!this.$store.state.permission.userInfo.user_id) {
       window.eventBus.$emit("blogEventHandle", {
         type: "user-login-show",
         data: true
@@ -410,21 +400,13 @@ export default class ArticleInfoModule extends Vue {
   }
   // 登录回调
   private handleUserInfoGet() {
-    this.author = {
-      user_id: localStorage.getItem("blog_user_id") || "",
-      name: localStorage.getItem("blog_name") || "",
-      avatar_url: localStorage.getItem("blog_avatar_url") || "",
-      location: localStorage.getItem("blog_location") || ""
-    };
+    this.author = this.$store.state.permission.userInfo;
   }
   /**
    * 文章点赞
    */
   private async getArticleUps() {
-    if (
-      !localStorage.getItem("blog_name") ||
-      !localStorage.getItem("blog_user_id")
-    ) {
+    if (!this.$store.state.permission.userInfo.user_id) {
       window.eventBus.$emit("blogEventHandle", {
         type: "user-login-show",
         data: true
@@ -433,7 +415,7 @@ export default class ArticleInfoModule extends Vue {
     }
     this.handleUserInfoGet();
     const article_id = this.$route.params.id;
-    const user_id = localStorage.getItem("blog_user_id");
+    const user_id = this.$store.state.permission.userInfo.user_id;
     if (!this.isUps) {
       const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleInfoUps(
         { article_id, user_id }
@@ -458,8 +440,11 @@ export default class ArticleInfoModule extends Vue {
    * 校验登录用户是否点赞过
    */
   private async handleUpsCheck() {
+    if (!this.$store.state.permission.userInfo.user_id) {
+      return;
+    }
     const article_id = this.$route.params.id;
-    const user_id = localStorage.getItem("blog_user_id");
+    const user_id = this.$store.state.permission.userInfo.user_id;
     const res: ApiResponse<boolean> = await HttpRequest.ArticleModule.getArticleUpsCheck(
       {
         article_id,
@@ -480,12 +465,7 @@ export default class ArticleInfoModule extends Vue {
     });
   }
   created() {
-    this.author = {
-      user_id: localStorage.getItem("blog_user_id") || "",
-      name: localStorage.getItem("blog_name") || "",
-      avatar_url: localStorage.getItem("blog_avatar_url") || "",
-      location: localStorage.getItem("blog_location") || ""
-    };
+    this.author = this.$store.state.permission.userInfo;
     const clientWidth = document.documentElement.clientWidth || 1001;
     this.$nextTick(() => {
       this.getArticleInfoById();
@@ -496,10 +476,7 @@ export default class ArticleInfoModule extends Vue {
       if (clientWidth > 1000) {
         this.handleQRcodeCreate();
       }
-      if (
-        localStorage.getItem("blog_name") &&
-        localStorage.getItem("blog_user_id")
-      ) {
+      if (this.$store.state.permission.userInfo.user_id) {
         this.handleUpsCheck();
       }
     });

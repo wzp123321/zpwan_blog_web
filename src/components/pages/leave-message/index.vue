@@ -68,21 +68,11 @@ export default class LeaveMessageModule extends Vue {
   };
   // 登录回调
   private handleUserInfoGet() {
-    this.author = {
-      user_id: localStorage.getItem("blog_user_id") || "",
-      name: localStorage.getItem("blog_name") || "",
-      avatar_url: localStorage.getItem("blog_avatar_url") || "",
-      location: localStorage.getItem("blog_location") || ""
-    };
+    this.author = this.$store.state.permission.userInfo;
   }
   // 留言
   private async releaseComment(content: string) {
-    if (
-      !localStorage.getItem("blog_user_id") ||
-      !localStorage.getItem("blog_name") ||
-      !localStorage.getItem("blog_avatar_url") ||
-      !localStorage.getItem("blog_location")
-    ) {
+    if (!this.$store.state.permission.userInfo.user_id) {
       window.eventBus.$emit("blogEventHandle", {
         type: "user-login-show",
         data: true
@@ -131,12 +121,7 @@ export default class LeaveMessageModule extends Vue {
   }
 
   mounted() {
-    this.author = {
-      user_id: localStorage.getItem("blog_user_id") || "",
-      name: localStorage.getItem("blog_name") || "",
-      avatar_url: localStorage.getItem("blog_avatar_url") || "",
-      location: localStorage.getItem("blog_location") || ""
-    };
+    this.author = this.$store.state.permission.userInfo;
     this.$nextTick(() => {
       this.getLeaveMessageList();
     });

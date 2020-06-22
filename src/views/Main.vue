@@ -12,16 +12,6 @@
     </div>
     <UserLoginModule></UserLoginModule>
     <LoadingModule></LoadingModule>
-    <!-- 音乐播放托盘 -->
-    <!-- <MusicPlayer
-      :isMin="isMin"
-      :isPlay="isPlay"
-      :cur_music="currentMusicInfo"
-      :musicList="musicList"
-      @change="handlePlayChange"
-      @index_change="handleMusicIndexChange"
-      @play_pause="handleMusicPlayPause"
-    ></MusicPlayer>-->
   </div>
 </template>
 <script lang="ts">
@@ -32,13 +22,8 @@ import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
 import BreadcrumbModule from "@/components/Breadcrumb.vue";
 import UserLoginModule from "@/components/UserLoginModal.vue";
-// import MusicPlayer from "@/components/MusicPlayer.vue";
 import LoadingModule from "@/components/Loading.vue";
 import { Notification } from "element-ui";
-/**
- * 引入vuex
- */
-import { namespace } from "vuex-class";
 Vue.prototype.$notify = Notification;
 
 @Component({
@@ -60,16 +45,6 @@ export default class Main extends Vue {
   private positionLeft: number = 0;
   // 是否显示回到顶骨图标
   private isTop: boolean = false;
-  // 是否最小化
-  private isMin: boolean = true;
-  // 当前播放音乐索引
-  private cur_index: number = 0;
-  // 是否播放
-  private isPlay: boolean = false;
-  // 用户名
-  private blog_user_name: string = "";
-  // 用户头像
-  private blog_user_avatar: string = "";
   // websocket对象
   private socket: any = {};
   /**
@@ -80,20 +55,6 @@ export default class Main extends Vue {
       top: 0,
       behavior: "smooth"
     });
-  }
-  /**
-   * 最大最小化
-   */
-  private handlePlayChange(flag: boolean) {
-    this.isMin = flag;
-  }
-  // 切换歌曲
-  private handleMusicIndexChange(index: number) {
-    // this.changeMusicData(index);
-  }
-  // 播放暂停
-  private handleMusicPlayPause(flag: boolean) {
-    this.isPlay = flag;
   }
   //初始化websocket
   private initWebSocket() {
@@ -145,8 +106,6 @@ export default class Main extends Vue {
    */
   mounted() {
     this.initWebSocket();
-    this.blog_user_name = localStorage.getItem("blog_name") || "";
-    this.blog_user_avatar = localStorage.getItem("blog_avatar_url") || "";
     window.addEventListener("scroll", () => {
       const scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop;
