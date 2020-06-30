@@ -770,8 +770,19 @@ export default class ArticleInfoModule extends Vue {
 .markdown-body {
   p {
     img {
-      width: 100% !important;
-      height: auto !important;
+      margin: 0 auto;
+      width: 560px !important;
+      height: 720px !important;
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .markdown-body {
+    p {
+      img {
+        width: 300px !important;
+        height: 420px !important;
+      }
     }
   }
 }

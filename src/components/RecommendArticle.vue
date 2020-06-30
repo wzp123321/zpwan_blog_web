@@ -41,9 +41,12 @@ import HttpRequest from "@/assets/api/modules/index";
 })
 export default class RecommendArticle extends Vue {
   private activeName: string = "first";
-
-  private articles: Array<ArticleModule.ArticleInfo> = [];
-
+  // 推荐文章
+  private recommendArticles: Array<ArticleModule.ArticleInfo> = [];
+  // 近期文章
+  private recentArticles: Array<ArticleModule.ArticleInfo> = [];
+  // 热门文章
+  private hotArticles: Array<ArticleModule.ArticleInfo> = [];
   private tabs: Array<{ [key: string]: any }> = [
     {
       key: "first",
@@ -58,53 +61,58 @@ export default class RecommendArticle extends Vue {
       value: "热门文章"
     }
   ];
+  private articles: Array<ArticleModule.ArticleInfo> = [];
   // icons
   private icons: string[] = icons;
   /**
    * tab 切换
    */
   private chooseTab(value: string) {
-    this.articles = [];
     this.activeName = value;
-    if (value === "first") {
-      this.getArticleList({ isRecommend: 1, limit: 9 });
-    } else if (value === "second") {
-      this.getArticleList({
+    switch (value) {
+      case "first":
+        this.articles = this.recommendArticles;
+        break;
+      case "second":
+        this.articles = this.recentArticles;
+        break;
+      case "third":
+        this.articles = this.hotArticles;
+        break;
+    }
+  }
+  // 初始化文章数组
+  private async initData() {
+    const arrays: ["recommendArticles", "recentArticles", "hotArticles"] = [
+      "recommendArticles",
+      "recentArticles",
+      "hotArticles"
+    ];
+    const promiseAll = [
+      HttpRequest.ArticleModule.getArticleSearchByKey({
+        isRecommend: 1,
         limit: 9
+      }),
+      HttpRequest.ArticleModule.getArticleSearchByKey({ limit: 9 }),
+      HttpRequest.ArticleModule.getHotArticleList({})
+    ];
+
+    const resolveAll = await Promise.all(promiseAll);
+
+    if (resolveAll && promiseAll.length > 0) {
+      resolveAll.forEach((res, index) => {
+        if (res && res.data) {
+          const datas = res.data.data;
+          this[arrays[index]] = datas;
+        }
       });
-    } else {
-      this.getHotArticle();
     }
-  }
-  /**
-   * 请求推荐&&近期文章
-   */
-  private async getArticleList(params: { [key: string]: any }) {
-    const res: ApiResponse<ListResponse<
-      Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getArticleSearchByKey(params);
-    if (res && res.data) {
-      const datas = res.data.data;
-      this.articles = datas;
-    }
-  }
-  /**
-   * 请求热门文章
-   */
-  private async getHotArticle() {
-    const res: ApiResponse<ListResponse<
-      Array<ArticleModule.ArticleInfo>
-    >> = await HttpRequest.ArticleModule.getHotArticleList({});
-    if (res && res.data) {
-      const datas = res.data.data;
-      this.articles = datas;
-    }
+    this.chooseTab('first')
   }
 
   created() {
-    this.getArticleList({
-      isRecommend: 1,
-      limit: 10
+    this.$nextTick(() => {
+      this.initData();
     });
   }
 }

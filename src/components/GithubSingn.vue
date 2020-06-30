@@ -106,7 +106,7 @@ export default class GithubLogin extends Vue {
    * 页面销毁前 ---清除定时器
    */
   beforeDestroy() {
-    clearInterval();
+    this.timer = null;
   }
 }
 </script>

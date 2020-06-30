@@ -86,8 +86,8 @@ interface NoticeInfo {
 interface MusicInfo {
   id?: number,
   title?: string,
-  url?: string,
-  musicLen?: number,
+  src?: string,
+  duration?: number,
   pic?: string,
   author?: string,
   lrc?: string

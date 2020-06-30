@@ -87,9 +87,9 @@ export default class TopBox extends Vue {
         if (result && result.city && result.bounds) {
           const cityinfo = result.province + "" + result.city;
           that.cityinfo = cityinfo;
-          const userInfo = that.$store.state.permission.userInfo
-          userInfo.location = cityinfo
-          that.$store.dispatch('permission/setUserInfo', userInfo)
+          const userInfo = that.$store.state.permission.userInfo;
+          userInfo.location = cityinfo;
+          that.$store.dispatch("permission/setUserInfo", userInfo);
         }
       }
     });
@@ -109,7 +109,7 @@ export default class TopBox extends Vue {
     }, 1000);
   }
   beforeDestroy() {
-    clearInterval(this.timer);
+    this.timer = null;
   }
 }
 </script>

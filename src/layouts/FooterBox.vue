@@ -70,7 +70,7 @@ export default class FooterBox extends Vue {
   }
 
   beforeDestroy() {
-    clearInterval(this.timer);
+     this.timer = null;
   }
 }
 </script>

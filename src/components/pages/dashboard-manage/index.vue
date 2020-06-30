@@ -84,6 +84,10 @@
         </div>
         <!-- 文章列表 -->
         <RecommendArticle></RecommendArticle>
+        <!-- 我的公众号 -->
+        <div class="my-weixin-content">
+          <img src="../../../assets/imgs/wodegongzhonh.jpg" alt class="my-weixin-code" />
+        </div>
       </b-col>
     </b-row>
   </b-container>
@@ -282,6 +286,15 @@ export default class DashboardModule extends Vue {
           }
         }
       }
+
+      .my-weixin-content {
+        padding-bottom: 15px;
+        background-color: white;
+        img {
+          width: 240px;
+          height: 240px;
+        }
+      }
     }
     .load-more {
       width: 100%;
@@ -357,6 +370,12 @@ export default class DashboardModule extends Vue {
       }
       .tag-cloud {
         width: 100% !important;
+      }
+    }
+    .my-weixin-content {
+      img {
+        width: 120px !important;
+        height: 120px !important;
       }
     }
   }
