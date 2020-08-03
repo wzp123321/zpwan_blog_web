@@ -10,7 +10,10 @@ const generateUUId = (len: number) => {
     return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len);
 };
 
-
+/**
+ * 格式化时间
+ * @param date 日期
+ */
 const formatDate = (date: number) => {
     const dateTime = new Date(date)
     const YY = dateTime.getFullYear()
@@ -27,5 +30,22 @@ const formatDate = (date: number) => {
     return `${YY}-${MM}-${D} ${hh}:${mm}`
 }
 
+/**
+ * 格式化音乐时长
+ * @param time 时长
+ */
+const formatDuration = (time: number) => {
+    if (!time) {
+        return '00:00'
+    }
+    var minutes = Math.floor(time / 60)
+    var seconds = time - minutes * 60
 
-export { generateUUId, formatDate };
+    return (
+        (minutes > 0 ? minutes + ':' : '0:') +
+        (seconds > 0 ? (Math.floor(seconds) < 10 ? '0' + Math.floor(seconds) : Math.floor(seconds)) : '00')
+    )
+}
+
+
+export { generateUUId, formatDate, formatDuration };

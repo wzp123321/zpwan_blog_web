@@ -1,28 +1,29 @@
 <template>
-  <div class="music-player-wrapper">
+  <div class="music-player-wrapper" v-if="musicInfo">
     <!-- audio组件 -->
     <audio
-      ref="player"
-      :src="musicInfo.src || ''"
+      :autoplay="false"
+      ref="audio"
+      :loop="mode===2"
+      :src="musicInfo.src"
       :controls="false"
-      :autoplay="true"
-      :volume="volume"
-      @pause="handleMusicPause"
-      @play="handleMusicPlay"
-      @playing="handleMusicPlaying"
-      @timeupdate="handleTimeUpdate"
+      @loadedmetadata="handleLoadData"
+      @ended="handleMusicPlayEnd"
     ></audio>
     <div class="player-info flex-row">
       <!-- 最小化--歌曲封面 -->
       <div class="mini-player">
-        <img :src="musicInfo.pic" alt />
-        <i :class="['iconfont',isPlay?'icon-weibiaoti519':'icon-bofang']"></i>
-        <i class="iconfont icon-zhankai-" v-show="isMin" @click="handlePlayerMaxMin(false)"></i>
+        <img :src="musicInfo.pic||require('../assets/imgs/music_back.jpg')" alt />
+        <i
+          :class="['iconfont',isPlay?'icon-weibiaoti519':'icon-bofang']"
+          @click="()=>{isPlay = !isPlay}"
+        ></i>
+        <i class="iconfont icon-zhankai-" v-show="isMin" @click="()=>{isMin = false}"></i>
       </div>
       <!-- 最大化--详细信息 -->
       <div class="max-player" :style="{'width':isMin?'0':'240px'}">
         <div class="max-player-info" v-if="!isMin">
-          <i class="iconfont icon-guanbi" @click="handlePlayerMaxMin(true)"></i>
+          <i class="iconfont icon-guanbi" @click="()=>{isMin=true}"></i>
           <!-- 标题 -->
           <div class="max-player-info-title">
             {{musicInfo.title || '音乐播放器'}}
@@ -30,32 +31,35 @@
           </div>
           <!-- 切换歌曲 -->
           <div class="max-player-info-switch">
-            <i class="iconfont icon-diyiyeshouyeshangyishou"></i>
-            <i class="iconfont icon-zuihouyiyemoyexiayishou"></i>
+            <i class="iconfont icon-diyiyeshouyeshangyishou" @click="getMusicPlayByListBefore"></i>
+            <i class="iconfont icon-zuihouyiyemoyexiayishou" @click="getMusicPlayByListAfter"></i>
           </div>
           <!-- 播放进度 -->
           <div class="max-player-info-progress frspace">
-            <div class="player-progress-wrapper">
-              <div class="progress-loaded"></div>
-              <div class="progress-playing flex-row">
-                <div class="count" :style="{'width':progress+'%'}"></div>
-                <span class="thumb"></span>
-              </div>
-            </div>
-            <div class="player-time">{{play_time}}/{{total_time}}</div>
+            <Slider
+              class="player-progress-wrapper"
+              :min="0"
+              :max="total"
+              v-model="currentTime"
+              @change="handleProgressChange"
+              :format-tooltip="handleTooltipFormat"
+            ></Slider>
+            <div class="player-time">{{formatDuration(currentTime)}}/{{formatDuration(total)}}</div>
           </div>
           <!-- 音量/播放模式 -->
           <div class="max-player-info-operation">
+            <!-- 音量 -->
             <span class="volume">
               <i class="iconfont icon-laba"></i>
               <Slider
                 class="volume-wrapper"
                 height="40"
-                :value="(volume)*100"
+                v-model="volume"
                 :vertical="true"
                 @change="handleVolumeChange"
               ></Slider>
             </span>
+            <!-- 播放模式 -->
             <span class="mode">
               <i :class="['iconfont',modes[mode]]"></i>
               <div class="mode-item">
@@ -67,6 +71,26 @@
                 ></i>
               </div>
             </span>
+            <!-- 提示前往留言想听的歌 -->
+            <span class="add">
+              <i class="iconfont icon-tianjiajiahaowubiankuang" @click="handleAddMusicModal"></i>
+            </span>
+            <!-- 音乐列表 -->
+            <span class="list">
+              <i class="iconfont icon-liebiao"></i>
+              <!-- 当前音乐列表 -->
+              <div class="music-list">
+                <div
+                  class="music-list-item"
+                  v-for="(musicItem,musicIndex) in musicList"
+                  :key="musicIndex"
+                >
+                  <span>{{musicItem.title}}</span>
+                  <span>{{musicItem.author}}</span>
+                  <i :class="['iconfont',isPlay?'icon-weibiaoti519':'icon-bofang']"></i>
+                </div>
+              </div>
+            </span>
           </div>
         </div>
       </div>
@@ -75,112 +99,193 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Watch } from "vue-property-decorator";
-import { Slider } from "element-ui";
+import { Slider, MessageBox } from "element-ui";
+import { formatDuration } from "@/utils/index";
+
 @Component({
   name: "MusicPlayer",
   components: {
-    Slider
-  }
+    Slider,
+  },
 })
 export default class MusicPlayer extends Vue {
-  private isDrag: boolean = false;
-  // 当前播放时长
-  private play_time: number = 0;
-  // 当前音乐时长
-  private total_time: number = 0;
-  // 当前播放模式 0-列表循环 1-单曲循环 2随机播放
+  // 当前播放位置
+  private currentTime: number = 0;
+  // 总时长
+  private total: number = 0;
+  // 定时器
+  private timeInterval: any = null;
+  // 当前播放模式 0-列表循环 1-随机播放
   private mode: number = 0;
+  // 是否最小化
+  private isMin: boolean = true;
+  // 是否播放
+  private isPlay: boolean = false;
   // 模式iconfont数组
   private modes: string[] = [
-    "icon-suijibofang",
     "icon-xunhuanbofang",
-    "icon-danquxunhuan"
+    "icon-suijibofang",
+    "icon-danquxunhuan",
   ];
   // 音量
-  private volume: number = 0.5;
-  // 是否最小化
-  @Prop({ default: true })
-  private isMin!: boolean;
-  // 当前播放音乐
-  @Prop({ default: {} })
-  private musicInfo!: MusicInfo;
-  // 是否播放
-  @Prop({ default: false })
-  private isPlay!: boolean;
-  // 音乐列表
-  @Prop({ default: [] })
-  private musicList!: Array<MusicInfo>;
-  // 最大化 最小化
-  @Emit("change")
-  private getMusicPlayMax(flag: boolean) {
-    return flag;
+  private volume: number = 50;
+
+  // 格式化时间
+  private formatDuration(time: number) {
+    return formatDuration(time) || "00:00";
   }
-  // 切换歌曲
-  @Emit("index_change")
-  private changeCurrentIndex(cur: number) {
-    return cur;
+
+  // 重新加载资源
+  private handleLoadData(e: any) {
+    const audio: any = this.$refs.audio;
+    if (this.isPlay) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
   }
-  // 暂停
-  @Emit("pause")
-  private handleMusicPause(flag: boolean) {
-    return flag;
+
+  // 播放结束
+  private handleMusicPlayEnd() {
+    switch (this.mode) {
+      case 0:
+        this.getMusicPlayByListAfter();
+        break;
+      case 1:
+        this.getMusicRandomPlay();
+        break;
+    }
   }
-  // 播放
-  @Emit("play")
-  private handleMusicPlay(flag: boolean) {
-    return flag;
+
+  // 列表循环-- 下一首
+  private getMusicPlayByListAfter() {
+    let index = Number(this.current_index) + 1;
+    index = index === this.musicList.length ? 0 : index;
+    this.$store.dispatch("music/setCurrentIndex", index);
   }
-  // 播放中
-  @Emit("playing")
-  private handleMusicPlaying(e: any) {
-    return e;
+
+  // 列表循环-- 上一首
+  private getMusicPlayByListBefore() {
+    let index = Number(this.current_index) - 1;
+    index = index < 0 ? this.musicList.length - 1 : index;
+    this.$store.dispatch("music/setCurrentIndex", index);
   }
-  // 时间更新
-  @Emit("timeupdate")
-  private handleTimeUpdate(e: any) {
-    return e;
+
+  // 随机播放
+  private getMusicRandomPlay() {
+    let index = Math.ceil(Math.random() * this.musicList.length);
+    this.$store.dispatch("music/setCurrentIndex", index);
   }
-  // 最大最小化
-  @Emit("minMax")
-  private handlePlayerMaxMin(value: boolean) {
-    return value;
-  }
+
   // 切换模式
   private handleModeChange(mode: number) {
     this.mode = mode;
   }
+
   // 改变音量
   private handleVolumeChange(value: number) {
-    this.volume = value / 100;
+    let audio: any = this.$refs.audio;
+    this.volume = value;
+    audio.volume = (value / 100).toFixed(1);
   }
-  @Watch("isPlay")
-  private handlePlayStatusChange(newVal: boolean, oldVal: boolean) {
-    const player: any = this.$refs.player;
-    if (newVal) {
-      player.play();
-    } else {
-      player.pause();
+
+  // 改变进度
+  private handleProgressChange(value: number) {
+    const player: any = this.$refs.audio;
+    this.currentTime = value;
+    player.currentTime = value;
+  }
+
+  // 格式化tooltip
+  private handleTooltipFormat(value: number) {
+    return formatDuration(this.currentTime);
+  }
+
+  //获取当前已播放时间
+  getPlayTime() {
+    const audio: any = this.$refs.audio;
+    this.timeInterval = setInterval(() => {
+      this.currentTime = audio.currentTime;
+    }, 1000);
+  }
+
+  // 获取audio时长
+  private getTotalTimeByAudio() {
+    const that = this;
+    const audio: any = this.$refs.audio;
+    if (audio != null) {
+      audio.load();
+      audio.oncanplay = function () {
+        that.total = Math.floor(audio.duration);
+      };
+      audio.onerror = function () {
+        that.getMusicPlayByListAfter();
+      };
     }
   }
 
+  // 新增歌曲提示留言对话框
+  private handleAddMusicModal() {
+    MessageBox.confirm("如果您想听什么歌，欢迎给我留言！", "温馨提示", {
+      confirmButtonText: "确定",
+      showCancelButton: false,
+      callback: (action) => {
+        this.$router.push("/leave_message");
+      },
+    });
+  }
+
+  @Watch("isPlay")
+  private handlePlayStatusChange(newVal: boolean, oldVal: boolean) {
+    const audio: any = this.$refs.audio;
+    if (newVal) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }
+
+  // 计算歌曲时长
+  @Watch("musicInfo")
+  private handleMusicChange(newVal: MusicInfo, oldVal: MusicInfo) {
+    this.getTotalTimeByAudio();
+  }
+
   /**
-   * 计算当前播放进度条长度
+   * 通过计算属性得到当前音乐对象以及音乐数组
    */
-  get progress() {
-    const { play_time, total_time } = this;
-    return total_time !== 0 ? (play_time / total_time).toFixed(2) : 0;
+  get current_index() {
+    return this.$store.state.music.current_index;
+  }
+
+  get musicInfo() {
+    return this.$store.state.music.musicInfo;
+  }
+
+  get musicList() {
+    return this.$store.state.music.musicList;
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      if (this.musicInfo && this.musicInfo.src) {
+        this.getPlayTime();
+      }
+      this.getTotalTimeByAudio();
+    });
   }
 }
 </script>
 <style lang="less" scoped>
 .music-player-wrapper {
   position: fixed;
-  bottom: 15px;
-  left: 30px;
-  min-width: 80px;
-  min-height: 80px;
+  bottom: 10px;
+  left: 10px;
+  min-width: 70px;
+  min-height: 70px;
   color: #333;
   font-size: 10px;
+  z-index: 999;
 
   .player-info {
     border-radius: 2px;
@@ -189,8 +294,8 @@ export default class MusicPlayer extends Vue {
     .mini-player {
       color: white;
       position: relative;
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       background-color: rgba(0, 0, 0, 0.3);
 
       .iconfont {
@@ -198,16 +303,18 @@ export default class MusicPlayer extends Vue {
         font-size: 28px;
         position: relative;
         top: 25%;
-        left: 30%;
+        left: 28%;
       }
+      .icon-weibiaoti519 {
+        animation: rotate 500ms infinite forwards;
+      }
+      .icon-weibiaoti519,
       .icon-bofang {
         padding: 2px;
-        border: 1px solid white;
-        border-radius: 50%;
       }
       .icon-zhankai- {
-        top: 16%;
-        left: 45%;
+        top: 53%;
+        left: 38%;
         font-size: 10px;
         display: none;
       }
@@ -219,6 +326,14 @@ export default class MusicPlayer extends Vue {
         height: 100%;
         z-index: -1;
       }
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
     }
     .mini-player:hover .icon-zhankai- {
       display: inline-block;
@@ -229,7 +344,7 @@ export default class MusicPlayer extends Vue {
       .max-player-info {
         position: relative;
         height: 100%;
-        padding: 1px 3px;
+        padding: 0 5px;
         .icon-guanbi {
           position: absolute;
           right: 4px;
@@ -246,35 +361,8 @@ export default class MusicPlayer extends Vue {
         }
         &-progress {
           .player-progress-wrapper {
-            padding: 2px 0;
-            height: 2px;
             flex: 1;
-            position: relative;
-            top: 4px;
-            .progress-loaded {
-              height: 2px;
-              width: 100%;
-              background-color: #cdcdcd;
-            }
-            .progress-playing {
-              width: 100%;
-              position: absolute;
-              left: 0;
-              top: 2px;
-              .count {
-                height: 2px;
-                background-color: #31c27c;
-              }
-              .thumb {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                border: 1px solid #31c27c;
-                position: relative;
-                bottom: 4px;
-                background-color: white;
-              }
-            }
+            height: 2px;
           }
           .player-time {
             margin-left: 5px;
@@ -283,8 +371,6 @@ export default class MusicPlayer extends Vue {
         &-operation {
           text-align: right;
           font-size: 10px;
-          margin-top: 5px;
-          padding: 0 3px;
           .iconfont {
             font-size: 10px;
           }
@@ -309,10 +395,13 @@ export default class MusicPlayer extends Vue {
               }
             }
           }
+          span:last-child {
+            padding-right: 0;
+          }
           .volume-wrapper {
             position: absolute;
             bottom: 20px;
-            left: -8px;
+            left: -6px;
             height: 48px;
             display: none;
           }
@@ -322,6 +411,35 @@ export default class MusicPlayer extends Vue {
           .volume:hover .volume-wrapper {
             display: inline-block;
           }
+          .list:hover .music-list {
+            display: inline-block;
+          }
+          .music-list {
+            display: none;
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-size: 10px;
+            width: 85px;
+            height: 57px;
+            border: 1px solid #ededed;
+            border-radius: 3px;
+            background-color: white;
+            overflow-y: scroll;
+            &-item {
+              border-bottom: 1px solid #ededed;
+              span {
+                display: inline-block;
+                padding: 0 3px;
+              }
+              .iconfont {
+                font-size: 10px;
+              }
+            }
+            &-item:last-child {
+              border: none;
+            }
+          }
         }
       }
     }
@@ -329,19 +447,37 @@ export default class MusicPlayer extends Vue {
 }
 </style>
 <style lang="less">
-.el-slider.is-vertical .el-slider__runway,
-.el-slider.is-vertical .el-slider__bar {
-  width: 2px !important;
-}
-.el-slider.is-vertical .el-slider__bar {
-  background-color: #31c27c;
-}
-.el-slider.is-vertical .el-slider__button-wrapper {
-  left: -17px;
+.volume {
+  .el-slider.is-vertical .el-slider__runway,
+  .el-slider.is-vertical .el-slider__bar {
+    width: 2px !important;
+  }
+  .el-slider.is-vertical .el-slider__bar {
+    background-color: #31c27c;
+  }
+  .el-slider.is-vertical .el-slider__button-wrapper {
+    left: -17px;
+  }
 }
 .el-slider__button {
   width: 8px;
   height: 8px;
   border-color: #31c27c;
+}
+
+.player-progress-wrapper {
+  position: relative;
+  top: 9px;
+  .el-slider__runway {
+    margin: 0;
+    height: 2px;
+    .el-slider__bar {
+      height: 2px;
+      background-color: #31c27c;
+    }
+    .el-slider__button-wrapper {
+      top: -17px;
+    }
+  }
 }
 </style>

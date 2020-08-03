@@ -15,13 +15,7 @@
     <!-- loading过渡 -->
     <LoadingModule></LoadingModule>
     <!-- 左下角音乐托盘 -->
-    <MusicPlayer
-      :isMin="isMin"
-      :isPlay="isPlay"
-      :musicInfo="musicInfo"
-      :musicList="musicList"
-      @minMax="handlePlayerMinMax"
-    ></MusicPlayer>
+    <MusicPlayer class="music-player"></MusicPlayer>
   </div>
 </template>
 <script lang="ts">
@@ -35,6 +29,7 @@ import UserLoginModule from "@/components/UserLoginModal.vue";
 import LoadingModule from "@/components/Loading.vue";
 import MusicPlayer from "@/components/MusicPlayer.vue";
 import { Notification } from "element-ui";
+import HttpRequest from "@/assets/api/modules/index";
 Vue.prototype.$notify = Notification;
 
 @Component({
@@ -47,26 +42,10 @@ Vue.prototype.$notify = Notification;
     BreadcrumbModule,
     UserLoginModule,
     LoadingModule,
-    MusicPlayer
-  }
+    MusicPlayer,
+  },
 })
 export default class Main extends Vue {
-  // 最小化
-  private isMin: boolean = true;
-  // 是否播放
-  private isPlay: boolean = false;
-  // 当前播放音乐
-  private musicInfo: MusicInfo = {
-    title: "有多少爱可以重来",
-    pic:
-      "http://p1.music.126.net/TIQMdKKvWY0dDr-yKBaBeQ==/19000660439853455.jpg",
-    author: "迪克牛仔",
-    src:
-      "http://m7.music.126.net/20200629170120/6896e6329535c12e20240ee1e9162797/ymusic/071d/ca5f/ab5b/97adc83065f23caf6f4b409e961f0f0c.mp3"
-  };
-  // 当前播放列表
-  private musicList: MusicInfo[] = [];
-
   // 顶部是否吸顶
   private isCeil: boolean = false;
   // 距离左边距离
@@ -76,18 +55,12 @@ export default class Main extends Vue {
   // websocket对象
   private socket: any = {};
   /**
-   * 播放器最大最小化
-   */
-  handlePlayerMinMax(value: boolean) {
-    this.isMin = value;
-  }
-  /**
    * 回到顶部
    */
   private handleScrollToTop() {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   }
   //初始化websocket
@@ -132,13 +105,13 @@ export default class Main extends Vue {
       title,
       message,
       dangerouslyUseHTMLString: true,
-      type: "success"
+      type: "success",
     });
   }
   /**
    * 添加全局监听
    */
-  mounted() {
+  created() {
     this.initWebSocket();
     window.addEventListener("scroll", () => {
       const scrollTop =
@@ -186,6 +159,11 @@ export default class Main extends Vue {
       font-size: 50px;
       cursor: pointer;
     }
+  }
+}
+@media screen and(max-width: 500px) {
+  .music-player {
+    display: none;
   }
 }
 </style>

@@ -68,7 +68,7 @@ const publicReq = async (params: { [key: string]: any }) => {
 const timeoutfn = (delay: number, url: string) => {
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve('请求超时');
+            resolve(`请求超时--${url}`);
         }, delay);
     });
 };

@@ -252,6 +252,7 @@ export default class DashboardModule extends Vue {
           position: absolute;
           left: 0;
           top: 0;
+          font-size: 16px;
           padding: 5px 15px;
           background: #31c27c;
           color: #fff;

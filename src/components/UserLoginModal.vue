@@ -113,9 +113,11 @@ export default class UserLoginModal extends Vue {
   }
   mounted() {
     window.eventBus.$on("handleLoginModalShow", this.handleLoginModalShow);
-  }
-  beforeDestroy() {
-    window.eventBus.$off("handleLoginModalShow", this.handleLoginModalShow);
+    // 利用hook监听组件销毁钩子函数 并取消监听事件
+    this.$once("hook:beforeDestroy", () => {
+      console.log("测试是否监听到了");
+      window.eventBus.$off("handleLoginModalShow", this.handleLoginModalShow);
+    });
   }
 }
 </script>

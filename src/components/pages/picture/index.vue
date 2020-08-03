@@ -12,7 +12,7 @@
         </b-col>
       </b-row>
       <el-divider></el-divider>
-      <div class="picture-list" v-if="JSON.stringify(dataList) !=='{}'">
+      <div class="picture-list" v-if="JSON.stringify(dataList) ==='{}'">
         <div class="show-date" v-if="isShowByDate">
           <div v-for="(value,key,index) in dataList" :key="index">
             <el-divider class="date">{{key}}</el-divider>
@@ -79,43 +79,34 @@ Vue.prototype.$message = Message;
   }
 })
 export default class PictureModule extends Vue {
-  private action: string = "";
-
-  private dislogWidth: string = "30%";
-
-  private isShowByDate: boolean = false;
-
-  private dialogVisible: boolean = false;
-
-  private urls: string[] = [];
-
-  private fileList: any = [];
-
-  private pictureList: PictureInfo[] = [];
-
-  private dataList: { [init_date: string]: string[] } = {};
-
-  private startDate: number = new Date("2020-05-01").getTime();
-
-  private endDate: number = new Date().getTime();
-
+  private action: string = ""; // 图片上传路径
+  private dislogWidth: string = "30%"; // 对话框宽度
+  private isShowByDate: boolean = false; // 是否按照日期分组
+  private dialogVisible: boolean = false; // 打开对话框开关
+  private urls: string[] = []; // 上传的图片路径拼接字符串
+  private fileList: any = []; // 图片文件数组
+  private pictureList: PictureInfo[] = []; // 图片数组
+  private dataList: { [init_date: string]: string[] } = {}; // 封装后的数据
+  private startDate: number = new Date("2020-05-01").getTime(); //初始时间戳 目前是按照五一算的
+  private endDate: number = new Date().getTime(); //结束时间戳
   private pagination: PaginationInfo = {
     page: 1,
     total: 0
-  };
-
+  }; //分页
+  // 开关
   private handleSwitchChange(value: boolean) {
     this.isShowByDate = value;
   }
-
+  // 打开对话框
   private handleUserUploadOpen() {
     this.dialogVisible = true;
   }
+  // 关闭对话框
   private handleClose() {
     this.dialogVisible = false;
   }
 
-  // 选择图片
+  // 选择图片回调
   private handleFileChange(file: File, fileList: any) {
     let newFileList = fileList;
     newFileList.forEach(async (item: any, index: number) => {
@@ -127,11 +118,14 @@ export default class PictureModule extends Vue {
     this.fileList = newFileList;
   }
 
+  // 移除上传的图片
   private handleRemove(file: any, fileList: any) {
     this.urls = this.urls.filter(item => {
       return item !== file.response.data.url;
     });
   }
+
+  // 上传成功回调
   private handleUploadSuccess(response: any, file: File, fileList: File[]) {
     this.urls.push(response.data.url);
   }
@@ -157,6 +151,7 @@ export default class PictureModule extends Vue {
       this.pagination.total = total;
       this.pictureList = [...this.pictureList, ...list];
       this.dataList = this.getDataListCalculate(this.pictureList);
+      // 如果下一页还有数据----拿到本次请求最后一条数据的时间 将时间戳置为当前的0时0分0秒 再次请求数据页码加1
       if (res.data.hasNext) {
         const timestamp =
           this.pictureList[this.pictureList.length - 1].create_time || 0;
@@ -165,10 +160,12 @@ export default class PictureModule extends Vue {
       }
     }
   }
-  // 封装数据
+  /**
+   * 封装数据
+   * 按照日期进行分组
+   */
   getDataListCalculate(list: PictureInfo[]) {
     let newData: { [init_date: string]: string[] } = {};
-
     list.forEach(item => {
       newData[item.init_date] = [
         ...(newData[item.init_date] || []),
@@ -229,13 +226,13 @@ export default class PictureModule extends Vue {
   .picture-header {
     padding-top: 0.875rem;
     .el-button {
-      height: 1.875rem;
+      height: 2.375rem;
       line-height: 1.25rem;
       font-size: 0.875rem;
       padding: 0.3125rem 0.625rem;
     }
     .date-switch {
-      font-size: 0.8125rem;
+      font-size: 0.9125rem;
       line-height: 2.5rem;
       .el-switch {
         position: relative;
@@ -274,7 +271,7 @@ export default class PictureModule extends Vue {
       border-radius: 4px;
     }
     img:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       transition: 500ms all;
     }
   }
@@ -303,7 +300,7 @@ export default class PictureModule extends Vue {
     column-gap: 0.875rem !important;
   }
   .el-button {
-    height: 3.875rem !important;
+    height: 4.875rem !important;
     line-height: 1.875rem !important;
     font-size: 0.875rem !important;
     padding: 0.9375rem !important;
@@ -312,13 +309,13 @@ export default class PictureModule extends Vue {
     width: 30px !important;
     height: 15px !important;
     line-height: 15px !important;
-    .el-switch__core {
-      height: 14px !important;
-    }
-    .el-switch__core::after {
-      width: 10px !important;
-      height: 10px !important;
-    }
+  }
+  .el-switch__core {
+    height: 14px !important;
+  }
+  .el-switch__core::after {
+    width: 10px !important;
+    height: 10px !important;
   }
 }
 </style>

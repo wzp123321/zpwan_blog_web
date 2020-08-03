@@ -4,6 +4,7 @@ import ArticleModule from "./article"
 import CommentModule from "./comment"
 import ShareModule from "./share"
 import PictureModule from './picture'
+import MusicModule from './music'
 
 export default {
     CatalogModule,
@@ -11,5 +12,6 @@ export default {
     ArticleModule,
     CommentModule,
     ShareModule,
-    PictureModule
+    PictureModule,
+    MusicModule
 }

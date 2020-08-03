@@ -20,9 +20,10 @@ export default class LoadingModule extends Vue {
 
   mounted() {
     window.eventBus.$on("handleLoadingShow", this.handleLoading);
-  }
-  beforeDestroy() {
-    window.eventBus.$off("handleLoadingShow", this.handleLoading);
+    // 通过$once监听钩子函数F
+    this.$once("hook:beforeDestroy", () => {
+      window.eventBus.$off("handleLoadingShow", this.handleLoading);
+    });
   }
 }
 </script>
