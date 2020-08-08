@@ -4,7 +4,8 @@ const smp = new SpeedMeasurePlugin(); // 打包速度分析
 const webpack = require('webpack')
 
 const moduleConfig = {
-  outputDir:"blogWeb",
+  outputDir: "blogWeb",
+  productionSourceMap: false,
   devServer: {
     port: "8088",
     proxy: {
@@ -40,7 +41,7 @@ const moduleConfig = {
       return smp.wrap({
         plugins: [
           new BundleAnalyzerPlugin(), // 打包分析
-          new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+          new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         ]
       })
     }
