@@ -1,4 +1,9 @@
+/**
+ * element-ui组件注册
+ */
 import Vue from 'vue'
+// 引入element
+import 'element-ui/lib/theme-chalk/index.css';
 
 import {
     Pagination,
@@ -9,8 +14,6 @@ import {
     Divider,
     Input,
     Button,
-    Table,
-    TableColumn,
     Menu,
     MenuItem,
     Submenu,

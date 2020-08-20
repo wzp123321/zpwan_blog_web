@@ -18,9 +18,6 @@ export default class App extends Vue {
   destroyed() {
     localStorage.clear();
   }
-  blogEventHandle(args: { type: string; data: any }) {
-    blogEventHandle(args);
-  }
   /**
    * 1.在Vue组件中，可以用过$on,$once去监听所有的生命周期钩子函数，如监听组件的updated钩子函数可以写成 this.$on('hook:updated', () => {})
    * 2.Vue支持在外部监听组件的生命周期钩子函数。
@@ -38,10 +35,15 @@ export default class App extends Vue {
     document.body.appendChild(script);
 
     // 监听事件
-    window.eventBus.$on("blogEventHandle", this.blogEventHandle);
+    window.eventBus.$on(
+      "blogEventHandle",
+      (args: { type: string; data: any }) => {
+        blogEventHandle(args);
+      }
+    );
     // 利用hook监听组件销毁钩子函数，并取消监听
     this.$once("hook:beforeDestroy", () => {
-      window.eventBus.$off("blogEventHandle", this.blogEventHandle);
+      window.eventBus.$off("blogEventHandle");
     });
   }
 

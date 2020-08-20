@@ -16,6 +16,10 @@
     <zp-loading></zp-loading>
     <!-- 左下角音乐托盘 -->
     <zp-music-player class="music-player"></zp-music-player>
+    <!-- 图片预览 -->
+    <viewer :images="viewerList" class="images" ref="viewer">
+      <img v-for="src in viewerList" :src="src" :key="src" class="image" />
+    </viewer>
   </div>
 </template>
 <script lang="ts">
@@ -36,6 +40,8 @@ import HttpRequest from "@/assets/api/modules/index";
   },
 })
 export default class Main extends Vue {
+  // 预览图片地址
+  private viewerList: string[] = []; // 预览list -- 有图片url即可
   // 顶部是否吸顶
   private isCeil: boolean = false;
   // 距离左边距离
@@ -98,11 +104,9 @@ export default class Main extends Vue {
       type: "success",
     });
   }
-  /**
-   * 添加全局监听
-   */
-  created() {
-    this.initWebSocket();
+
+  // 初始化滚轮监听事件
+  private initScroll() {
     window.addEventListener("scroll", () => {
       const scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop;
@@ -124,6 +128,37 @@ export default class Main extends Vue {
         this.isTop = false;
       }
     });
+  }
+
+  /**
+   * 图片预览
+   * config [Object]:
+   *    imgList: 图片list
+   *    urlAlias:图片地址的别名，默认url
+   *    index: 播放索引,默认0
+   */
+  imagePreviewListen() {
+    window.eventBus.$on(
+      "global.image.preview",
+      (config: { imgList: string[]; index: number }) => {
+        if (config.imgList && config.imgList.length) {
+          this.viewerList = config.imgList;
+          const viewer: any = this.$refs.viewer;
+          viewer.$viewer.show();
+          // 为0或者不传时
+          if (config.index) {
+            setTimeout(() => {
+              viewer.$viewer.view(config.index);
+            }, 100);
+          }
+        }
+      }
+    );
+  }
+  mounted() {
+    this.imagePreviewListen();
+    this.initWebSocket();
+    this.initScroll();
   }
   // 销毁前
   beforeDestroy() {

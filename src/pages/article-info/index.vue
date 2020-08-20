@@ -32,7 +32,7 @@
           <p>{{articleInfo.description}}</p>
         </div>
         <!-- 正文 -->
-        <div class="markdown-body" v-html="articleInfo.content"></div>
+        <div class="markdown-body" v-html="articleInfo.content" @click="handleContentClick($event)"></div>
         <!-- 分割线 -->
         <el-divider content-position="center">本文结束,感谢阅读</el-divider>
         <!-- 点赞模块 -->
@@ -453,6 +453,17 @@ export default class ArticleInfoModule extends Vue {
       colorDark: "#000000",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.H,
+    });
+  }
+  // 富文本点击事件
+  private handleContentClick(e: any) {
+    console.log("e--------------", e.target.src, e.target.nodeName === "IMG");
+    window.eventBus.$emit("global.image.preview", {
+      imgList: [
+        "http://test.download.cycore.cn/question/6a4d1a9e-c53f-451e-b680-47be32815988.jpg",
+        "https://test.download.cycore.cn/test/2020/6/7/9/34/03cef609-1b16-4407-bc3c-f815cd90ed2c_mp4867e6cf9-a24f-4342-95ef-055c8e4ebf48.png",
+      ],
+      index: 1,
     });
   }
   created() {

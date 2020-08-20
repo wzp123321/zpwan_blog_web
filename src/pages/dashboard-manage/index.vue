@@ -86,7 +86,7 @@
         <zp-recommend-article></zp-recommend-article>
         <!-- 我的公众号 -->
         <div class="my-weixin-content">
-          <img src="../../assets/imgs/wodegongzhong.jpg" alt class="my-weixin-code" />
+          <img v-viewer src="../../assets/imgs/wodegongzhong.jpg" alt class="my-weixin-code" />
         </div>
       </b-col>
     </b-row>

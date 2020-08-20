@@ -3,7 +3,7 @@
     <div class="flex-row">
       <span v-if="articleInfo.isTop===1" class="top">置顶</span>
       <div class="img-div">
-        <img :src="articleInfo.imgUrl" alt @click="()=>{$router.push('/article/'+articleInfo.id)}" />
+        <img v-viewer :src="articleInfo.imgUrl"/>
       </div>
       <div class="info">
         <div class="header frspace">
