@@ -22,6 +22,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/js/flexible'
 //引入tag云
 import tagCloud from 'v-tag-cloud'
+
+// 引入自定义组件注册
+import { customRegister } from '@/utils/customerRegister'
+// 注册element组件
+import { elementRegister } from '@/utils/elementRegister'
+
 import bus from '@/utils/EventBus'
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
@@ -48,6 +54,11 @@ router.afterEach(route => {
   NProgress.done();
 })
 
+
+// 自定义组件
+customRegister()
+// element-ui组件注册
+elementRegister()
 
 new Vue({
   router,

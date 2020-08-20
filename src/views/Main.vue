@@ -3,7 +3,7 @@
     <div style="flex:1">
       <TopBox></TopBox>
       <HeaderBox :isCeil="isCeil" :positionLeft="positionLeft"></HeaderBox>
-      <BreadcrumbModule v-if="$route.path !=='/app'"></BreadcrumbModule>
+      <zp-bread-crumb v-if="$route.path !=='/app'"></zp-bread-crumb>
       <ContentBox :style="{marginTop:isCeil?'64px':'10px'}"></ContentBox>
     </div>
     <FooterBox></FooterBox>
@@ -11,11 +11,11 @@
       <i class="iconfont icon-huojianxianxing" @click="handleScrollToTop"></i>
     </div>
     <!-- 用户登录对话框 -->
-    <UserLoginModule></UserLoginModule>
+    <zp-user-login></zp-user-login>
     <!-- loading过渡 -->
-    <LoadingModule></LoadingModule>
+    <zp-loading></zp-loading>
     <!-- 左下角音乐托盘 -->
-    <MusicPlayer class="music-player"></MusicPlayer>
+    <zp-music-player class="music-player"></zp-music-player>
   </div>
 </template>
 <script lang="ts">
@@ -24,13 +24,7 @@ import TopBox from "@/layouts/TopBox.vue";
 import HeaderBox from "@/layouts/HeaderBox.vue";
 import ContentBox from "@/layouts/ContentBox.vue";
 import FooterBox from "@/layouts/FooterBox.vue";
-import BreadcrumbModule from "@/components/Breadcrumb.vue";
-import UserLoginModule from "@/components/UserLoginModal.vue";
-import LoadingModule from "@/components/Loading.vue";
-import MusicPlayer from "@/components/MusicPlayer.vue";
-import { Notification } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
-Vue.prototype.$notify = Notification;
 
 @Component({
   name: "Main",
@@ -39,10 +33,6 @@ Vue.prototype.$notify = Notification;
     HeaderBox,
     ContentBox,
     FooterBox,
-    BreadcrumbModule,
-    UserLoginModule,
-    LoadingModule,
-    MusicPlayer,
   },
 })
 export default class Main extends Vue {

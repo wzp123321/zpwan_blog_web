@@ -14,32 +14,36 @@
         offset="0"
         class="menu-wrapper flex-row"
       >
-        <Menu
+        <el-menu
           class="el-menu-demo"
           mode="horizontal"
           @select="select"
           active-text-color="#31c27c"
           :default-active="activeIndex"
         >
-          <MenuItem index="1" @click="()=>{$router.push('/')}">首页</MenuItem>
-          <MenuItem
+          <el-menu-item index="1" @click="()=>{$router.push('/')}">首页</el-menu-item>
+          <el-menu-item
             index="2"
             @click="()=>{$router.push('/leave_message')}"
             class="leave-message-item"
-          >留言板</MenuItem>
-          <MenuItem index="3" @click="()=>{$router.push('/picture')}" class="leave-message-item">照片墙</MenuItem>
+          >留言板</el-menu-item>
+          <el-menu-item
+            index="3"
+            @click="()=>{$router.push('/picture')}"
+            class="leave-message-item"
+          >照片墙</el-menu-item>
           <template v-for="(item,index) in menus">
-            <Submenu :index="index+4+''" :key="'menu_'+index">
+            <el-submenu :index="index+4+''" :key="'menu_'+index">
               <template slot="title">{{item.value}}</template>
-              <MenuItem
+              <el-menu-item
                 v-for="(childItem,idx) in item.children"
                 :key="'child_'+idx"
                 :index="index+2+'-'+idx"
                 @click="()=>{$router.push('/type/'+childItem.id)}"
-              >{{childItem.value}}</MenuItem>
-            </Submenu>
+              >{{childItem.value}}</el-menu-item>
+            </el-submenu>
           </template>
-        </Menu>
+        </el-menu>
         <div class="search-icon" @click="()=>{$router.push('/search')}">
           <i class="iconfont icon-sousuo"></i>
         </div>
@@ -49,16 +53,10 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { Menu, MenuItem, Submenu } from "element-ui";
 import HttpRequest from "@/assets/api/modules/index";
 
 @Component({
   name: "HeaderBox",
-  components: {
-    Menu,
-    MenuItem,
-    Submenu
-  }
 })
 export default class HeaderBox extends Vue {
   @Prop({ default: false })
@@ -92,7 +90,7 @@ export default class HeaderBox extends Vue {
             id,
             code,
             value,
-            children: []
+            children: [],
           });
           const response: ApiResponse<ListResponse<
             Array<DashoboardModule.CatalogInfo>
@@ -106,7 +104,7 @@ export default class HeaderBox extends Vue {
                   id,
                   code,
                   value,
-                  children: []
+                  children: [],
                 });
               }
             );

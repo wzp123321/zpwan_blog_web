@@ -3,16 +3,16 @@ import VueRouter from 'vue-router'
 import { Route } from 'vue-router'
 
 const Main = () => import("@/views/Main.vue");
-const LeaveMessageModule = () => import("@/components/pages/leave-message/index.vue")
-const PictureModule = () => import("@/components/pages/picture/index.vue")
-const ArticleInfoModule = () => import("@/components/pages/article-info/index.vue")
-const DashboardModule = () => import("@/components/pages/dashboard-manage/index.vue")
-const SearchModule = () => import("@/components/pages/search-manage/index.vue")
-const FriednlyLinkModule = () => import("@/components/pages/links/index.vue")
-const AboutModule = () => import("@/components/pages/about/index.vue")
-const TypeModule = () => import("@/components/pages/type-article/index.vue")
-const NotFoundModule = () => import("@/components/404.vue")
-const GithubLogin = () => import("@/components/GithubSingn.vue")
+const LeaveMessageModule = () => import("@/pages/leave-message/index.vue")
+const PictureModule = () => import("@/pages/picture/index.vue")
+const ArticleInfoModule = () => import("@/pages/article-info/index.vue")
+const DashboardModule = () => import("@/pages/dashboard-manage/index.vue")
+const SearchModule = () => import("@/pages/search-manage/index.vue")
+const FriednlyLinkModule = () => import("@/pages/links/index.vue")
+const AboutModule = () => import("@/pages/about/index.vue")
+const TypeModule = () => import("@/pages/type-article/index.vue")
+const NotFoundModule = () => import("@/pages/404.vue")
+const GithubLogin = () => import("@/pages/GithubSingn.vue")
 Vue.use(VueRouter)
 
 const routes = [
