@@ -14,15 +14,19 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'viewerjs/dist/viewer.css';
 
 // 引入第三方插件注册
-import { busRegister, customRegister, elementRegister, pluginRegister } from '@/plugins/index'
+import { customRegister, elementRegister, pluginRegister, vueInjecter } from '@/plugins/index'
 
 // 自定义组件
 customRegister()
-busRegister();
 // element-ui组件注册
 elementRegister()
 // 第三方插件
 pluginRegister()
+
+// * ----------------------------------------
+// * 调用注入器
+// * ----------------------------------------
+Vue.use(vueInjecter)
 
 Vue.config.productionTip = false
 
