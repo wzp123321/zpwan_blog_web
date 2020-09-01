@@ -12,7 +12,7 @@
     <div class="frspace comment-operation" v-show="btnShow">
       <div class="emoji" id="emoji">
         <i class="iconfont icon-iconsmile"></i>
-        <span>Ctrl + Enter 发表</span>
+        <span style="font-size:14px">Ctrl + Enter 发表</span>
         <div class="emoji-content" id="emoji-content">
           <span
             v-for="(item,index) in emojis"
@@ -160,7 +160,7 @@ export default class CommentInput extends Vue {
 <style lang="less" scoped>
 .comment-operation {
   // infinite无限
-  animation: operation_show 500ms linear forwards;
+  animation: operation_show 200ms linear forwards;
   .emoji {
     cursor: pointer;
     position: relative;

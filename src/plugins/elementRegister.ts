@@ -28,6 +28,7 @@ import {
     CarouselItem,
     Collapse,
     CollapseItem,
+    
 } from "element-ui";
 
 
@@ -53,6 +54,7 @@ export function elementRegister() {
     Vue.use(Menu);
     Vue.use(MenuItem);
     Vue.use(Submenu);
+    Vue.use(Divider);
 
     Vue.prototype.$message = Message;
     Vue.prototype.$notify = Notification;

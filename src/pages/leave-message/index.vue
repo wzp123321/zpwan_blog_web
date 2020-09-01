@@ -19,7 +19,7 @@
     <div class="leave-message-list">
       <div class="leave-message-header">
         <i class="iconfont icon-iconsmile"></i>
-        <Divider direction="vertical"></Divider>
+        <el-divider direction="vertical"></el-divider>
         <span>{{pagination.total}}</span>条留言
       </div>
       <zp-leavemessage-item v-for="(item,index) in leavemessages" :key="index" :LeaveMessageInfo="item"></zp-leavemessage-item>

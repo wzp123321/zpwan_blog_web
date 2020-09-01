@@ -5,7 +5,7 @@
       <b-row class="picture-header">
         <b-col class="frspace" style="margin:0.2rem 1rem">
           <el-button type="primary" @click="handleUserUploadOpen">我要上传</el-button>
-          <div class="date-switch">
+          <div class="date-switch" v-if="dataList.length>0">
             按日期展示
             <el-switch v-model="isShowByDate" @change="handleSwitchChange"></el-switch>
           </div>
@@ -82,7 +82,7 @@ export default class PictureModule extends Vue {
   private endDate: number = new Date().getTime(); //结束时间戳
   private pagination: PaginationInfo = {
     page: 1,
-    total: 0
+    total: 0,
   }; //分页
   // 开关
   private handleSwitchChange(value: boolean) {
@@ -111,7 +111,7 @@ export default class PictureModule extends Vue {
 
   // 移除上传的图片
   private handleRemove(file: any, fileList: any) {
-    this.urls = this.urls.filter(item => {
+    this.urls = this.urls.filter((item) => {
       return item !== file.response.data.url;
     });
   }
@@ -133,7 +133,7 @@ export default class PictureModule extends Vue {
       startDate,
       endDate,
       page,
-      limit: 10
+      limit: 10,
     });
 
     if (res && res.data) {
@@ -157,10 +157,10 @@ export default class PictureModule extends Vue {
    */
   getDataListCalculate(list: PictureInfo[]) {
     let newData: { [init_date: string]: string[] } = {};
-    list.forEach(item => {
+    list.forEach((item) => {
       newData[item.init_date] = [
         ...(newData[item.init_date] || []),
-        ...[item.picture_url]
+        ...[item.picture_url],
       ];
     });
     return newData;
@@ -217,9 +217,9 @@ export default class PictureModule extends Vue {
   .picture-header {
     padding-top: 0.875rem;
     .el-button {
-      height: 2.375rem;
-      line-height: 1.25rem;
-      font-size: 0.875rem;
+      height: 1.575rem;
+      line-height: 0.575rem;
+      font-size: 0.675rem;
       padding: 0.3125rem 0.625rem;
     }
     .date-switch {
@@ -230,6 +230,10 @@ export default class PictureModule extends Vue {
         top: -1px;
       }
     }
+  }
+
+  ::v-deep .el-divider--horizontal {
+    margin: 14px 0;
   }
 
   .picture-list {
@@ -270,10 +274,10 @@ export default class PictureModule extends Vue {
     width: 100%;
     text-align: center;
     padding-bottom: 3.125rem;
-    font-size: 1.5rem;
+    font-size: 0.8rem;
     img {
-      width: 22.5rem;
-      height: 22.5rem;
+      width: 15.5rem;
+      height: 15.5rem;
       margin: 0 auto;
     }
   }
