@@ -458,7 +458,7 @@ export default class ArticleInfoModule extends Vue {
   // 富文本点击事件---获取图片
   private handleContentClick(e: any) {
     if ((e.target.src, e.target.nodeName === "IMG")) {
-      let imgList = this.$getAllImages(this.articleInfo.content);
+      let imgList = (this as any).$getAllImages(this.articleInfo.content);
       window.eventBus.$emit("global.image.preview", {
         imgList,
         index: 1,

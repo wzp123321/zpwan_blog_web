@@ -197,7 +197,7 @@ export default class DashboardModule extends Vue {
   }
   // 文章分页
   private loadMore() {
-    this.$debounce(() => {
+    (this as any).$debounce(() => {
       if (this.articles.length < this.pagination.total) {
         this.loading = true;
         this.pagination.page += 1;
