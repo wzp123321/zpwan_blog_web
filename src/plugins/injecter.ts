@@ -1,12 +1,12 @@
 /**
- * @author ghchu
+ * @author zpwan
  * @description 注入器
  */
 
 import Vue from "vue";
 import bus from '@/utils/EventBus'
 
-import { throttle, debounce, audioPlay, delay } from '../utils/index'
+import { throttle, debounce, audioPlay, delay, getAllImages } from '../utils/index'
 
 const vueInjecter = {
     install: (Vue: any, options: any) => {
@@ -16,7 +16,8 @@ const vueInjecter = {
         Vue.prototype.$delay = delay;
         Vue.prototype.$bus = new Vue();
         Vue.prototype.bus = bus;
-        window.eventBus = Vue.prototype.bus
+        window.eventBus = Vue.prototype.bus;
+        Vue.prototype.$getAllImages = getAllImages;// 获取富文本所有图片
     }
 };
 

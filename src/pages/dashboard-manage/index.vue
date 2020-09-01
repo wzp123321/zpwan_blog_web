@@ -112,7 +112,7 @@ export default class DashboardModule extends Vue {
   private pagination: { [key: string]: any } = {
     page: 1,
     limit: 10,
-    total: 10
+    total: 10,
   };
   private tags: Array<{ [key: string]: any }> = [];
   /**
@@ -137,7 +137,7 @@ export default class DashboardModule extends Vue {
       const res: ApiResponse<ListResponse<
         Array<{ [key: string]: any }>
       >> = await HttpRequest.BannerModule.getTagsList({
-        page
+        page,
       });
       if (res && res.data) {
         datas = [...datas, ...this.getTagChange(res.data.data)];
@@ -151,13 +151,13 @@ export default class DashboardModule extends Vue {
     queryAll(page);
   }
   // tag转参数格式
-  getTagChange(data: Array<{ [key: string]: any }>) {
+  private getTagChange(data: Array<{ [key: string]: any }>) {
     let datas = data;
     let newData: Array<{ [key: string]: any }> = [];
     datas.forEach((item: { [key: string]: any }) => {
       newData.push({
         id: item.id,
-        name: item.value
+        name: item.value,
       });
     });
     return newData;
@@ -197,13 +197,15 @@ export default class DashboardModule extends Vue {
   }
   // 文章分页
   private loadMore() {
-    if (this.articles.length < this.pagination.total) {
-      this.loading = true;
-      this.pagination.page += 1;
-      setTimeout(() => {
-        this.getArticleList();
-      }, 800);
-    }
+    this.$debounce(() => {
+      if (this.articles.length < this.pagination.total) {
+        this.loading = true;
+        this.pagination.page += 1;
+        setTimeout(() => {
+          this.getArticleList();
+        }, 800);
+      }
+    });
   }
   created() {
     this.$nextTick(() => {

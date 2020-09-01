@@ -87,7 +87,6 @@
                 >
                   <span>{{musicItem.title}}</span>
                   <span>{{musicItem.author}}</span>
-                  <i :class="['iconfont',isPlay?'icon-weibiaoti519':'icon-bofang']"></i>
                 </div>
               </div>
             </span>
@@ -294,8 +293,8 @@ export default class MusicPlayer extends Vue {
     .mini-player {
       color: white;
       position: relative;
-      width: 70px;
-      height: 70px;
+      width: 84px;
+      height: 84px;
       background-color: rgba(0, 0, 0, 0.3);
 
       .iconfont {
@@ -367,6 +366,22 @@ export default class MusicPlayer extends Vue {
           .player-time {
             margin-left: 5px;
           }
+
+          .player-progress-wrapper {
+            position: relative;
+            top: 9px;
+            ::v-deep .el-slider__runway {
+              margin: 0;
+              height: 2px;
+              .el-slider__bar {
+                height: 2px;
+                background-color: #31c27c;
+              }
+              .el-slider__button-wrapper {
+                top: -17px;
+              }
+            }
+          }
         }
         &-operation {
           text-align: right;
@@ -411,6 +426,18 @@ export default class MusicPlayer extends Vue {
           .volume:hover .volume-wrapper {
             display: inline-block;
           }
+          .volume {
+            ::v-deep .el-slider.is-vertical .el-slider__runway,
+            ::v-deep .el-slider.is-vertical .el-slider__bar {
+              width: 2px !important;
+            }
+            ::v-deep .el-slider.is-vertical .el-slider__bar {
+              background-color: #31c27c;
+            }
+            ::v-deep .el-slider.is-vertical .el-slider__button-wrapper {
+              left: -17px;
+            }
+          }
           .list:hover .music-list {
             display: inline-block;
           }
@@ -420,17 +447,22 @@ export default class MusicPlayer extends Vue {
             bottom: 12px;
             right: 12px;
             font-size: 10px;
-            width: 85px;
-            height: 57px;
+            width: 100px;
+            height: 80px;
             border: 1px solid #ededed;
             border-radius: 3px;
             background-color: white;
             overflow-y: scroll;
             &-item {
+              text-align: left;
               border-bottom: 1px solid #ededed;
               span {
                 display: inline-block;
-                padding: 0 3px;
+                padding-top: 8px;
+                max-width: 50px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
               .iconfont {
                 font-size: 10px;
@@ -441,42 +473,12 @@ export default class MusicPlayer extends Vue {
             }
           }
         }
+        ::v-deep .el-slider__button {
+          width: 10px;
+          height: 10px;
+          border-color: #31c27c;
+        }
       }
-    }
-  }
-}
-</style>
-<style lang="less">
-.volume {
-  .el-slider.is-vertical .el-slider__runway,
-  .el-slider.is-vertical .el-slider__bar {
-    width: 2px !important;
-  }
-  .el-slider.is-vertical .el-slider__bar {
-    background-color: #31c27c;
-  }
-  .el-slider.is-vertical .el-slider__button-wrapper {
-    left: -17px;
-  }
-}
-.el-slider__button {
-  width: 8px;
-  height: 8px;
-  border-color: #31c27c;
-}
-
-.player-progress-wrapper {
-  position: relative;
-  top: 9px;
-  .el-slider__runway {
-    margin: 0;
-    height: 2px;
-    .el-slider__bar {
-      height: 2px;
-      background-color: #31c27c;
-    }
-    .el-slider__button-wrapper {
-      top: -17px;
     }
   }
 }

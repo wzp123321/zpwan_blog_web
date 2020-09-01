@@ -12,14 +12,15 @@
     </div>
     <!-- 用户登录对话框 -->
     <zp-user-login></zp-user-login>
-    <!-- loading过渡 -->
-    <zp-loading></zp-loading>
     <!-- 左下角音乐托盘 -->
     <zp-music-player class="music-player"></zp-music-player>
     <!-- 图片预览 -->
-    <viewer :images="viewerList" class="images" ref="viewer">
+    <viewer v-show="false" :images="viewerList" class="images" ref="viewer">
       <img v-for="src in viewerList" :src="src" :key="src" class="image" />
     </viewer>
+    <!-- <div v-show="false" v-viewer ref="viewer">
+      <img v-for="(view, index) in viewerList" :key="index" :src="view" />
+    </div> -->
   </div>
 </template>
 <script lang="ts">
@@ -155,6 +156,7 @@ export default class Main extends Vue {
       }
     );
   }
+
   mounted() {
     this.imagePreviewListen();
     this.initWebSocket();

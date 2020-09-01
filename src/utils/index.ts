@@ -115,6 +115,17 @@ export function delay(time = 50) {
   })
 }
 
+// 获取富文本中所有图片地址
+export function getAllImages(content: string) {
+  if (!content || content.indexOf('img') === -1) return [];
+  var list: string[] = [];
+  content.replace(/<img [^="">]*src=['"]([^'"]+)[^>]*>/g, (match: any, capture: string) => {
+    list.push(capture);
+    return capture
+  });
+  return list;
+}
+
 
 export {
   generateUUId,

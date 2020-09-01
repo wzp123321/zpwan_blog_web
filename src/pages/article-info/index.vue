@@ -455,16 +455,15 @@ export default class ArticleInfoModule extends Vue {
       correctLevel: QRCode.CorrectLevel.H,
     });
   }
-  // 富文本点击事件
+  // 富文本点击事件---获取图片
   private handleContentClick(e: any) {
-    console.log("e--------------", e.target.src, e.target.nodeName === "IMG");
-    window.eventBus.$emit("global.image.preview", {
-      imgList: [
-        "http://test.download.cycore.cn/question/6a4d1a9e-c53f-451e-b680-47be32815988.jpg",
-        "https://test.download.cycore.cn/test/2020/6/7/9/34/03cef609-1b16-4407-bc3c-f815cd90ed2c_mp4867e6cf9-a24f-4342-95ef-055c8e4ebf48.png",
-      ],
-      index: 1,
-    });
+    if ((e.target.src, e.target.nodeName === "IMG")) {
+      let imgList = this.$getAllImages(this.articleInfo.content);
+      window.eventBus.$emit("global.image.preview", {
+        imgList,
+        index: 1,
+      });
+    }
   }
   created() {
     this.author = this.$store.state.permission.userInfo;
