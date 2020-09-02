@@ -76,7 +76,9 @@ export function throttle(f: Function, wait = 100) {
 
 // 视频播放
 export function audioPlay(url: string, {
-  closeLoadingFn
+  closeLoadingFn, // 关闭加载
+  timeupdateFn, // 进度更新
+  endFn,// 播放结束
 }: {
   [key: string]: Function
 }) {
@@ -97,11 +99,15 @@ export function audioPlay(url: string, {
   }
   // 播放结束
   audioPlayer.onended = function () {
-    closeLoadingFn && closeLoadingFn()
+    endFn && endFn()
   }
   // 暂停时触发
   audioPlayer.onpause = function () {
     closeLoadingFn && closeLoadingFn()
+  }
+  // 进度更新
+  audioPlayer.onpause = function () {
+    timeupdateFn && timeupdateFn()
   }
   return audioPlayer
 }

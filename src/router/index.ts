@@ -13,6 +13,8 @@ const AboutModule = () => import("@/pages/about/index.vue")
 const TypeModule = () => import("@/pages/type-article/index.vue")
 const NotFoundModule = () => import("@/pages/404.vue")
 const GithubLogin = () => import("@/pages/GithubSingn.vue")
+
+
 Vue.use(VueRouter)
 
 const routes = [
