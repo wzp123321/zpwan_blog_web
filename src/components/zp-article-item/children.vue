@@ -7,7 +7,7 @@
       </div>
       <div class="info">
         <div class="header frspace">
-          <h1 @click="()=>{$router.push('/article/'+articleInfo.id)}" v-html="articleInfo.title"></h1>
+          <div class="article-title" @click="()=>{$router.push('/article/'+articleInfo.id)}" v-html="articleInfo.title"></div>
         </div>
         <p v-html="articleInfo.description"></p>
         <span class="mobile-time">
@@ -103,7 +103,7 @@ export default class ArticleItem extends Vue {
     width: 100%;
     padding: 0 10px;
     .header {
-      h1 {
+      .article-title {
         margin: -3px 0 10px 0;
         font-weight: 500;
         font-size: 18px;
